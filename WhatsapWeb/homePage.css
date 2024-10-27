@@ -1,0 +1,1437 @@
+/* Reset some default browser styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    height: 100vh;
+}
+
+a {
+    text-decoration: none; /* Alt çizgiyi kaldırır */
+    color: inherit; /* Varsayılan metin rengini kullanır */
+}
+
+a:visited {
+    color: inherit; /* Ziyaret edilmiş bağlantılar için de aynı renk */
+}
+
+a:hover {
+    text-decoration: none; /* Hover durumunda da alt çizgiyi korur */
+    color: inherit; /* Renk değişimini önler */
+}
+
+/* Navigation Container */
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px; /* Sidebar genişliği */
+    background-color: #2C3E50; /* Koyu arka plan */
+    padding: 20px 0; /* Üst ve alt boşluk */
+    position: fixed; /* Sabit pozisyon */
+    left: 0;
+    top: 0;
+    bottom: 0;
+    height: 100%; /* Tüm ekran yüksekliği */
+    z-index: 500; /* Üstte görünmesi için */
+}
+
+.nav-btn ul {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column; /* Vertical layout */
+    gap: 20px; /* Space between the buttons */
+    justify-content: center;
+}
+
+.nav-btn ul li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Styling the nav buttons */
+.nav-btn ul li a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    background-color: #34495E; /* Button background color */
+    color: #fff; /* Icon color */
+    border-radius: 50%; /* Make them circular */
+    transition: background-color 0.3s, transform 0.3s;
+    text-decoration: none;
+    font-size: 20px; /* Icon size */
+   
+}
+
+
+
+/* Hover effect */
+.nav-btn ul li a:hover {
+    background-color: #1ABC9C; /* Change color on hover */
+    
+}
+
+/* Active button state */
+.nav-btn ul li a.active {
+    background-color: #1ABC9C; /* Active button color */
+}
+
+.nav-btn .responsive{
+    display :none;
+
+}
+
+
+/* Responsive - for smaller screens */
+@media (max-width: 768px) {
+    .nav-btn ul li a {
+        width: 40px; 
+        height: 40px; 
+        font-size: 16px; /* Reduce icon size */
+    }
+    
+    .nav-btn .responsive{
+        display: flex;
+    }
+    .bar-container{
+
+        width: calc(100% - 80px)
+
+    }
+
+}
+
+/* For screens between 900px and 1200px */
+@media (min-width: 768px) and (max-width: 900px) {
+    .bar-container {
+        display: block; /* Geniş ekranlarda görünür yap */
+        width: 30%;
+    }
+}
+
+
+/* For screens between 900px and 1200px */
+@media (min-width: 900px)  {
+    .bar-container {
+        display: block;
+        width: 30%;
+    }
+}
+
+
+
+.bar-container {
+
+    height: 250px; /* İstediğiniz sabit yüksekliği ayarlayın */
+    background-color: #fff;
+    border-right: 1px solid #ddd;
+    padding: 15px 0;
+    position: fixed;
+ 
+    
+    z-index: 1;
+    display: block;
+    flex-direction: column; /* İçeriği dikey olarak hizala */
+    overflow-y: auto; /* Kaydırma ekle */
+    scrollbar-width: thin; /* Firefox için ince kaydırma çubuğu */
+    scrollbar-color: transparent transparent; /* Kaydırma çubuğunu şeffaf yap */
+}
+
+/* Chrome, Safari ve Edge için */
+.bar-container::-webkit-scrollbar, 
+.emoji-container::-webkit-scrollbar {
+    width: 2px; /* Kaydırma çubuğu genişliği */
+}
+
+.bar-container::-webkit-scrollbar-thumb,
+.emoji-container::-webkit-scrollbar-thumb {
+    background-color: #ddd; /* Kaydırma çubuğu rengi */
+}
+
+.bar-container::-webkit-scrollbar-track,
+.emoji-container::-webkit-scrollbar-track {
+    background: transparent; /* Arka plan rengi */
+}
+
+.chat-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: #ffffff;
+}
+
+.friends-container,
+.calls-container,
+.addfriends-container,
+.grups-container,
+.settings-container {
+    display: none; /* Tüm bu container'ları gizle */
+}
+
+.header {
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    font-size: 1.5rem;
+    margin: 10px;
+    padding-left: 10px;
+
+}
+/* Dropcontent varsayılan olarak gizli */
+/* Dropcontent varsayılan olarak gizli */
+.dropcontent {
+    display: none;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ddd;
+
+    width: 250;
+    max-height: 300px; /* Sabit boyut */
+    overflow-y: auto; /* Scrollbar */
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+    top: 100%; /* Butonun altına açılacak */
+    right: 0;
+    z-index: 5; /* Üstte görünmesi için */
+    border-radius: 8px; /* Yuvarlak köşeler */
+    scrollbar-width: thin; /* Firefox için ince kaydırma çubuğu */
+    scrollbar-color: transparent transparent; /* Kaydırma çubuğunu şeffaf yap */
+}
+
+/* Chrome, Safari ve Edge için */
+
+.dropcontent::-webkit-scrollbar {
+    width: 2px; /* Kaydırma çubuğu genişliği */
+}
+
+
+.dropcontent::-webkit-scrollbar-thumb {
+    background-color: #ddd; /* Kaydırma çubuğu rengi */
+}
+
+
+.dropcontent::-webkit-scrollbar-track {
+    background: transparent; /* Arka plan rengi */
+}
+
+
+.dropcontent h1 {
+    font-size: 1.2rem; /* Başlık boyutu */
+    margin-bottom: 10px; /* Alt boşluk */
+    color: #333; /* Koyu gri renk */
+}
+
+.dropcontent input[type="text"] {
+    width: 100% ;/* Genişliği ayarla */
+    height: 50px;
+    padding: 8px; /* İçerik için boşluk */
+    padding-right:0;
+    border: 1px solid #ccc; /* Kenarlık */
+    border-radius: 4px; /* Yuvarlak köşeler */
+    margin-bottom: 10px; /* Alt boşluk */
+    outline: none; /* Kenar çizgisini kaldır */
+    transition: border-color 0.3s; /* Kenar renginin geçişi */
+}
+
+.dropcontent input[type="text"]:focus {
+    border-color: #1ABC9C; /* Fokuslandığında renk değişimi */
+}
+
+.dropcontent ul {
+    list-style-type: none; /* Madde işaretlerini kaldır */
+    padding: 0; /* Varsayılan padding'i kaldır */
+    margin: 0; /* Varsayılan margin'i kaldır */
+}
+
+.dropcontent li {
+    padding: 10px; /* İçerik için boşluk */
+    border-radius: 4px; /* Yuvarlak köşeler */
+    transition: background-color 0.3s; /* Arka plan renginin geçişi */
+    cursor: pointer; /* İmleç değişimi */
+}
+
+.dropcontent li:hover {
+    background-color: #f0f0f0; /* Hover durumunda arka plan rengi */
+}
+
+/* Resimlerin yanındaki kişi adları için */
+.dropcontent li img {
+    border-radius: 50%; /* Yuvarlak görünüm */
+    margin-right: 10px; /* Sağ boşluk */
+    vertical-align: middle; /* Dikey hizalama */
+}
+.drop-i {
+    display: flex; /* İçerikleri yan yana hizalamak için */
+    float: left;
+    align-items: center; /* Dikey hizalama */
+    justify-content: center; /* Yatay hizalama */
+    padding: 8px 0; /* İçerik için boşluk */
+    border-radius: 50%; /* Yuvarlak köşeler */
+    background-color: #1ABC9C; /* İkon arka plan rengi */
+    color: #fff; /* İkon rengi */
+    margin-right: 10px; /* İkon ile metin arasında boşluk */
+    transition: background-color 0.3s; /* Arka plan rengi geçişi */
+    width: 50px; /* Sabit genişlik */
+    height: 50px; /* Sabit yükseklik */
+    left: 0;
+}
+
+
+/* A etiketi için flex ayarları */
+.drop-a {
+    display: flex; /* İçeriği yan yana hizala */
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    padding-left: 0;
+ 
+}
+
+.drop-a p{
+    font-size: 0.8rem;
+    padding: 15px 0;
+}
+
+
+/* Hover efekti */
+.drop-i:hover {
+    background-color: #16a085; /* Hover durumunda arka plan rengi */
+}
+
+
+
+
+
+.right-btn {
+    display: flex; /* Flexbox düzenini uygula */
+    justify-content:space-between;
+    position: relative;
+}
+.right-btn .btn {
+    display: flex; /* Flexbox düzenini uygula */
+    
+}
+
+.right-btn a {
+    margin: 10px;
+    padding-left: 10px;
+    
+    display: inline-block;
+    font-size: 20px; /* İkon boyutunu ayarla (isteğe bağlı) */
+    color: black; /* İkon rengi */
+    text-decoration: none; /* Alt çizgiyi kaldır */
+}
+
+.search-container {
+    position: relative;
+    width: 100%; /* Genişliği ayarlayın */
+    padding: 20px 20px;
+}
+
+.search-container input[type="text"] {
+    width: 100%;
+    padding: 10px 40px 10px 10px; /* Sağda arama ikonuna yer açmak için padding ekleyin */
+    font-size: 16px;
+    border: 1px solid #ccc;
+
+    box-sizing: border-box;
+}
+
+.search-container .fa-search {
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+    font-size: 18px;
+   
+}
+
+
+
+
+/* Contacts List */
+.contacts {
+
+    overflow-y: auto; /* İletişim listesini kaydırılabilir yap */
+    background-color: #fff;
+}
+
+
+.chat-header {
+    display: flex;
+    width: 100%;
+    align-items: center; /* Dikey ortala */
+    justify-content: space-between; /* Sol ve sağdaki alanı dağıt */
+    margin-bottom: 10px; /* Alt boşluk */
+}
+
+.contact-user {
+    display: flex;
+    width: 100%;
+    align-items: center; /* Dikey ortala */
+}
+
+#contact-profile-image {
+    display: block; /* Resmi görünür yap */
+    width: 50px;
+    height: 50px; 
+    border-radius: 50%;
+    background-color: #1ABC9C;
+    margin-right: 10px;
+}
+
+.call-icons {
+    display: flex; /* Flexbox kullanarak öğeleri hizala */
+    margin-top: 0; /* Üstten boşluk yok */
+}
+
+.call-icons a {
+    margin: 0px 10px; /* İkonlar arasında boşluk */
+    color: #000; /* İkon rengi (isteğe bağlı) */
+    text-decoration: none; /* Alt çizgiyi kaldır */
+}
+
+.contacts ul {
+    list-style-type: none;
+    height: auto;
+}
+
+.contacts li {
+    padding: 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+    position: relative;
+  
+}
+
+.contact-image {
+    width: 50px; /* Resim genişliği */
+    height: 50px; /* Resim yüksekliği */
+    border-radius: 50%; /* Yuvarlak görünüm */
+    margin-bottom: 50px; /* Alt boşluk */
+    margin-right: 10px; /* Sağ boşluk */
+    position: absolute; /* Solda hizalama */
+}
+
+.contact-text {
+    padding-left: 70px;
+    padding-bottom: 10px;
+    padding-top: 5px;
+}
+
+.contact-text p {
+    padding-top: 5px;
+    font-size: 0.8rem;
+}
+
+.contacts li:hover {
+    background-color: #e0e0e0; /* Light grey on hover */
+}
+
+/* Chat Area */
+.chat-area {
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    flex-grow: 1;
+    display: block;
+    flex-direction: column;
+    background-color: #ffffff;
+}
+
+.chat-header {
+    padding: 15px;
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #ddd;
+    position: fixed;
+    z-index: 1; /* Önde kalmasını sağlıyor */
+    top: 0;
+    right: 0;
+    width: calc(100% - 380px);
+}
+
+.chat-messages {
+    right: 0;
+    display: block;
+    padding-top: 80px;
+    flex-grow: 1;
+    overflow-y: auto; /* Kaydırma ekle */
+    width: 100%;
+    height: calc(100vh - 55px); /* Header ve footer arasındaki alanı kapla */
+    background-color: #f5f5f5;
+   
+}
+
+.chat-header h2 {
+    font-size: 20px;
+    color: #333;
+
+}
+
+.message {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 8px 12px;
+    border-radius: 20px;
+    max-width: 70%; /* Restrict width */
+    display: block;
+    position: relative; /* For pseudo-element positioning */
+}
+
+.message.sent {
+    background-color: #dcf8c6; /* Light green for sent messages */
+    margin-left: auto;
+    width: 30%;
+    height: auto;
+    min-width:150px ;
+}
+
+.message.received {
+    background-color: #9a9898; /* White for received messages */
+    margin-right: auto; /* Align received messages to the left */
+    width: 30%;
+    height: auto;
+    min-width:150px ;
+}
+
+/* Input Area */
+.container-text {
+    display: block;
+    padding: 10px 20px;
+    border-top: 1px solid #ddd;
+    background-color: #f7f7f7;
+    width: calc(100% - 250px);
+    position: fixed;
+    z-index: 1; /* Önde kalmasını sağlıyor */
+    bottom: 0;
+    right: 0;
+}
+.emoji-active,.more,.voice{
+    display: inline;
+    width: 20px;
+    height: 20px;
+     padding: 15px;
+}
+.emoji-active i,.more i,.voice i{
+    margin: auto;
+}
+
+    .emoji-active:hover ,.more:hover ,.voice:hover{
+        color: #fff;
+        background-color: #333;
+    }
+
+
+
+      
+      .more .dropcontent-2 {
+        display: none;
+        position: absolute;
+        bottom: 100%; /* Üste doğru açılması için */
+        left: 0;
+        background-color: #f9f9f9;
+        color: #000;
+        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+        padding: 10px 0;
+        z-index: 1;
+        min-width: 200px;
+        border-radius: 5px;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        opacity: 1;
+        transform: translateY(10px); /* Aşağıda başlaması için */
+      }
+      
+      .more .dropcontent-2 ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+      }
+      
+      .more .dropcontent-2 ul li {
+        padding: 10px;
+        text-align: left;
+        white-space: nowrap;
+      }
+      
+      .more .dropcontent-2 ul li:hover {
+        background-color: #333;
+        color: #fff;
+      }
+      
+      .more.active .dropcontent-2 {
+        display: block;
+        opacity: 1;
+        transform: translateY(0); /* Üstte görünecek */
+      }
+
+
+      .voice-content,.voice-stop,.voice-start{
+        display: flex;
+        float: left;
+      }
+
+      .voice-content .btn{
+        margin: 0px 5px;
+      }
+      .voice-start{
+        display: flex;
+      }
+      .voice-stop{
+        display: none;
+      }
+      .voice {
+        position: relative; /* Açılır menünün konumunu ayarlamak için gerekli */
+
+        text-decoration: none; /* Bağlantının alt çizgisini kaldırır */
+        color: black; /* Bağlantı rengini ayarlar */
+    }
+    
+      
+      .voice:hover {
+        background-color: #333;
+        color: #fff;
+      }
+      
+      .voice i {
+        font-size: 24px;
+      }
+      
+      .voice .dropcontent-3{
+        display: none;
+        position: absolute;
+        bottom: 100%;
+        right: 0;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: auto;
+        z-index: 1;
+      }
+      
+  
+      
+      .voice .dropcontent-3 h1 {
+        font-size: 16px;
+        margin: 10px 0;
+        color: #333;
+      }
+      
+      .voice .dropcontent-3 p {
+        font-size: 14px;
+        margin: 5px 0;
+        color: #666;
+      }
+
+      .signal {
+        width: 20px; /* Dairenin boyutu */
+        height: 20px; /* Dairenin boyutu */
+        background-color: red; /* Dairenin rengi */
+        border-radius: 50%; /* Daire şekli için */
+        animation: blink 1s infinite; /* Yanıp sönme animasyonu */
+        margin: 0 auto; /* Ortalamak için */
+        display: none; /* Varsayılan olarak gizle */
+    }
+    #waveform {
+
+        background-color: #f9f9f9; /* Arka plan rengi */
+   
+        
+        width: 100px;
+    }
+    
+    
+    @keyframes blink {
+        0% {
+            opacity: 1; /* Tam görünür */
+        }
+        50% {
+            opacity: 0; /* Tamamen görünmez */
+        }
+        100% {
+            opacity: 1; /* Tekrar görünür */
+        }
+    }
+    
+      
+      a.gabrage, a.stop-recording, a.continue-registration, a.voice-submit ,a.play-voice {
+        display: block;
+        padding: 10px;
+        background-color: #f0f0f0;
+        text-align: center;
+        margin: 5px 0;
+        border-radius: 5px;
+        color: #333;
+        transition: background-color 0.3s ease;
+      }
+      
+      a.gabrage:hover, a.stop-recording:hover, a.continue-registration:hover, a.voice-submit:hover ,a.play-voice:hover {
+        background-color: #ccc;
+      }
+
+.text-box {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    outline: none; /* Remove outline on focus */
+    margin-right: 10px; /* Space between input and button */
+    width: calc(100% - 260px);
+}
+
+.text-box:focus {
+    border-color: #25D366; /* Highlight on focus */
+}
+
+.emoji-container {
+    display: none; /* Flexbox ile hizalama */
+    flex-wrap: wrap; /* Taşan emojiler bir alt satıra geçer */
+    justify-content: space-around; /* Elemanlar arasında boşluk bırak */
+    align-items: center; /* Yatay ortalama */
+    margin-top: 5px;
+    height: auto;
+    background-color: #f9f9f9; /* Arka plan rengi isteğe bağlı */
+    width: calc(100% - 390px);
+    height: 200px;
+    position: fixed;
+    z-index: 1; /* Önde kalmasını sağlıyor */
+    bottom: 0;
+    right: 0;
+    overflow-y: auto; /* Kaydırma ekle */
+    scrollbar-color: transparent transparent; /* Kaydırma çubuğunu şeffaf yap */
+}
+
+.emoji {
+    width: 40px; /* Sabit bir genişlik belirleyebilirsiniz */
+    height: 40px; /* Sabit bir yükseklik belirleyebilirsiniz */
+    margin: 10px; /* Emojiler arasında boşluk */
+    display: flex; /* Flexbox ile içerik hizalama */
+    justify-content: center; /* İçerik ortalama */
+    align-items: center;
+    font-size: 24px; /* Emoji boyutu */
+}
+
+.emoji:hover {
+    background-color: black; /* Hover durumunda arka plan rengi */
+    border-radius: 50%; /* Köşeleri yuvarlama (isteğe bağlı) */
+    color: white; /* Emoji rengini değiştir */
+}
+
+.back-input-text {
+    width: 100%;
+    height: auto;
+    display: block;
+    background-color: #8f8f8f;
+}
+
+.back-input-text i {
+    font-size: 25px;
+    padding: 10px 20px;
+}
+
+.btn-submit {
+    padding: 10px 20px;
+    background-color: #25D366; /* WhatsApp green */
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-submit:hover {
+    background-color: #128C7E; /* Darker green on hover */
+}
+
+.message-info {
+    display: flex; /* Use flexbox for layout */
+    justify-content: flex-end; /* Align items to the right */
+    align-items: center; /* Vertically centers the items */
+    gap: 10px; /* Adds space between items */
+    height: auto;
+    flex-wrap: wrap; /* Ensures items wrap when screen size is small */
+}
+
+.message-info .history, 
+.message-info .read {
+    display: block;
+    padding: 0 2px;
+    width: auto; /* Auto width, adjusts based on content */
+    max-width: 100px; /* Optional: set a max width if needed */
+}
+
+/* Responsive behavior for smaller screens */
+@media screen and (max-width: 600px) {
+    .message-info .history, 
+    .message-info .read {
+        font-size: 0.7rem;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .message-info .history, 
+    .message-info .read {
+        font-size: 0.5rem;
+        padding: 0;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .message-info .history, 
+    .message-info .read {
+        padding: 0;
+        font-size: 0.4rem;
+    }
+}
+
+
+audio {
+    width: 100%;
+    height: 60px;
+    background-color: #f0f0f0; /* Arka plan rengini değiştirme */
+    border-radius: 10px; /* Kenarları yuvarlatma */
+ 
+}
+
+.design-container,.document-container{
+    width: 550px;
+    height: auto;
+    position: absolute;
+    bottom: 10px;
+    background-color: #333;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+   
+    
+}
+/* Responsive - for smaller screens */
+@media (max-width: 768px) {
+    .design-container,.document-container{
+        width: 90%;
+       
+        
+    }
+}
+
+/* For screens between 900px and 1200px */
+@media (min-width: 768px) and (max-width: 900px) {
+    .design-container,.document-container{
+        width: 90%;
+       
+        
+    }
+}
+
+
+/* For screens between 900px and 1200px */
+@media (min-width: 900px)  {
+    .design-container,.document-container{
+        width: 50%;
+       
+        
+    }
+}
+
+
+.design-container .img-container ,.document-container .document{
+    width: 100%;
+    height: 100%;
+
+    background-color: #888;
+    justify-content: center;
+   
+    
+
+}
+
+.design-container .img-container ul ,.document-container .document ul{
+    width: 100%;
+    height: 35px;
+    background-color: black;
+    display: flex; /* Flex kullanarak öğeleri yan yana hizalar */
+    padding-top: 2px;
+    margin: 0; /* Varsayılan margin'i kaldır */
+    list-style-type: none; /* Nokta işaretlerini kaldır */
+    justify-content:end;
+ 
+    
+    
+}
+
+.design-container .img-container li ,.document-container .document li {
+    width: 30px;
+    height: 30px;
+    color: #fff;
+    display: flex; /* Flex kullanarak içeriği ortala */
+    justify-content: center; /* Yatayda ortalama */
+    align-items: center; /* Dikeyde ortalama */
+    margin-right: 10px; /* Öğeler arasına boşluk ekle */
+}
+
+/* Son öğenin sağ tarafındaki boşluğu kaldırmak için */
+.design-container .img-container li:hover ,.document-container .document li:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+.design-container .img-container img,.document-container .document img{
+display: none;
+height: 350px;
+width: auto;
+max-width: 100%;
+padding: 10px 0;
+justify-content: center;
+margin: auto;
+}
+
+.design-container .img-container video{
+    display: none;
+    height: 350px;
+    width: auto;
+    max-width: 100%;
+    padding: 10px 0;
+    justify-content: center;
+    margin: auto;
+    }
+    
+
+
+
+.design-container .submit-container,.document-container .submit-container{
+    width: 100%;
+    min-height: 80px;
+    background-color: #333;
+    display: block;
+
+}
+.submit-container .first-Col{
+    display: flex;
+    float: left;
+
+}
+
+.first-Col {
+    display: flex; /* Flex düzeni etkinleştir */
+    width: 100%;
+    padding: 10px;
+    justify-content:space-between;
+    flex-wrap: wrap;
+}
+
+
+
+
+.first-Col .chat-message{
+    width: calc(100% - 80px);
+    min-height: 30px;
+    background-color: transparent;
+    color: #fff;
+    border: none;
+}
+
+
+.first-Col .btn {
+    background-color: transparent;
+    width: 30px;
+    height: 30px;
+    display: flex; /* Flex düzeni etkinleştir */
+    justify-content: center; /* Yatay olarak ortala */
+    align-items: center; /* Dikey olarak ortala */
+    border: none; /* Kenarlık varsa kaldır */
+    cursor: pointer; /* İmleci göster */
+}
+.first-Col .btn:hover{
+    
+    background-color: #16a085;
+}
+
+
+.first-Col .btn i {
+    font-size: 1rem;
+    color: #fff;
+    border-radius: 50%;
+}
+
+
+
+
+
+
+.tool {
+    display: inline-block;
+    cursor: pointer;
+    transition: background-color 0.3s;
+   
+}
+
+.tool:hover {
+    background-color: #aaa;
+}
+
+
+.emoji-container-2{
+    display: flex;
+    flex-wrap: wrap; /* Taşan emojiler bir alt satıra geçer */
+    justify-content: space-around; /* Elemanlar arasında boşluk bırak */
+    align-items: center; /* Yatay ortalama */
+    margin-top: 5px;
+    height: auto;
+    background-color: transparent; /* Arka plan rengi isteğe bağlı */
+    width: 100%;
+    height: 180px;
+
+    z-index: 50; /* Önde kalmasını sağlıyor */
+    overflow-y: auto; /* Kaydırma ekle */
+    scrollbar-color: transparent transparent; /* Kaydırma çubuğunu şeffaf yap */
+
+    transition: left 0.3s; /* Açılma animasyonu */
+
+}
+.mediaContent{
+    width: 100%;
+    height: auto;
+    justify-content: center;
+    display: block;
+}
+
+.message-image{
+    height: auto;
+    width: 100%;
+    max-height:500px;
+    justify-content: center;
+}
+
+.message-video{
+    height: auto;
+    width: 100%;
+    justify-content: center;
+    max-height:500px;
+}
+
+
+
+.camera-container {
+    position: fixed;
+    width: 500px;
+    height: auto;
+    background-color: #333;
+    padding-top: 20px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+
+.camera-container .header{
+    height: auto;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    color: #fff;
+
+}
+
+.camera-container .header a{
+    font-size: 1.5rem;
+    padding: 10px;
+    
+}
+
+.camera-container .header a:hover{
+    color:#333;
+    background-color: #fff;
+    
+}
+
+.camera-container .camera{
+    width: 500px;
+    height: auto;
+    background-color: #333;
+    padding-top: 20px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#cameraStream {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+#capturedPhoto ,#capturedVideo {
+    margin-top: 20px;
+    max-width: 100%;
+}
+
+
+.camera-container .first,.camera-container .video-first,.camera-container .video-end,.camera-container .foto-end {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 10px; /* İç boşluk ekleyerek daha iyi görünüm sağlar */
+    background-color: #34495E; /* Arka plan rengi */
+    gap: 15px; /* Butonlar arası boşluk */
+
+    margin: 20px 0;
+}
+
+.camera-container .btn a {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%; /* Yuvarlak şekil */
+    background-color: #888; /* Buton arka plan rengi */
+    display: flex; /* İçerik hizalaması için flex kullanımı */
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease; /* Hover animasyonu */
+    color: white; /* İçerik rengi */
+    text-decoration: none; /* Link alt çizgiyi kaldır */
+    font-size: 20px; /* İkon boyutu veya yazı boyutu */
+}
+
+.camera-container .btn a:hover {
+    background-color: #2C3E50; /* Hover olduğunda değişecek arka plan rengi */
+    cursor: pointer; /* Tıklanabilir işaretçi */
+}
+
+
+.document .text {
+    width: 100%;
+    display: block; /* Flexbox kullanarak içeriği hizalayacağız */
+    justify-content: center; /* Yatayda ortala */
+    align-items: center; /* Dikeyde ortala */
+    text-align: center; /* Metni ortala */
+    padding: 10px; /* İçerik ile kenar arasında boşluk bırak */
+}
+
+.document p {
+    width: 100%;
+    font-size: 0.8rem; /* Küçük metin boyutu */
+    color: #333; /* Metin rengi */
+    margin: 0; /* Varsayılan margin'i sıfırla */
+    line-height: 1.2; /* Satır yüksekliğini ayarla */
+    text-align: center;
+}
+
+
+
+
+
+.shared-contact{
+    width: 550px;
+    height: auto;
+    position: absolute;
+    bottom: 20px;
+    background-color: #333;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+
+
+.shared-contact .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #191919;
+    color: #fff;
+    padding: 10px 20px;
+}
+
+.shared-contact .header h1 {
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+.shared-contact .exit {
+    color: #fff;
+    font-size: 24px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.shared-contact .exit:hover {
+    color: #191919;
+    background-color: #fff;
+
+}
+.shared-contact .search-container {
+    width: 100%;
+    padding: 10px 20px ;
+
+}
+.shared-contact .search-contact {
+    width: 100%;
+    height: 50px;
+    padding: 20px ;
+    margin: 10px 0;
+    border: 1px solid #161616;
+    border-bottom: 2px solid #106a2f;
+    border-radius: 4px;
+    outline: none;
+    font-size: 20px;
+    box-sizing: border-box;
+    background-color: transparent;
+    color: #fff;
+}
+
+.shared-contact .shared-btn {
+    display: block;
+    text-align: center;
+    background-color: #28a745;
+    color: #fff;
+    padding: 15px 0;
+    text-decoration: none;
+    font-size: 1.3rem;
+    font-weight: bold;
+    border-radius: 4px;
+    margin: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.shared-contact .shared-btn:hover {
+    background-color: #218838;
+}
+
+.shared-contact .shared-contacts {
+    max-height: 500px;
+    overflow-y: auto;
+    border-top: 1px solid #333;
+    padding: 10px;
+}
+
+/* Scrollbar'ı gizlemek için */
+.shared-contact .shared-contacts::-webkit-scrollbar {
+    display: none; /* WebKit tabanlı tarayıcılar için scrollbar'ı gizle */
+}
+
+.shared-contact .shared-contacts {
+    -ms-overflow-style: none;  /* Internet Explorer ve Edge için scrollbar'ı gizle */
+    scrollbar-width: none;  /* Firefox için scrollbar'ı gizle */
+}
+
+.shared-contact #shared-contact-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.shared-contact #shared-contact-list li {
+    padding: 10px;
+    border-bottom: 1px solid #333;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+
+
+.shared-contact #shared-contact-list li:last-child {
+    border-bottom: none;
+}
+
+.shared-contact-li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background-color: #272727;
+    transition: background-color 0.3s;
+    color: #fff;
+
+}
+
+.shared-contact-li:hover {
+    background-color: #333;
+}
+
+.shared-contact-li .shared-contact-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+    position: relative;
+}
+
+.shared-contact-li .contact-checkbox {
+    margin-left: auto;
+}
+
+.shared-contact-li h1 {
+    font-size: 1.2em;
+    font-weight: normal;
+    margin: 0;
+    color: #fff;
+}
+
+
+.mediaContent .sharedContacts{
+    display: flex;
+    align-items: center;
+    justify-content:flex-start;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background-color: #106a2f;
+    transition: background-color 0.3s;
+    color: #fff;
+    cursor: pointer;
+}
+
+.mediaContent .sharedContacts:hover{
+    background-color: #1ABC9C;
+    
+}
+
+
+
+.questions-container {
+
+    margin: 0 auto;
+
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0,  0.3);
+    padding: 15px;
+    font-family: Arial, sans-serif;
+
+
+    width: 400px;
+    height: auto;
+    position: absolute;
+    bottom: 20px;
+    background-color: #333;
+
+
+    overflow: hidden;
+}
+
+.questions-container .header h1 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #075e54;
+}
+
+.questions-container .header .exit{
+    color: #fff;
+    font-size: 24px;
+    text-decoration: none;
+    cursor: pointer;
+    padding: 10px;
+} 
+.questions-container  .exit:hover {
+    color: #191919;
+    background-color: #fff;
+
+}
+
+.questions-container .header small {
+    font-size: 1rem;
+    color: #888;
+}
+
+.questions-container .inputContent,
+.questions-container .inputContent-Options {
+    display: flex;
+    align-items: center;
+    margin-top: 2px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+
+    
+}
+
+.questions-container input[type="text"] {
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 0 8px;
+    font-size: 1rem;
+    background-color: transparent;
+    color: #fff;
+}
+
+.questions-container .emoji {
+    margin-left: 6px;
+    color: #888;
+    cursor: pointer;
+}
+
+.options-container p {
+    font-size: 14px;
+    margin-top: 15px;
+    color: #075e54;
+}
+
+.options-container .options {
+    margin-top: 5px;
+    max-height: 250px;
+    overflow-y: auto;
+
+}
+
+
+/* Scrollbar'ı gizlemek için */
+.options-container .options::-webkit-scrollbar {
+    display: none; /* WebKit tabanlı tarayıcılar için scrollbar'ı gizle */
+}
+
+.options-container .options {
+    -ms-overflow-style: none;  /* Internet Explorer ve Edge için scrollbar'ı gizle */
+    scrollbar-width: none;  /* Firefox için scrollbar'ı gizle */
+}
+
+.question-submit {
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
+    margin-top: 15px;
+    color: #fff;
+    
+}
+
+.question-submit input[type="checkbox"] {
+    margin-right: 5px;
+    width: 15px;
+    height: 15px;
+}
+
+.question-submit .submit-btn {
+    background: #25d366;
+    color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+
+
