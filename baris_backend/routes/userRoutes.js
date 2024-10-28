@@ -18,6 +18,13 @@ router.post('/register', async (req, res) => {
     }
 });
 
+// Logout route
+router.post('/logout', (req, res) => {
+    // Token cookie'sini temizle
+    res.clearCookie('auth_token');
+    res.send('Logged out and token cleared.');
+  });
+
 module.exports = router;
 
 

@@ -792,3 +792,14 @@ nav {
         font-size: 0.4rem;
     }
 }
+
+.settings-container.active {
+    display: block;
+    position: absolute;
+    top: 50px; /* İstediğin konumu ayarla */
+    right: 50px; /* İstediğin konumu ayarla */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}

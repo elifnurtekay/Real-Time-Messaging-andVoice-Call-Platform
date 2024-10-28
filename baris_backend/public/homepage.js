@@ -1,4 +1,3 @@
-
 document.querySelector(".responsive").addEventListener("click", function(event) {
     event.preventDefault(); // Linkin varsayılan davranışını durdur
     event.stopPropagation(); // Olayın yayılmasını durdur
@@ -57,3 +56,25 @@ function adjustBarContainerPadding() {
 
 window.addEventListener('load', adjustBarContainerPadding);
 window.addEventListener('resize', adjustBarContainerPadding);
+
+document.getElementById('btn-setting').addEventListener('click', function (event) {
+    event.preventDefault();
+    const settingsContainer = document.querySelector('.settings-container');
+    settingsContainer.classList.toggle('active');
+});
+
+document.getElementById('btn-logout').addEventListener('click', function () {
+
+    fetch('api/users/logout', {
+        method: 'POST',
+    })
+    .then(response => {
+        if (response.ok) {
+            alert("Çıkış başarılı")
+            window.location.href = "/login";
+        } else {
+            console.error('Çıkış yapılamadı');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+});

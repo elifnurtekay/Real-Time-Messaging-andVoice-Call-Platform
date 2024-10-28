@@ -28,8 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
         	about: formData.get('about') ? formData.get('about').trim() : null // Null kontrolü ekle
     	};
 
-		console.log('Gönderilen veri:', data); // Veriyi konsola yazdır
-
 		try {
 			const response = await fetch('api/users/register', {
 				method: 'POST',
@@ -62,8 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			username: formData.get('username_') ? formData.get('username_').trim() : null,
       		password: formData.get('password_') ? formData.get('password_').trim() : null
 		};
-
-		console.log(data_)
 	  
 		try {
 			const response = await fetch('/api/auth/login', {
@@ -100,5 +96,4 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	  });
 	  
-
 });

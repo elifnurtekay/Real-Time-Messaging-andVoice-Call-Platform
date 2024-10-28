@@ -11,7 +11,7 @@ const authenticateToken = (req, res, next) => {
     }
   
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-        console.log(token)
+        
       if (err) return res.status(403).json({ message: 'Token geçersiz!' });
   
       req.user = user;

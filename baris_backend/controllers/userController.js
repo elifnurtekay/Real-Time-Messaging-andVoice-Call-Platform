@@ -10,7 +10,7 @@ const saltRounds = 10;
 async function registerUser(name, surname, username, password, email, about) {
     let connection;
     try {
-        console.log(password);
+        
         // Şifre ve salt değerlerini kontrol et
         if (!password) {
             throw new Error('Şifre alanı boş olamaz.');
