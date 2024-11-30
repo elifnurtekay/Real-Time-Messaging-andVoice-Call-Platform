@@ -12,7 +12,6 @@ document.querySelector(".responsive").addEventListener("click", function(event) 
     }
 });
 
-
 function adjustWidth() {
     const element = document.querySelector('.container-text'); // Genişliğini ayarlamak istediğiniz elemanın sınıfı
     const element2 = document.querySelector('.emoji-container'); // Genişliğini ayarlamak istediğiniz elemanın sınıfı
@@ -34,12 +33,9 @@ function adjustWidth() {
     console.log("navbar: " + navbar + ", barcontainer: " + barcontainer + ", newWidth: " + finalWidth);
 }
 
-
 // Sayfa yüklendiğinde ve pencere boyutu değiştiğinde fonksiyonu çağır
 window.addEventListener('DOMContentLoaded', adjustWidth);
 window.addEventListener('resize', adjustWidth);
-
-
 
 function adjustBarContainerPadding() {
     const nav = document.querySelector('.nav');
@@ -52,7 +48,6 @@ function adjustBarContainerPadding() {
        
     }
 }
-
 
 window.addEventListener('load', adjustBarContainerPadding);
 window.addEventListener('resize', adjustBarContainerPadding);

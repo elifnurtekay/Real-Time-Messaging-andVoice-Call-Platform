@@ -2,11 +2,10 @@ const getConnection = require('../config/db');
 
 const User = {
   findByUsername: async (username) => {
-    
-    connection = await getConnection();
-    console.log("MySQL Bağlandı")
+    let connection = await getConnection();
     const [rows] = await connection.execute('SELECT * FROM users WHERE username = ?', [username]);
     
+    connection.release();
     return rows[0];
   }
 };

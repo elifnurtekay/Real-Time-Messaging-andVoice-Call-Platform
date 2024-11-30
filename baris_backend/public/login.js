@@ -78,13 +78,10 @@ document.addEventListener('DOMContentLoaded', () => {
 		  	});
 
 			const data2 = await response2.text();
-			if(response2.ok){
-				
+			if(response2.ok){	
 				window.location.href = "/anasayfa"
 			}else{
-				
 				console.log(data2)
-				
 			}
 			
 		  } else {

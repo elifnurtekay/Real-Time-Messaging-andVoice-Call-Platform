@@ -16,7 +16,6 @@ const pool = mysql.createPool({
 async function getConnection() {
     try {
         const connection = await pool.getConnection(); // Bağlantıyı aç
-        console.log('Bağlantı başarılı');
         return connection; // Bağlantıyı döndür
     } catch (error) {
         console.error('Veritabanı bağlantı hatası:', error); // Hata mesajı
@@ -25,7 +24,3 @@ async function getConnection() {
 }
 
 module.exports = getConnection;
-
-
-
-

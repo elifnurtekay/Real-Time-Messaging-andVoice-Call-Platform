@@ -23,16 +23,14 @@ async function registerUser(name, surname, username, password, email, about) {
         const query = 'INSERT INTO users (user_id, name_, surname, username, password_, email, about) VALUES (?, ?, ?, ?, ?, ?, ?)';
 
         const [result] = await connection.execute(query, [userId, name, surname, username, hashedPassword, email, about]);
-        console.log('SQL sonucu:', result);  // Sorgu sonucunu kontrol et
         
         connection.release(); // Bağlantıyı serbest bırak
-        console.log('Kullanıcı başarıyla eklendi.');
     } catch (error) {
         console.error('Kayıt sırasında hata oluştu:', error);
         throw error;  // Hata fırlatın ki dışarıdaki try-catch bunu yakalayabilsin
     } finally {
         if (connection && connection.release) {
-            await connection.release(); // Bağlantıyı serbest bırak
+            connection.release(); // Bağlantıyı serbest bırak
         }
     }
 }
@@ -40,4 +38,3 @@ async function registerUser(name, surname, username, password, email, about) {
 module.exports = {
     registerUser
 };
-

@@ -10,11 +10,9 @@ const login = async (req, res) => {
     
   try {
     const user = await User.findByUsername(username);
-
     if (!user) return res.status(401).json({ message: "Kullanıcı bulunamadı" });
 
     const isPasswordValid = await bcrypt.compare(password, user.password_);
-
     if (!isPasswordValid) return res.status(401).json({ message: "Şifre yanlış" });
 
     const token = jwt.sign({ userId: user.user_id }, process.env.JWT_SECRET, { expiresIn: '1h' });
@@ -35,7 +33,6 @@ const login = async (req, res) => {
 // Korumalı route
 const protectedRoute = async (req, res) => {
   const token = req.headers['authorization'];
-  console.log(token)
   if (!token) return res.status(401).json({ message: 'Yetkisiz erişim' });
 
   try {
@@ -46,4 +43,21 @@ const protectedRoute = async (req, res) => {
   }
 };
 
-module.exports = { login, protectedRoute };
+const getUserId = async(req,res)=>{
+  const token = req.cookies.auth_token; // HTTPOnly cookie'den token al
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  if (!token) {
+    return res.status(401).json({ message: 'Token bulunamadı' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    res.status(200).json({ userId: decoded.userId });
+  } catch (error) {
+    res.status(401).json({ message: 'Geçersiz token' });
+  }
+}
+
+module.exports = { login, protectedRoute, getUserId};
