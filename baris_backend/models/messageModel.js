@@ -5,6 +5,7 @@ const Messages = {
         let connection = await getConnection();
         const [rows] = await connection.execute(`
             SELECT * FROM messages WHERE chat_id = ?;`,[chatId]);
+            connection.release();
         return rows;
     }
 }

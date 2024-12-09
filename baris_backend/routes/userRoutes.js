@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { registerUser } = require('../controllers/userController'); // Fonksiyonunuzu doğru import edin
+const { registerUser , loadProfileDetails} = require('../controllers/userController'); // Fonksiyonunuzu doğru import edin
 
 // Kayıt rotası
 router.post('/register', async (req, res) => {
@@ -23,6 +23,8 @@ router.post('/logout', (req, res) => {
     // Token cookie'sini temizle
     res.clearCookie('auth_token');
     res.send('Logged out and token cleared.');
-  });
+});
+
+router.get('/profile', loadProfileDetails);
 
 module.exports = router;

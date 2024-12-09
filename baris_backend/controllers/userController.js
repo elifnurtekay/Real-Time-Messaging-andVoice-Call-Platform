@@ -2,6 +2,8 @@ const bcrypt = require('bcrypt');
 const { v4: uuidv4 } = require('uuid');
 const getConnection = require('../config/db');
 const dotenv = require('dotenv');
+const User = require('../models/userModel');
+const jwt = require('jsonwebtoken');
 
 dotenv.config();
 const saltRounds = 10;
@@ -35,6 +37,25 @@ async function registerUser(name, surname, username, password, email, about) {
     }
 }
 
+const loadProfileDetails = async (req,res) => {
+    const token = req.cookies.auth_token;
+    if (!token) {
+        return res.status(401).json({ message: 'Token bulunamadı.' });
+    }
+
+    try {
+        const decoded = jwt.decode(token); // Sadece çözümleme
+        const userId = decoded.userId; // Kullanıcının ID'si
+
+        const profileDetail = await User.getUserProfileDetails(userId);
+        res.status(200).json({ profileDetail });
+    } catch (error) {
+        console.error("Hata:", error);
+        res.status(500).json({ message: 'Veri tabanı hatası' });
+    }
+}
+
 module.exports = {
-    registerUser
+    registerUser,
+    loadProfileDetails
 };

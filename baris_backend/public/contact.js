@@ -1,5 +1,4 @@
 const barContainer = document.querySelector('.bar-container');
-const chatsContainer = document.querySelector(".chats-container");
 
 // İçerik değiştikçe yüksekliği güncelle
 function updateBarContainerHeight() {
@@ -33,8 +32,9 @@ async function getUserIdFromToken() {
 }
    
 const contactList = document.getElementById('contact-list');
+const groupsList = document.getElementById('groups-list');
 
-async function fetchChats() {
+export async function fetchChats() {
     try {
         const response = await fetch('/api/chat/load', {
         method: 'GET',
@@ -60,10 +60,15 @@ async function fetchChats() {
 
 function renderChats(chats) {
     contactList.innerHTML = '';
+    groupsList.innerHTML = '';
     chats.sort((a, b) => new Date(b.last_message_time) - new Date(a.last_message_time));
     chats.forEach(chat => {
         const li = document.createElement('li');
-        li.classList.add('contact-item');
+        if(chat.is_group === 1){
+            li.classList.add('group-item');
+        }else{
+            li.classList.add('contact-item');
+        }
         li.setAttribute('data-chat-id', chat.chat_id);
         li.setAttribute('data-chat-name', chat.chat_name);
 
@@ -110,7 +115,11 @@ function renderChats(chats) {
         </div>
         `;
 
-        contactList.appendChild(li);
+        if(chat.is_group === 1){
+            groupsList.appendChild(li);
+        }else{
+            contactList.appendChild(li);
+        }
         
     });
     updateBarContainerHeight();
@@ -137,7 +146,28 @@ contactList.addEventListener('click', event => {
     loadMessages(chatId, chatName);
 });
 
-document.addEventListener('DOMContentLoaded', fetchChats);
+groupsList.addEventListener('click', event => {
+    // Tıklanan eleman bir `.group-item` mi?
+    const li = event.target.closest('.group-item');
+    if (!li) return; // Eğer değilse hiçbir şey yapma
+
+    // Chat ID'yi al
+    const chatId = li.getAttribute('data-chat-id');
+    const chatName = li.getAttribute('data-chat-name');
+    if (!chatId) return;
+
+    // Aktif öğeyi vurgulama
+    Array.from(groupsList.children).forEach(item => {
+        item.style.backgroundColor = '';
+        document.querySelector(".text-box").value = '';
+    });
+    li.style.backgroundColor = '#e0e0e0';
+    
+    // loadMessages fonksiyonunu çağır ve chatId'yi gönder
+    loadMessages(chatId, chatName);
+});
+
+window.addEventListener('DOMContentLoaded', fetchChats);
     
 async function loadMessages(chatId, chatName){
     try {
@@ -214,6 +244,232 @@ async function renderMessages(messages, chat_name) {
 
 }
 
+const friendsList = document.getElementById('friends-list');
+
+export async function loadFriends() {
+    try {
+        
+        // Mesajları API'den çek
+        const response = await fetch(`/api/chat/friends`,{
+            method: 'GET', // HTTP metodu
+            credentials: 'include',
+            headers:{
+                'Content-Type': 'application/json',
+                'Cache-Control': 'no-store',
+                'Pragma': 'no-cache'
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Arkadaşlar yüklenemedi');
+        }
+
+        // API'den dönen arkadaşları JSON olarak al
+        const data = await response.json();
+        // Arkadaşları render et
+        renderFriends(data.friends);
+    } catch (error) {
+        console.error('Arkadaş yükleme hatası:', error);
+    }
+
+}
+
+function renderFriends(friends){
+    friendsList.innerHTML = '';
+    friends.sort((a, b) => new Date(a.started_at) - new Date(b.started_at));
+    friends.forEach(friend=>{
+        const li = document.createElement('li');
+        li.classList.add('friend-item');
+
+        // IMAGE EKLENECEK
+        li.innerHTML = `
+            <img src="images/deneme.jpg" alt="${friend.name_} ${friend.surname}" class="friend-image" style="width: 50px; height: 50px; border-radius: 50%; margin-bottom: 10px; margin-right: 10px; float: left;">
+            <div class="friend-text" style="overflow: hidden;">
+
+                <strong class="friend-name">${friend.name_} ${friend.surname}</strong>
+                <p> ${friend.about}</p>
+            </div>
+
+        `;
+        friendsList.appendChild(li);
+    });
+}
+
+const callsList = document.getElementById("calls-list");
+
+export async function loadCalls(){
+    try {
+        // Aramaları API'den çek
+        const response = await fetch(`/api/call/load`,{
+            method: 'GET', // HTTP metodu
+            credentials: 'include',
+            headers:{
+                'Content-Type': 'application/json',
+                'Cache-Control': 'no-store',
+                'Pragma': 'no-cache'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Aramalar yüklenemedi');
+        }
+        // API'den dönen aramaları JSON olarak al
+        const data = await response.json();
+        // Aramaları render et
+        renderCalls(data.calls);
+
+    } catch(error){
+        console.error('Arama yükleme hatası:', error);
+    }
+    
+}
+
+async function renderCalls(calls){
+    callsList.innerHTML = '';
+    calls.sort((a, b) => new Date(a.started_at) - new Date(b.started_at));
+    const currentUser = await getUserIdFromToken(); 
+    calls.forEach(call =>{
+        const isCaller = call.caller_id === currentUser;
+        // Zaman formatlama
+        const startedAt = new Date(call.started_at);
+        const now = new Date();
+        const isToday = startedAt.toDateString() === now.toDateString();
+        const isYesterday = startedAt.toDateString() === new Date(now.setDate(now.getDate() - 1)).toDateString();
+
+        let timestamp = "";
+        if (isToday) {
+            timestamp = startedAt.toLocaleTimeString("tr-TR", {
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+        } else if (isYesterday) {
+            timestamp = `Dün ${startedAt.toLocaleTimeString("tr-TR", {
+                hour: "2-digit",
+                minute: "2-digit"
+            })}`;
+        } else {
+            timestamp = startedAt.toLocaleString("tr-TR", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+        }
+
+        const li = document.createElement('li');
+        li.classList.add('call-item');
+
+        // IMAGE EKLENECEK
+        li.innerHTML = `
+            <img src="images/deneme.jpg" alt="${call.other_user_name}" class="call-image" style="width: 50px; height: 50px; border-radius: 50%; margin-bottom: 10px; margin-right: 10px; float: left;">
+            <div class="call-text" style="overflow: hidden;">
+
+                <strong class="call-name">${call.other_user_name}</strong>
+
+                <p style="color: ${call.was_successful && !call.is_missed ? 'green' : 'red'};">
+                    <i class="${call.was_successful && !call.is_missed 
+                    ? (isCaller ? 'fa-solid fa-phone' : 'fa-solid fa-phone-flip') 
+                    : 'fa-solid fa-phone-slash'}">
+                    </i>
+                    ${call.was_successful && !call.is_missed 
+                        ? (isCaller ? `Giden ${call.call_type} Arama` : `Gelen ${call.call_type} Arama`) 
+                        : (call.is_missed 
+                            ? `Cevapsız ${call.call_type} Arama` 
+                            : `Başarısız ${call.call_type} Arama`)}
+                </p>
+
+                <small class="call-timestamp">
+                    ${timestamp}
+                </small>
+            </div>
+
+        `;
+        callsList.appendChild(li);
+    })
+}
+
+/* 
+callsList.addEventListener('click', () => {
+    adjustWidth();
+    Array.from(callsList.children).forEach(item => {
+        item.style.backgroundColor = '';
+    });
+    li.style.backgroundColor = '#e0e0e0';
+
+});
+    
+
+friendList.addEventListener('click', () => {
+    adjustWidth();
+    Array.from(friendsList.children).forEach(item => {
+        item.style.backgroundColor = '';
+    });
+    li.style.backgroundColor = '#e0e0e0';
+    loadChat(friend);
+
+});
+*/
+
+/* 
+let selectedFriend = friends.find(c => c.name === contact.name);
+    
+if (selectedFriend) {  // `find` kullanarak öğe bulunmama durumu kontrol edilir
+
+    const contactLi = document.querySelectorAll(".contact-item");
+    contactLi.forEach(item => {
+        item.style.backgroundColor = '';  // Tüm friend-item öğelerinin arka plan rengini sıfırlar
+    });
+
+    if(!contacts[selectedFriend.name]){
+        contacts[selectedFriend.name] = {  // `contacts` nesnesi üzerinden işlem yapılıyor
+            name: selectedFriend.name,
+            image: selectedFriend.image,
+            type: "contact"  // Virgül yerine noktalı virgül kullanılmaz
+        };
+    
+        const li = document.createElement('li');
+        li.classList.add('contact-item');
+        li.setAttribute('data-name', selectedFriend.name);  //
+        li.innerHTML = `
+            <img src="${selectedFriend.image}" alt="${selectedFriend.name}" class="contact-image" style="width: 50px; height: 50px; border-radius: 50%; margin-bottom: 10px; margin-right: 10px; float: left;">
+            <div class="contact-text" style="overflow: hidden;">
+                <strong>${selectedFriend.name}</strong>
+                <p><i class="fa-regular fa-circle-check"></i> ${selectedFriend.lastMessage}</p>
+            </div>
+        `;
+    
+        li.addEventListener('click', () => {
+            adjustWidth();
+            contactList.querySelectorAll('li').forEach(item => {  // Array.from kullanmadan doğrudan .forEach
+                item.style.backgroundColor = '';
+            });
+            li.style.backgroundColor = '#e0e0e0';
+            loadChat(selectedFriend);
+        });
+    
+        contactList.appendChild(li);
+    
+        updateBarContainerHeight();
+        const foundLi = contactList.querySelector(`li[data-name="${selectedFriend.name}"]`);
+        foundLi.style.backgroundColor = '#e0e0e0';
+    }else{
+        const foundLi = contactList.querySelector(`li[data-name="${selectedFriend.name}"]`);
+        foundLi.style.backgroundColor = '#e0e0e0';
+    }
+    // friend-item'lar için arka plan rengini sıfırlama
+    const friendLi = document.querySelectorAll(".friend-item");
+    friendLi.forEach(item => {
+        item.style.backgroundColor = '';  // Tüm friend-item öğelerinin arka plan rengini sıfırlar
+    });
+        
+    console.log(`Contact'a yeni bir kişi eklendi: ${selectedFriend.name}`);
+    
+    friendsContainer.style.display = "none";
+    contactList.style.display = "block";
+    headerText.textContent = "Sohbetler";
+    searchBar.placeholder = "Sohbetler içinde arama yapın.";
+} */
+
 const textBox = document.getElementById('text-box');
 const btnSubmit = document.getElementById('btn-submit');
 
@@ -222,6 +478,14 @@ btnSubmit.addEventListener('click', () => {
     const selectedContact = contactNameHeader.textContent; // Seçili kontak
     const messageText = textBox.value.trim(); // Textbox içeriğini al
     if (selectedContact && messageText) {
+        // Kontak mevcut mu kontrol et
+        if (!chatData[selectedContact]) {
+            chatData[selectedContact] = {
+                profileImage: "https://via.placeholder.com/50", // Varsayılan profil resmi
+                messages: [] // Yeni mesajlar dizisi oluştur
+            };
+        }
+
         const newMessage = {
             type: "sent",
             text: messageText,
@@ -229,9 +493,6 @@ btnSubmit.addEventListener('click', () => {
         };
 
         // Yeni mesajı chatData'ya ekle
-        if (!chatData[selectedContact].messages) {
-            chatData[selectedContact].messages = []; // Eğer kontak yoksa yeni bir dizi oluştur
-        }
         chatData[selectedContact].messages.push(newMessage); // Yeni mesajı ekle
 
         // Mesajı chatMessages'a ekle
@@ -254,45 +515,18 @@ btnSubmit.addEventListener('click', () => {
     }
 });
 
-// Sayfadaki tüm toggle-btn'lere tıklama olayı ekle
-document.querySelectorAll('.toggle-btn').forEach(button => {
-    button.addEventListener('click', function (e) {
-        e.stopPropagation(); // Olayın yayılmasını durdur
-        const dropContent = this.querySelector('.dropcontent');
-
-        // Diğer dropcontent'leri kapat
-        document.querySelectorAll('.dropcontent').forEach(content => {
-            if (content !== dropContent) {
-                content.style.display = 'none'; // Açık olanları kapat
-            }
-        });
-
-        // Tıklanan butona ait dropcontent'i aç/kapat
-        dropContent.style.display = dropContent.style.display === 'block' ? 'none' : 'block';
-    });
-});
-
-// Sayfanın başka bir yerine tıklandığında dropdown'u kapat
-document.addEventListener('click', function (e) {
-    if (!e.target.closest('.toggle-btn')) {
-        document.querySelectorAll('.dropcontent').forEach(content => {
-            content.style.display = 'none'; // Tüm dropcontent'leri kapat
-        });
+// Mesaj kutusundaki "enter" tuşu ile mesaj gönderme işlevi
+textBox.addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+        btnSubmit.click(); // Enter'a basıldığında mesajı gönder
     }
 });
 
-// Input alanına tıklanıldığında dropcontent'in kapanmasını engelle
-document.querySelectorAll('.dropcontent ').forEach(input => {
-    input.addEventListener('click', function (e) {
-        e.stopPropagation(); // Olayın yayılmasını durdur
-    });
-});
+/* // Sayfa yüklendiğinde bazı başlangıç ayarlarını yap
+window.addEventListener('load', () => {
+    // İlk yükleme sırasında varsayılan bir sohbeti yükleyebiliriz
 
-// Diğer listelere tıklanıldığında dropcontent'in kapanmasını sağla
-document.querySelectorAll('.dropcontent ul li').forEach(item => {
-    item.addEventListener('click', function (e) {
-        // Burada dropcontent'i kapat
-        const dropContent = this.closest('.dropcontent');
-        dropContent.style.display = 'none'; // Tıklanan öğenin ait olduğu dropcontent'i kapat
-    });
-});
+    let selectedContact = contacts.find(c => c.name === "Contact 1");
+    loadChat(selectedContact);
+
+}); */

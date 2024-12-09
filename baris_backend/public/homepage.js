@@ -29,8 +29,9 @@ function adjustWidth() {
     element2.style.width = finalWidth + "px";
     element3.style.width = finalWidth + "px";
     
-    element4.style.paddingLeft = navbar.offsetWidth + barcontainer.offsetWidth + "px";
-    console.log("navbar: " + navbar + ", barcontainer: " + barcontainer + ", newWidth: " + finalWidth);
+    element4.style.width=finalWidth + "px";
+    
+    element4.style.paddingLeft = 5 + "px";
 }
 
 // Sayfa yüklendiğinde ve pencere boyutu değiştiğinde fonksiyonu çağır
@@ -52,24 +53,23 @@ function adjustBarContainerPadding() {
 window.addEventListener('load', adjustBarContainerPadding);
 window.addEventListener('resize', adjustBarContainerPadding);
 
-document.getElementById('btn-setting').addEventListener('click', function (event) {
-    event.preventDefault();
-    const settingsContainer = document.querySelector('.settings-container');
-    settingsContainer.classList.toggle('active');
-});
+document.addEventListener('DOMContentLoaded', () => {
 
-document.getElementById('btn-logout').addEventListener('click', function () {
+    document.querySelector('.logout-button').addEventListener('click', function () {
 
-    fetch('api/users/logout', {
-        method: 'POST',
-    })
-    .then(response => {
-        if (response.ok) {
-            alert("Çıkış başarılı")
-            window.location.href = "/login";
-        } else {
-            console.error('Çıkış yapılamadı');
-        }
-    })
-    .catch(error => console.error('Error:', error));
+        fetch('api/users/logout', {
+            method: 'POST',
+            credentials: 'include' // Eğer JWT çerezde saklanıyorsa bunu ekleyin
+        })
+        .then(response => {
+            if (response.ok) {
+                alert("Çıkış başarılı")
+                window.location.href = "/login";
+            } else {
+                console.error('Çıkış yapılamadı');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+
 });

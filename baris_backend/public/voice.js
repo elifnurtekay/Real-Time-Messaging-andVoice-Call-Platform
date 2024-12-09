@@ -1,5 +1,3 @@
-//sess alma
-
 // Global değişkenler
 let mediaRecorder;
 let audioChunks = [];
@@ -7,6 +5,9 @@ let audioContext, analyser, dataArray;
 let recordingTimeInterval, recordingTime = 0;
 let audio;
 let isRecording = false;
+const voice = document.querySelector('.voice');
+let audioStream = null;
+let callAudio = null; // Ses dosyasını kontrol eden değişken
 
 // Ses kayıt arayüzüne tıklama işlemi
 document.querySelectorAll(".voice").forEach(input => {
@@ -15,19 +16,9 @@ document.querySelectorAll(".voice").forEach(input => {
         e.stopPropagation();
 
         const voiceDropContent = this.querySelector(".dropcontent-3");
-
-        if (isRecording) {
-
-            resetRecordingUI();
-            voiceDropContent.style.display = "none";
-            this.style.backgroundColor = "#fff";
-            this.style.color = "#333";
-        } else {
-            startRecording(); // Yeni kayıt başlat
-            voiceDropContent.style.display = "block";
-            this.style.backgroundColor = "#333";
-            this.style.color = "#fff";
-        }
+        voiceDropContent.style.display = "block";
+        this.style.backgroundColor = "#333";
+        this.style.color = "#fff";
     });
 });
 
@@ -50,8 +41,15 @@ async function startRecording() {
         return;
     }
     const stream = await requestMicrophoneAccess();
-    if (!stream) return;  
+    if (!stream) {
+        const voiceDropContent = this.querySelector(".dropcontent-3");
+        voiceDropContent.style.display = "none";
+        document.querySelector(".voice").style.backgroundColor = "";
+        document.querySelector(".voice").style.color = ""; 
+        return;
+    } 
 
+    audioStream = stream;
     mediaRecorder = new MediaRecorder(stream);
     mediaRecorder.start();
     isRecording = true;
@@ -65,7 +63,7 @@ async function startRecording() {
 
     mediaRecorder.onstop = ()=>{
         handleRecordingStop();
-        if (stream) {
+        if (audioStream) {
             const tracks = stream.getTracks(); // Akıştaki tüm izleri al
             tracks.forEach(track => track.stop()); // Her bir izi durdur
       
@@ -77,8 +75,7 @@ async function startRecording() {
 function stopRecording() {
     if (mediaRecorder && mediaRecorder.state !== "inactive") {
         mediaRecorder.stop();
-
-
+        isRecording=false;
         console.log("Ses kaydı durduruldu.");
     }
 }
@@ -103,7 +100,7 @@ function handleRecordingStop() {
     audioChunks = [];
     const audioUrl = URL.createObjectURL(audioBlob);
     audio = new Audio(audioUrl); // Kayıtlı sesi sakla
-    document.querySelector('.voice-mp4').innerText = audioUrl;
+    document.querySelector('.voice-mp4').src = audioUrl;
 
     isRecording = false;
 }
@@ -170,7 +167,7 @@ function initializeRecordingUI() {
     
     if (isRecording) {
         recordingTime = 0;
-    recordingTimeInterval = setInterval(updateRecordingTime, 1000);
+        recordingTimeInterval = setInterval(updateRecordingTime, 1000);
     }else{
         recordingTime=setInterval(updateRecordingTime);
     }
@@ -194,39 +191,11 @@ document.querySelector(".stop-recording").addEventListener("click", function (e)
     console.log("Kayıt durduruldu.");
 });
 
-// Kayıt devam ettirme
-document.querySelector(".continue-registration").addEventListener("click", function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (!isRecording) {
-        // Mevcut ses parçalarını kontrol et
-        if (audioChunks.length > 0) {
-            // Kayıt devam etsin
-            
-            startRecording(); // Kayıt başlatma fonksiyonunu çağır
-            console.log("Kayıt devam ettirildi.");
-            document.querySelector('.voice-start').style.display = 'flex';
-            document.querySelector('.voice-stop').style.display = 'none';
-        } else {
-            console.log("Öncelikle ses kaydı yapılmalı.");
-        }
-    } else {
-        console.log("Zaten kayıt yapılıyor.");
-    }
-});
-
-// Ses kaydını çalma
-document.querySelector('.play-voice').addEventListener('click', function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-    if (audio) audio.play();
-});
-
 // Ses kaydını gönderme
 document.querySelector(".voice-submit").addEventListener("click", function (e) {
     e.preventDefault(); // Linkin varsayılan davranışını durdur
     e.stopPropagation(); // Olayın yayılmasını durdur
+
 
     const contactNameHeader = document.getElementById('contact-name');
     if (!contactNameHeader) {
@@ -271,6 +240,7 @@ document.querySelector(".voice-submit").addEventListener("click", function (e) {
             </div>`;
         chatMessages.appendChild(messageDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight;
+
         
         e.preventDefault();
         e.stopPropagation();
@@ -284,3 +254,6 @@ document.querySelector(".voice-submit").addEventListener("click", function (e) {
         alert("Gönderilecek ses kaydı yok.");
     }
 });
+
+// Olay dinleyicileri
+voice?.addEventListener('click', startRecording);

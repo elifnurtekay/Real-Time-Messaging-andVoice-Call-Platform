@@ -2,6 +2,7 @@ const express = require('express');
 const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
 const chatRoutes = require('./routes/chatRoutes');
+const callRoutes = require('./routes/callRoutes');
 const dotenv = require('dotenv');
 const path = require('path');
 const cors = require('cors');
@@ -21,6 +22,7 @@ app.use(cors());
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/call', callRoutes);
 
 // Ana sayfa rotası (HTML dosyasını sun)
 app.get('/login', (req, res) => {

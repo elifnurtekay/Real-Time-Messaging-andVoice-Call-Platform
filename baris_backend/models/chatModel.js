@@ -3,6 +3,8 @@ const getConnection = require('../config/db');
 const Chat = {
     loadChat: async(userId)=>{
         let connection = await getConnection();
+        // is_group BİLGİSİ ALINACAK
+        // profile_photo_url BİLGİSİ ALINACAK
         const [rows] = await connection.execute(
             `SELECT DISTINCT
                 c.chat_id,
@@ -15,7 +17,8 @@ const Chat = {
                     ELSE m.message_content
                 END AS last_message,
                 m.timestamp_ AS last_message_time,
-                m.is_read AS seen
+                m.is_read AS seen,
+                c.is_group
             FROM chats c
             LEFT JOIN chat_members cm ON c.chat_id = cm.chat_id AND cm.user_id = ?
             LEFT JOIN messages m ON c.chat_id = m.chat_id 

@@ -7,6 +7,19 @@ const User = {
     
     connection.release();
     return rows[0];
+  },
+  getUserProfileDetails: async(userId)=>{
+    let connection = await getConnection();
+    const [rows] = await connection.execute(`
+      SELECT 
+      CONCAT(name_ , ' ', surname) AS name,
+      about,
+      email
+      FROM users WHERE user_id = ?`,[userId]);
+
+    connection.release();
+    
+    return rows;
   }
 };
 
