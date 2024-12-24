@@ -1,0 +1,2394 @@
+/* Reset some default browser styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.element::-webkit-scrollbar {
+    display: none;
+}
+
+a {
+    text-decoration: none; /* Alt çizgiyi kaldırır */
+    color: inherit; /* Varsayılan metin rengini kullanır */
+}
+
+a:visited {
+    color: inherit; /* Ziyaret edilmiş bağlantılar için de aynı renk */
+}
+
+a:hover {
+    text-decoration: none; /* Hover durumunda da alt çizgiyi korur */
+    color: inherit; /* Renk değişimini önler */
+}
+
+/* Navigation Container */
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px; /* Sidebar genişliği */
+    background-color: #2C3E50; /* Koyu arka plan */
+    padding: 20px 0; /* Üst ve alt boşluk */
+    position: fixed; /* Sabit pozisyon */
+    left: 0;
+    top: 0;
+    bottom: 0;
+    height: 100%; /* Tüm ekran yüksekliği */
+    z-index: 500; /* Üstte görünmesi için */
+}
+
+.nav-btn ul {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column; /* Vertical layout */
+    gap: 20px; /* Space between the buttons */
+    justify-content: center;
+}
+
+.nav-btn ul li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Styling the nav buttons */
+.nav-btn ul li a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    background-color: #34495E; /* Button background color */
+    color: #fff; /* Icon color */
+    border-radius: 50%; /* Make them circular */
+    transition: background-color 0.3s, transform 0.3s;
+    text-decoration: none;
+    font-size: 20px; /* Icon size */
+   
+}
+
+/* Hover effect */
+.nav-btn ul li a:hover {
+    background-color: #1ABC9C; /* Change color on hover */
+    transform: scale(1.1);
+}
+
+/* Active button state */
+.nav-btn ul li a.active {
+    background-color: #1ABC9C; /* Active button color */
+}
+
+.nav-btn .responsive{
+    display :none;
+
+}
+
+
+/* Responsive - for smaller screens */
+@media (max-width: 768px) {
+    .nav-btn ul li a {
+        width: 40px; 
+        height: 40px; 
+        font-size: 16px; /* Reduce icon size */
+    }
+    
+    .nav-btn .responsive{
+        display: flex;
+    }
+}
+
+.bar-container {
+    width: 350px;
+    height: 250px; /* İstediğiniz sabit yüksekliği ayarlayın */
+    background-color: #fff;
+    border-right: 1px solid #ddd;
+    padding: 15px 0;
+    position: relative;
+    z-index: 5;
+    display: block;
+    flex-direction: column; /* İçeriği dikey olarak hizala */
+    overflow-y: auto; /* Kaydırma ekle */
+    scrollbar-width: thin; /* Firefox için ince kaydırma çubuğu */
+    scrollbar-color: transparent transparent; /* Kaydırma çubuğunu şeffaf yap */
+}
+
+/* Chrome, Safari ve Edge için */
+.bar-container::-webkit-scrollbar, 
+.emoji-container::-webkit-scrollbar,
+.friends-container::-webkit-scrollbar {
+    width: 2px; /* Kaydırma çubuğu genişliği */
+}
+
+.bar-container::-webkit-scrollbar-thumb,
+.emoji-container::-webkit-scrollbar-thumb {
+    background-color: #ddd; /* Kaydırma çubuğu rengi */
+}
+
+.bar-container::-webkit-scrollbar-track,
+.emoji-container::-webkit-scrollbar-track {
+    background: transparent; /* Arka plan rengi */
+}
+
+.chat-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: #ffffff;
+}
+
+.friends-container,
+.calls-container,
+.addfriends-container,
+.groups-container {
+    display: none; /* Tüm bu container'ları gizle */
+}
+
+.header {
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    font-size: 1.5rem;
+    margin: 10px;
+    padding-left: 10px;
+
+}
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: #e0e0e0;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.contacts,
+.calls-container,
+.friends-container,
+.groups-container,
+.addfriends-container {
+    width: 450px;
+    padding: 10px;
+    background-color: #fff;
+    height: auto;
+    overflow-y: auto;
+    z-index: 5;
+}
+
+.addfriend-body {
+    padding: 5px;
+    padding-left: 0;
+    margin-top: 10px;
+}
+
+#searchFriend {
+    height: 40px;
+    width: 270px;
+    padding-left: 5px;
+    margin-bottom: 10px;
+}
+
+.addfriend-body button {
+    padding: 5px;
+    width: 40px;
+    border-radius: 5px;
+    background-color: #34495E;
+    color: #fff;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9);
+}
+
+.addfriend-body button:active {
+    color: gray;
+}
+
+
+/*settings */
+.settings-container {
+    background-color: #2C3E50;
+    position: absolute;
+    z-index: 10;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    width: 500px;
+    bottom: 0;
+    left: 100px;
+    border-radius: 7px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.9);
+    opacity: 0;
+    transform: translateY(100%);
+    transition: transform 0.5s ease, opacity 0.5s ease;
+    max-height: 0;
+    overflow: hidden;
+}
+
+.settings-container.show,
+.profile-summary.show {
+    opacity: 1;
+    max-height: 500px;
+    transform: translateY(0);
+}
+
+.settings-categories {
+    background-color: #2C3E50;
+    width: 35%;
+    display: inline-block;
+    height: auto;
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
+    padding: 4px;
+}
+
+.settings-categories ul li i {
+    margin-right: 10px;
+}
+
+.category {
+    padding: 8px;
+    margin: 5px 2px;
+    font-size: 16px;
+    font-weight: 100;
+    color: #fff;
+    border-radius: 4px;
+    background-color: #2C3E50;
+}
+
+.categories li:hover {
+    background-color: #34495E;
+    cursor: pointer;
+}
+
+.categories li:active {
+    color: gray;
+    transition: 0.3s;
+}
+
+
+.category.active,
+.profile-category.active {
+    background-color: #34495E;
+    box-shadow: 2px 2px rgba(0, 0, 0, 0.9);
+    ;
+}
+
+.setting {
+    display: none;
+}
+
+
+
+.categories li:last-child {
+    margin-top: 90px;
+}
+
+.settings-content {
+    background-color: #fff;
+    float: right;
+    width: 65%;
+    height: 500px;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+    overflow-y: scroll;
+}
+
+.settings-general {
+    padding: 10px;
+    display: block;
+}
+
+.settings-content div {
+    position: relative;
+    top: 0;
+    left: 0;
+    height: auto;
+    padding: 20px;
+}
+
+#blocked-users {
+    margin-top: 10px;
+    padding: 5px;
+    height: auto;
+}
+
+.person-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.blocked-image {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-left: 35%;
+}
+
+.person-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.blocked-name {
+    font-size: 1.2em;
+    margin-bottom: 5px;
+}
+
+.blocked-username,
+.blocked-email {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.blocked-email {
+    margin-bottom: 10px;
+}
+
+.remove-block-button {
+    background-color: #2C3E50;
+    color: #fff;
+    height: 30px;
+    border-radius: 3px;
+    box-shadow: 2px 2px rgba(0, 0, 0, 0.9);
+}
+
+.remove-block-button:hover {
+    cursor: pointer;
+}
+
+.remove-block-button:active {
+    color: lightgray;
+}
+
+.option {
+    padding: 4px;
+    margin-left: 7px;
+    margin-bottom: 20px;
+}
+
+.settings-account h4 {
+    color: #666;
+}
+
+.settings-general p {
+    width: 80%;
+}
+
+.settings-profile div {
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.settings-profile p {
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.account-pp {
+    margin: 10px;
+    margin-left: 30%;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+}
+
+.logout-button {
+    padding: 10px;
+    margin: 20px;
+    width: 120px;
+    color: #fff;
+    background-color: #34495E;
+    border-radius: 10px;
+    border: 1px solid #34495E;
+}
+
+.logout-button:hover {
+    cursor: pointer;
+    background-color: #2C3E50;
+}
+
+.logout-button:active {
+    color: lightgray;
+}
+
+/* Dropcontent varsayılan olarak gizli */
+/* Dropcontent varsayılan olarak gizli */
+.dropcontent {
+    display: none;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ddd;
+
+    width: 250;
+    max-height: 300px; /* Sabit boyut */
+    overflow-y: auto; /* Scrollbar */
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+    top: 100%; /* Butonun altına açılacak */
+    right: 0;
+    z-index: 5; /* Üstte görünmesi için */
+    border-radius: 8px; /* Yuvarlak köşeler */
+    scrollbar-width: thin; /* Firefox için ince kaydırma çubuğu */
+    scrollbar-color: transparent transparent; /* Kaydırma çubuğunu şeffaf yap */
+}
+
+/* Chrome, Safari ve Edge için */
+
+.dropcontent::-webkit-scrollbar {
+    width: 2px; /* Kaydırma çubuğu genişliği */
+}
+
+
+.dropcontent::-webkit-scrollbar-thumb {
+    background-color: #ddd; /* Kaydırma çubuğu rengi */
+}
+
+
+.dropcontent::-webkit-scrollbar-track {
+    background: transparent; /* Arka plan rengi */
+}
+
+
+.dropcontent h1 {
+    font-size: 1.2rem; /* Başlık boyutu */
+    margin-bottom: 10px; /* Alt boşluk */
+    color: #333; /* Koyu gri renk */
+}
+
+.dropcontent input[type="text"] {
+    width: 100% ;/* Genişliği ayarla */
+    height: 50px;
+    padding: 8px; /* İçerik için boşluk */
+    padding-right:0;
+    border: 1px solid #ccc; /* Kenarlık */
+    border-radius: 4px; /* Yuvarlak köşeler */
+    margin-bottom: 10px; /* Alt boşluk */
+    outline: none; /* Kenar çizgisini kaldır */
+    transition: border-color 0.3s; /* Kenar renginin geçişi */
+}
+
+.dropcontent input[type="text"]:focus {
+    border-color: #1ABC9C; /* Fokuslandığında renk değişimi */
+}
+
+.dropcontent ul {
+    list-style-type: none; /* Madde işaretlerini kaldır */
+    padding: 0; /* Varsayılan padding'i kaldır */
+    margin: 0; /* Varsayılan margin'i kaldır */
+}
+
+.dropcontent li {
+    padding: 10px; /* İçerik için boşluk */
+    border-radius: 4px; /* Yuvarlak köşeler */
+    transition: background-color 0.3s; /* Arka plan renginin geçişi */
+    cursor: pointer; /* İmleç değişimi */
+}
+
+.dropcontent li:hover {
+    background-color: #f0f0f0; /* Hover durumunda arka plan rengi */
+}
+
+/* Resimlerin yanındaki kişi adları için */
+.dropcontent li img {
+    border-radius: 50%; /* Yuvarlak görünüm */
+    margin-right: 10px; /* Sağ boşluk */
+    vertical-align: middle; /* Dikey hizalama */
+}
+.drop-i {
+    display: flex; /* İçerikleri yan yana hizalamak için */
+    float: left;
+    align-items: center; /* Dikey hizalama */
+    justify-content: center; /* Yatay hizalama */
+    padding: 8px 0; /* İçerik için boşluk */
+    border-radius: 50%; /* Yuvarlak köşeler */
+    background-color: #1ABC9C; /* İkon arka plan rengi */
+    color: #fff; /* İkon rengi */
+    margin-right: 10px; /* İkon ile metin arasında boşluk */
+    transition: background-color 0.3s; /* Arka plan rengi geçişi */
+    width: 50px; /* Sabit genişlik */
+    height: 50px; /* Sabit yükseklik */
+    left: 0;
+}
+
+
+/* A etiketi için flex ayarları */
+.drop-a {
+    display: flex; /* İçeriği yan yana hizala */
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    padding-left: 0;
+ 
+}
+
+.drop-a p{
+    font-size: 0.8rem;
+    padding: 15px 0;
+}
+
+
+/* Hover efekti */
+.drop-i:hover {
+    background-color: #16a085; /* Hover durumunda arka plan rengi */
+}
+
+
+
+
+
+.right-btn {
+    display: flex; /* Flexbox düzenini uygula */
+    justify-content:space-between;
+    position: relative;
+}
+.right-btn .btn {
+    display: flex; /* Flexbox düzenini uygula */
+    
+}
+
+.right-btn a {
+    margin: 10px;
+    padding-left: 10px;
+    
+    display: inline-block;
+    font-size: 20px; /* İkon boyutunu ayarla (isteğe bağlı) */
+    color: black; /* İkon rengi */
+    text-decoration: none; /* Alt çizgiyi kaldır */
+}
+
+.search-container {
+    position: relative;
+    width: 100%; /* Genişliği ayarlayın */
+    padding: 20px 20px;
+}
+
+.search-container input[type="text"] {
+    width: 100%;
+    padding: 10px 40px 10px 10px; /* Sağda arama ikonuna yer açmak için padding ekleyin */
+    font-size: 16px;
+    border: 1px solid #ccc;
+
+    box-sizing: border-box;
+}
+
+.search-container .fa-search {
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+    font-size: 18px;
+   
+}
+
+
+
+
+/* Contacts List */
+.contacts,
+.calls-container,
+.friends-container,
+.groups-container {
+
+    overflow-y: auto; /* İletişim listesini kaydırılabilir yap */
+    background-color: #fff;
+}
+
+/* Liste düzeni */
+#contact-list,
+#friends-list,
+#calls-list,
+#groups-list {
+    list-style-type: none;
+    /* Madde işaretlerini kaldır */
+    margin: 0;
+    padding: 0;
+}
+
+/* Liste öğeleri */
+.contact-item,
+.call-item,
+.friend-item,
+.group-item {
+    padding: 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+    position: relative;
+    display: flex;
+    /* Görüntü ve metni hizalamak için flex kullan */
+    align-items: center;
+    /* Dikey hizalama */
+}
+
+/* Profil resimleri */
+.contact-image,
+.calls-image,
+.friend-image,
+.group-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    /* Yuvarlak görünüm */
+    margin-right: 10px;
+    flex-shrink: 0;
+    /* Boyutun sabit kalmasını sağlar */
+}
+
+/* Metin düzeni */
+.contact-text,
+.call-text,
+.friend-text,
+.group-text {
+    flex-grow: 1;
+    /* Metnin kalan alanı kaplamasını sağlar */
+
+}
+
+/* Metin düzeni */
+.contact-text strong,
+.call-text strong,
+.friend-text strong,
+.group-text strong {
+    font-weight: bold;
+
+}
+
+
+
+
+.contact-text p,
+.friend-text p,
+.call-text p,
+.group-text p {
+    margin: 5px 0 0;
+    /* Üstten boşluk ekle */
+    font-size: 0.8rem;
+    /* Küçük yazı boyutu */
+    color: #666;
+    /* Metin rengi */
+}
+
+.chat-header {
+    display: flex;
+    width: 100%;
+    align-items: center; /* Dikey ortala */
+    justify-content: space-between; /* Sol ve sağdaki alanı dağıt */
+    margin-bottom: 10px; /* Alt boşluk */
+}
+
+.contact-user {
+    display: flex;
+    width: 100%;
+    align-items: center; /* Dikey ortala */
+}
+
+#contact-profile-image {
+    display: block; /* Resmi görünür yap */
+    width: 50px;
+    height: 50px; 
+    border-radius: 50%;
+    background-color: #1ABC9C;
+    margin-right: 10px;
+}
+
+.call-icons {
+    display: flex; /* Flexbox kullanarak öğeleri hizala */
+    margin-top: 0; /* Üstten boşluk yok */
+}
+
+.call-icons a {
+    margin: 0px 10px; /* İkonlar arasında boşluk */
+    padding: 7px 15px;
+    border-radius: 15px;
+    color: #000; /* İkon rengi (isteğe bağlı) */
+    text-decoration: none; /* Alt çizgiyi kaldır */
+}
+
+.call-icons a:hover {
+
+    background-color: #000;
+    /* İkon rengi (isteğe bağlı) */
+    color: #fff;
+
+}
+
+.result-container {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    padding-left: 5px;
+    border-radius: 10px;
+}
+
+.person-image {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    /* İsteğe bağlı: Yuvarlak profil resmi */
+    margin-right: 10px;
+    /* Görsel ile metin arasında boşluk */
+}
+
+.person-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.person-name {
+    font-weight: bold;
+    /* İsim-soyisim kısmını öne çıkarmak için */
+    margin-bottom: 5px;
+}
+
+.person.username {
+    color: gray;
+    /* Kullanıcı adı için farklı bir renk */
+    font-size: 0.9em;
+    /* Kullanıcı adını biraz daha küçük yapmak için */
+}
+
+.results p {
+    color: gray;
+}
+
+.contacts li:hover,
+.calls-container li:hover,
+.friends-container li:hover,
+.groups-container li:hover,
+.result-container:hover {
+    background-color: #e0e0e0; /* Light grey on hover */
+}
+
+/* Chat Area */
+.chat-area {
+    width: calc(100% - 380px);
+    right: 0;
+    height: 100%;
+    opacity: 0;
+    flex-grow: 1;
+    display: block;
+    flex-direction: column;
+    background-color: #ffffff;
+    position: absolute;
+}
+
+.chat-header {
+    padding: 15px;
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #ddd;
+    position: fixed;
+    z-index: 1; /* Önde kalmasını sağlıyor */
+    top: 0;
+    right: 0;
+    width: 100%;
+}
+
+.chat-messages {
+    right: 0;
+    display: block;
+    padding-top: 80px;
+    flex-grow: 1;
+    overflow-y: auto; /* Kaydırma ekle */
+    width: 100%;
+    height: calc(100vh - 55px); /* Header ve footer arasındaki alanı kapla */
+    background-color: #f5f5f5;
+    position: absolute;
+   
+}
+
+.chat-header h2 {
+    font-size: 20px;
+    color: #333;
+
+}
+
+.profile-summary {
+    background-color: #2C3E50;
+    height: 0;
+    width: 550px;
+    z-index: 44;
+    position: absolute;
+    top: 10px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transform: translateY(-50%);
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    overflow: hidden;
+}
+
+.profile-summary-click {
+    height: 100%;
+    width: 70%;
+    position: absolute;
+    cursor: pointer;
+}
+
+.profile-categories {
+    width: 35%;
+    height: 500px;
+    background-color: #2C3E50;
+    display: inline-block;
+    padding: 10px;
+    border-top-left-radius: inherit;
+    border-bottom-left-radius: inherit;
+
+}
+
+.profile-content {
+    width: 65%;
+    height: inherit;
+    background-color: #fff;
+    float: right;
+    border-top-right-radius: inherit;
+    border-bottom-right-radius: inherit;
+    overflow-y: scroll;
+
+}
+
+.profile-summary div {
+    padding: 5px;
+}
+
+
+.profile-header-info {
+    display: flex;
+    flex-direction: column;
+    /* Bütün bileşenleri alt alta yerleştir */
+    align-items: center;
+    /* İçeriği ortala */
+    text-align: center;
+    /* Yazı hizalaması */
+}
+
+
+.profile-header-info img {
+    max-width: 100px;
+    /* Resim boyutunu ayarlamak için */
+    height: auto;
+    /* Yükseklik orantılı ayarlanır */
+    border-radius: 50%;
+
+}
+
+.name-surname {
+    display: flex;
+    /* Name ve surname'ı yan yana yerleştir */
+    justify-content: center;
+    /* Ortala */
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 15px;
+    gap: 5px;
+    /* İki öğe arasında boşluk */
+}
+
+.connection {
+    margin-top: 10px;
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: space-around;
+}
+
+.connection button {
+    padding: 15px 20px;
+    width: 45%;
+    border-radius: 5px;
+    border: none;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+    color: #2C3E50;
+}
+
+
+.profile-body-informations {
+    width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+
+.profile-body-informations p {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    color: gray;
+}
+
+.block-report {
+    margin-top: 20px;
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: space-around;
+}
+
+.block-report button {
+    padding: 5px 2px;
+    width: 45%;
+    border-radius: 1px;
+    border: none;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    color: #2C3E50;
+}
+
+.block-report button:hover,
+.connection button:hover {
+    background-color: #e0e0e0;
+}
+
+.block-report button:active,
+.connection button:active {
+    color: gray;
+}
+
+#medias-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* Her satırda üç sütun */
+    gap: 5px;
+    /* Resimler arası boşluk */
+    width: 100%;
+    margin: 0 auto;
+    list-style: none;
+    /* Liste stilini kaldır */
+    padding: 0;
+}
+
+
+.media-item img {
+    width: 100%;
+    height: 80px;
+    border-radius: 10px;
+    transition: opacity 0.3s ease;
+}
+
+.media-item img:hover {
+    opacity: 0.6;
+}
+
+
+.file-item {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.file-item p {
+    color: gray;
+}
+
+
+.file-item:hover {
+    background-color: #e0e0e0;
+}
+
+.file-item:active {
+    color: gray;
+}
+
+.file-image img {
+    width: 60px;
+    height: auto;
+    border-radius: 10px;
+}
+
+.file-informations {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.link-item {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.link-item p {
+    color: gray;
+}
+
+
+.link-item:hover {
+    background-color: #e0e0e0;
+}
+
+.link-item:active {
+    color: gray;
+}
+
+.link-image img {
+    width: 100px;
+    height: auto;
+    border-radius: 10px;
+}
+
+.link-informations {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.group-item {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.group-item p {
+    color: gray;
+}
+
+
+.group-item:hover {
+    background-color: #e0e0e0;
+}
+
+.group-item:active {
+    color: gray;
+}
+
+.group-image-profile img {
+    width: 50px;
+    height: auto;
+    border-radius: 10px;
+}
+
+.group-informations {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+
+.categorization li {
+    padding: 10px;
+    margin-bottom: 15px;
+    color: #fff;
+    border-radius: 5px;
+    border: 1px solid #2C3E50;
+}
+
+.categorization li i {
+    margin-right: 10px;
+}
+
+.categorization li:hover {
+    background-color: #34495E;
+    cursor: pointer;
+}
+
+.categorization li:active {
+    color: gray;
+}
+
+.profile-summary-media-container,
+.profile-summary-files-container,
+.profile-summary-links-container,
+.profile-summary-groups-container {
+    display: none;
+}
+
+.message {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 8px 12px;
+    border-radius: 20px;
+    max-width: 70%; /* Restrict width */
+    display: block;
+    position: relative; /* For pseudo-element positioning */
+}
+
+.message.sent {
+    background-color: #dcf8c6; /* Light green for sent messages */
+    margin-left: auto;
+    width: 30%;
+    height: auto;
+    min-width:150px ;
+}
+
+.message.received {
+    background-color: #9a9898; /* White for received messages */
+    margin-right: auto; /* Align received messages to the left */
+    width: 30%;
+    height: auto;
+    min-width:150px ;
+}
+
+/* Input Area */
+.container-text {
+    display: block;
+    padding: 10px 20px;
+    border-top: 1px solid #ddd;
+    background-color: #f7f7f7;
+    width: calc(100% - 250px);
+    position: fixed;
+    z-index: 1; /* Önde kalmasını sağlıyor */
+    bottom: 0;
+    right: 0;
+}
+
+.emoji-active,
+.more,
+.voice{
+    display: inline;
+    width: 20px;
+    height: 20px;
+    padding: 15px;
+}
+
+.emoji-active i,
+.more i,
+.voice i{
+    margin: auto;
+}
+
+.emoji-active:hover ,
+.more:hover ,
+.voice:hover{
+    color: #fff;
+    background-color: #333;
+}
+
+.more .dropcontent-2 {
+    display: none;
+    position: absolute;
+    bottom: 100%; /* Üste doğru açılması için */
+    left: 0;
+    background-color: #f9f9f9;
+    color: #000;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    padding: 10px 0;
+    z-index: 1;
+    min-width: 200px;
+    border-radius: 5px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    opacity: 1;
+    transform: translateY(10px); /* Aşağıda başlaması için */
+}
+      
+.more .dropcontent-2 ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+      
+.more .dropcontent-2 ul li {
+    padding: 10px;
+    text-align: left;
+    white-space: nowrap;
+    width: 100%;
+    cursor: pointer;
+}
+      
+.more .dropcontent-2 ul li:hover {
+    background-color: #333;
+    color: #fff;
+}
+      
+.more.active .dropcontent-2 {
+    display: block;
+    opacity: 1;
+    transform: translateY(0); /* Üstte görünecek */
+}
+
+
+.voice-content,
+.voice-stop,
+.voice-start{
+    display: flex;
+    float: left;
+}
+
+.voice-content .btn{
+    margin: 0px 5px;
+}
+
+.voice-start{
+    display: flex;
+}
+      
+.voice-stop{
+    display: none;
+}
+.voice {
+    position: relative; /* Açılır menünün konumunu ayarlamak için gerekli */
+
+    text-decoration: none; /* Bağlantının alt çizgisini kaldırır */
+    color: black; /* Bağlantı rengini ayarlar */
+}
+      
+.voice:hover {
+    background-color: #333;
+    color: #fff;
+}
+      
+.voice i {
+    font-size: 24px;
+}
+      
+.voice .dropcontent-3{
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: auto;
+    z-index: 1;
+}
+      
+.voice .dropcontent-3 h1 {
+    font-size: 16px;
+    margin: 10px 0;
+    color: #333;
+}
+      
+.voice .dropcontent-3 p {
+    font-size: 14px;
+    margin: 5px 0;
+    color: #666;
+}
+
+.signal {
+    width: 20px; /* Dairenin boyutu */
+    height: 20px; /* Dairenin boyutu */
+    background-color: red; /* Dairenin rengi */
+    border-radius: 50%; /* Daire şekli için */
+    animation: blink 1s infinite; /* Yanıp sönme animasyonu */
+    margin: 0 auto; /* Ortalamak için */
+    display: none; /* Varsayılan olarak gizle */
+}
+
+#waveform {
+
+    background-color: #f9f9f9; /* Arka plan rengi */
+   
+        
+    width: 100px;
+}
+    
+.voice-mp4 {
+    flex-shrink: 0;
+    width: 250px;
+    /* Ses çubuğunun genişliği */
+}
+
+@keyframes blink {
+    0% {
+        opacity: 1; /* Tam görünür */
+    }
+    50% {
+        opacity: 0; /* Tamamen görünmez */
+    }
+    100% {
+        opacity: 1; /* Tekrar görünür */
+    }
+}
+    
+a.gabrage,
+a.stop-recording,
+a.continue-registration,
+a.voice-submit,
+a.play-voice {
+    display: block;
+    padding: 10px;
+    background-color: #f0f0f0;
+    text-align: center;
+    margin: 5px 0;
+    border-radius: 5px;
+    color: #333;
+    transition: background-color 0.3s ease;
+}
+      
+a.gabrage:hover,
+a.stop-recording:hover,
+a.continue-registration:hover,
+a.voice-submit:hover,
+a.play-voice:hover {
+    background-color: #ccc;
+}
+
+.text-box {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    outline: none; /* Remove outline on focus */
+    margin-right: 10px; /* Space between input and button */
+    width: calc(100% - 260px);
+}
+
+.text-box:focus {
+    border-color: #25D366; /* Highlight on focus */
+}
+
+.emoji-container {
+    display: none; /* Flexbox ile hizalama */
+    flex-wrap: wrap; /* Taşan emojiler bir alt satıra geçer */
+    justify-content: space-around; /* Elemanlar arasında boşluk bırak */
+    align-items: center; /* Yatay ortalama */
+    margin-top: 5px;
+    height: auto;
+    background-color: #f9f9f9; /* Arka plan rengi isteğe bağlı */
+    width: calc(100% - 390px);
+    height: 200px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    overflow-y: auto; /* Kaydırma ekle */
+    scrollbar-color: transparent transparent; /* Kaydırma çubuğunu şeffaf yap */
+}
+
+.emoji {
+    width: 40px; /* Sabit bir genişlik belirleyebilirsiniz */
+    height: 40px; /* Sabit bir yükseklik belirleyebilirsiniz */
+    margin: 10px; /* Emojiler arasında boşluk */
+    display: flex; /* Flexbox ile içerik hizalama */
+    justify-content: center; /* İçerik ortalama */
+    align-items: center;
+    font-size: 24px; /* Emoji boyutu */
+}
+
+.emoji:hover {
+    background-color: black; /* Hover durumunda arka plan rengi */
+    border-radius: 50%; /* Köşeleri yuvarlama (isteğe bağlı) */
+    color: white; /* Emoji rengini değiştir */
+}
+
+.back-input-text {
+    width: 100%;
+    height: auto;
+    display: block;
+    background-color: #8f8f8f;
+}
+
+.back-input-text i {
+    font-size: 25px;
+    padding: 10px 20px;
+}
+
+.btn-submit {
+    padding: 10px 20px;
+    background-color: #25D366; /* WhatsApp green */
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-submit:hover {
+    background-color: #128C7E; /* Darker green on hover */
+}
+
+.message-info {
+    display: flex; /* Use flexbox for layout */
+    justify-content: flex-end; /* Align items to the right */
+    align-items: center; /* Vertically centers the items */
+    gap: 10px; /* Adds space between items */
+    height: auto;
+    flex-wrap: wrap; /* Ensures items wrap when screen size is small */
+}
+
+.message-info .history, 
+.message-info .read {
+    display: block;
+    padding: 0 2px;
+    width: auto; /* Auto width, adjusts based on content */
+    max-width: 100px; /* Optional: set a max width if needed */
+}
+
+/* Responsive behavior for smaller screens */
+@media screen and (max-width: 600px) {
+    .message-info .history, 
+    .message-info .read {
+        font-size: 0.7rem;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .message-info .history, 
+    .message-info .read {
+        font-size: 0.5rem;
+        padding: 0;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .message-info .history, 
+    .message-info .read {
+        padding: 0;
+        font-size: 0.4rem;
+    }
+}
+
+audio {
+    width: 100%;
+    height: 60px;
+    background-color: #f0f0f0; /* Arka plan rengini değiştirme */
+    border-radius: 10px; /* Kenarları yuvarlatma */
+ 
+}
+
+.design-container,.document-container{
+    width: 550px;
+    height: auto;
+    position: absolute;
+    bottom: 10px;
+    background-color: #333;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+   
+    
+}
+/* Responsive - for smaller screens */
+@media (max-width: 768px) {
+    .design-container,
+    .document-container{
+        width: 90%;
+       
+        
+    }
+}
+
+/* For screens between 900px and 1200px */
+@media (min-width: 768px) and (max-width: 900px) {
+    .design-container,
+    .document-container{
+        width: 90%;
+       
+        
+    }
+}
+
+
+/* For screens between 900px and 1200px */
+@media (min-width: 900px)  {
+    .design-container,
+    .document-container{
+        width: 50%;
+       
+        
+    }
+}
+
+
+.design-container .img-container,
+.document-container .document{
+    width: 100%;
+    height: 100%;
+
+    background-color: #888;
+    justify-content: center;
+   
+    
+
+}
+
+.design-container .img-container ul,
+.document-container .document ul{
+    width: 100%;
+    height: 35px;
+    background-color: black;
+    display: flex; /* Flex kullanarak öğeleri yan yana hizalar */
+    padding-top: 2px;
+    margin: 0; /* Varsayılan margin'i kaldır */
+    list-style-type: none; /* Nokta işaretlerini kaldır */
+    justify-content:end;
+ 
+    
+    
+}
+
+.design-container .img-container li,
+.document-container .document li {
+    width: 30px;
+    height: 30px;
+    color: #fff;
+    display: flex; /* Flex kullanarak içeriği ortala */
+    justify-content: center; /* Yatayda ortalama */
+    align-items: center; /* Dikeyde ortalama */
+    margin-right: 10px; /* Öğeler arasına boşluk ekle */
+}
+
+/* Son öğenin sağ tarafındaki boşluğu kaldırmak için */
+.design-container .img-container li:hover,
+.document-container .document li:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+.design-container .img-container img,
+.document-container .document img{
+    display: none;
+    height: 350px;
+    width: auto;
+    max-width: 100%;
+    padding: 10px 0;
+    justify-content: center;
+    margin: auto;
+}
+
+.design-container .img-container video{
+    display: none;
+    height: 350px;
+    width: auto;
+    max-width: 100%;
+    padding: 10px 0;
+    justify-content: center;
+    margin: auto;
+}
+
+.design-container .submit-container,
+.document-container .submit-container{
+    width: 100%;
+    min-height: 80px;
+    background-color: #333;
+    display: block;
+
+}
+.submit-container .first-Col{
+    display: flex;
+    float: left;
+
+}
+
+.first-Col {
+    display: flex; /* Flex düzeni etkinleştir */
+    width: 100%;
+    padding: 10px;
+    justify-content:space-between;
+    flex-wrap: wrap;
+}
+
+.first-Col {
+    width: calc(100% - 80px);
+    min-height: 30px;
+    background-color: transparent;
+    color: #fff;
+    border: none;
+}
+
+.first-Col .btn {
+    background-color: transparent;
+    width: 30px;
+    height: 30px;
+    display: flex; /* Flex düzeni etkinleştir */
+    justify-content: center; /* Yatay olarak ortala */
+    align-items: center; /* Dikey olarak ortala */
+    border: none; /* Kenarlık varsa kaldır */
+    cursor: pointer; /* İmleci göster */
+}
+
+.first-Col .btn:hover{
+    
+    background-color: #16a085;
+}
+
+
+.first-Col .btn i {
+    font-size: 1rem;
+    color: #fff;
+    border-radius: 50%;
+}
+
+
+
+
+
+
+.tool {
+    display: inline-block;
+    cursor: pointer;
+    transition: background-color 0.3s;
+   
+}
+
+.tool:hover {
+    background-color: #aaa;
+}
+
+
+.emoji-container-2{
+    display: flex;
+    flex-wrap: wrap; /* Taşan emojiler bir alt satıra geçer */
+    justify-content: space-around; /* Elemanlar arasında boşluk bırak */
+    align-items: center; /* Yatay ortalama */
+    margin-top: 5px;
+    height: auto;
+    background-color: transparent; /* Arka plan rengi isteğe bağlı */
+    width: 100%;
+    height: 180px;
+
+    z-index: 50; /* Önde kalmasını sağlıyor */
+    overflow-y: auto; /* Kaydırma ekle */
+    scrollbar-color: transparent transparent; /* Kaydırma çubuğunu şeffaf yap */
+
+    transition: left 0.3s; /* Açılma animasyonu */
+
+}
+.mediaContent{
+    width: 100%;
+    height: auto;
+    justify-content: center;
+    display: block;
+}
+
+.message-image{
+    height: auto;
+    width: 100%;
+    max-height:500px;
+    justify-content: center;
+}
+
+.message-video{
+    height: auto;
+    width: 100%;
+    justify-content: center;
+    max-height:500px;
+}
+
+
+
+.camera-container {
+    position: fixed;
+    width: 500px;
+    height: auto;
+    background-color: #333;
+    padding-top: 20px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+
+.camera-container .header{
+    height: auto;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    color: #fff;
+
+}
+
+.camera-container .header a{
+    font-size: 1.5rem;
+    padding: 10px;
+    
+}
+
+.camera-container .header a:hover{
+    color:#333;
+    background-color: #fff;
+    
+}
+
+.camera-container .camera{
+    width: 500px;
+    height: auto;
+    background-color: #333;
+    padding-top: 20px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#cameraStream {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+#capturedPhoto ,#capturedVideo {
+    margin-top: 20px;
+    max-width: 100%;
+}
+
+
+.camera-container .first,
+.camera-container .video-first,
+.camera-container .video-end,
+.camera-container .foto-end {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 10px; /* İç boşluk ekleyerek daha iyi görünüm sağlar */
+    background-color: #34495E; /* Arka plan rengi */
+    gap: 15px; /* Butonlar arası boşluk */
+
+    margin: 20px 0;
+}
+
+.camera-container .btn a {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%; /* Yuvarlak şekil */
+    background-color: #888; /* Buton arka plan rengi */
+    display: flex; /* İçerik hizalaması için flex kullanımı */
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease; /* Hover animasyonu */
+    color: white; /* İçerik rengi */
+    text-decoration: none; /* Link alt çizgiyi kaldır */
+    font-size: 20px; /* İkon boyutu veya yazı boyutu */
+}
+
+.camera-container .btn a:hover {
+    background-color: #2C3E50; /* Hover olduğunda değişecek arka plan rengi */
+    cursor: pointer; /* Tıklanabilir işaretçi */
+}
+
+
+.document .text {
+    width: 100%;
+    display: block; /* Flexbox kullanarak içeriği hizalayacağız */
+    justify-content: center; /* Yatayda ortala */
+    align-items: center; /* Dikeyde ortala */
+    text-align: center; /* Metni ortala */
+    padding: 10px; /* İçerik ile kenar arasında boşluk bırak */
+}
+
+.document p {
+    width: 100%;
+    font-size: 0.8rem; /* Küçük metin boyutu */
+    color: #333; /* Metin rengi */
+    margin: 0; /* Varsayılan margin'i sıfırla */
+    line-height: 1.2; /* Satır yüksekliğini ayarla */
+    text-align: center;
+}
+
+
+
+
+
+.shared-contact{
+    width: 550px;
+    height: auto;
+    position: absolute;
+    bottom: 20px;
+    background-color: #333;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+
+
+.shared-contact .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #191919;
+    color: #fff;
+    padding: 10px 20px;
+}
+
+.shared-contact .header h1 {
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+.shared-contact .exit {
+    color: #fff;
+    font-size: 24px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.shared-contact .exit:hover {
+    color: #191919;
+    background-color: #fff;
+
+}
+.shared-contact .search-container {
+    width: 100%;
+    padding: 10px 20px ;
+
+}
+.shared-contact .search-contact {
+    width: 100%;
+    height: 50px;
+    padding: 20px ;
+    margin: 10px 0;
+    border: 1px solid #161616;
+    border-bottom: 2px solid #106a2f;
+    border-radius: 4px;
+    outline: none;
+    font-size: 20px;
+    box-sizing: border-box;
+    background-color: transparent;
+    color: #fff;
+}
+
+.shared-contact .shared-btn {
+    display: block;
+    text-align: center;
+    background-color: #28a745;
+    color: #fff;
+    padding: 15px 0;
+    text-decoration: none;
+    font-size: 1.3rem;
+    font-weight: bold;
+    border-radius: 4px;
+    margin: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.shared-contact .shared-btn:hover {
+    background-color: #218838;
+}
+
+.shared-contact .shared-contacts {
+    max-height: 500px;
+    overflow-y: auto;
+    border-top: 1px solid #333;
+    padding: 10px;
+}
+
+/* Scrollbar'ı gizlemek için */
+.shared-contact .shared-contacts::-webkit-scrollbar {
+    display: none; /* WebKit tabanlı tarayıcılar için scrollbar'ı gizle */
+}
+
+.shared-contact .shared-contacts {
+    -ms-overflow-style: none;  /* Internet Explorer ve Edge için scrollbar'ı gizle */
+    scrollbar-width: none;  /* Firefox için scrollbar'ı gizle */
+}
+
+.shared-contact #shared-contact-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.shared-contact #shared-contact-list li {
+    padding: 10px;
+    border-bottom: 1px solid #333;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+
+
+.shared-contact #shared-contact-list li:last-child {
+    border-bottom: none;
+}
+
+.shared-contact-li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background-color: #272727;
+    transition: background-color 0.3s;
+    color: #fff;
+
+}
+
+.shared-contact-li:hover {
+    background-color: #333;
+}
+
+.shared-contact-li .shared-contact-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+    position: relative;
+}
+
+.shared-contact-li .contact-checkbox {
+    margin-left: auto;
+}
+
+.shared-contact-li h1 {
+    font-size: 1.2em;
+    font-weight: normal;
+    margin: 0;
+    color: #fff;
+}
+
+
+.mediaContent .sharedContacts{
+    display: flex;
+    align-items: center;
+    justify-content:flex-start;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background-color: #106a2f;
+    transition: background-color 0.3s;
+    color: #fff;
+    cursor: pointer;
+}
+
+.mediaContent .sharedContacts:hover{
+    background-color: #1ABC9C;
+    
+}
+
+
+
+.questions-container {
+
+    margin: 0 auto;
+
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0,  0.3);
+    padding: 15px;
+    font-family: Arial, sans-serif;
+
+
+    width: 400px;
+    height: auto;
+    position: absolute;
+    bottom: 20px;
+    background-color: #333;
+
+
+    overflow: hidden;
+}
+
+.questions-container .header h1 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #075e54;
+}
+
+.questions-container .header .exit{
+    color: #fff;
+    font-size: 24px;
+    text-decoration: none;
+    cursor: pointer;
+    padding: 10px;
+} 
+
+.questions-container  .exit:hover {
+    color: #191919;
+    background-color: #fff;
+
+}
+
+.questions-container .header small {
+    font-size: 1rem;
+    color: #888;
+}
+
+.questions-container .inputContent,
+.questions-container .inputContent-Options {
+    display: flex;
+    align-items: center;
+    margin-top: 2px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+
+    
+}
+
+.questions-container input[type="text"] {
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 0 8px;
+    font-size: 1rem;
+    background-color: transparent;
+    color: #fff;
+}
+
+.questions-container .emoji {
+    margin-left: 6px;
+    color: #888;
+    cursor: pointer;
+}
+
+.options-container p {
+    font-size: 14px;
+    margin-top: 15px;
+    color: #075e54;
+}
+
+.options-container .options {
+    margin-top: 5px;
+    max-height: 250px;
+    overflow-y: auto;
+
+}
+
+
+/* Scrollbar'ı gizlemek için */
+.options-container .options::-webkit-scrollbar {
+    display: none; /* WebKit tabanlı tarayıcılar için scrollbar'ı gizle */
+}
+
+.options-container .options {
+    -ms-overflow-style: none;  /* Internet Explorer ve Edge için scrollbar'ı gizle */
+    scrollbar-width: none;  /* Firefox için scrollbar'ı gizle */
+}
+
+.question-submit {
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
+    margin-top: 15px;
+    color: #fff;
+    
+}
+
+.question-submit input[type="checkbox"] {
+    margin-right: 5px;
+    width: 15px;
+    height: 15px;
+}
+
+.question-submit .submit-btn {
+    background: #25d366;
+    color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.emoji-box {
+    display: flex;
+    flex-wrap: wrap;
+    /* Taşan emojiler bir alt satıra geçer */
+    justify-content: space-around;
+    /* Elemanlar arasında boşluk bırak */
+    align-items: center;
+    /* Yatay ortalama */
+    margin-top: 5px;
+    height: auto;
+    background-color: transparent;
+    /* Arka plan rengi isteğe bağlı */
+    width: 100%;
+    height: 180px;
+
+    bottom: 0;
+    z-index: 50;
+    /* Önde kalmasını sağlıyor */
+    overflow-y: auto;
+    /* Kaydırma ekle */
+    scrollbar-color: transparent transparent;
+    /* Kaydırma çubuğunu şeffaf yap */
+
+    transition: left 0.3s;
+    /* Açılma animasyonu */
+
+
+}
+
+
+.emoji-box span {
+    cursor: pointer;
+    font-size: 20px;
+    margin: 5px;
+}
+
+
+
+
+.survey-container {
+    background: transparent;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 100%;
+    margin: auto;
+}
+
+.survey-title {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.survey-container .options {
+    margin-bottom: 20px;
+}
+
+.survey-container .option {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 1.2em;
+    color: #555;
+    cursor: pointer;
+}
+
+.survey-container .option input {
+    display: none;
+    /* Normal checkbox'ı gizle */
+}
+
+.checkmark {
+    width: 24px;
+    height: 24px;
+    background-color: #eee;
+    border-radius: 5px;
+    margin-right: 10px;
+    position: relative;
+}
+
+.survey-container .option input:checked+.checkmark {
+    background-color: #4caf50;
+    /* Seçim yapıldığında yeşil */
+}
+
+.checkmark::after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.survey-container .option input:checked+.checkmark::after {
+    display: block;
+}
+
+.checkmark::after {
+    left: 9px;
+    top: 5px;
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.call-to-action {
+    font-size: 1em;
+    color: #777;
+}
+
+
+
+/* Ortak Konteyner */
+.video-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    z-index: 20;
+    background-color: #075e54;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+
+}
+
+.voicecall-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    z-index: 20;
+    background-color: #075e54;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+
+}
+
+
+
+#oppositeVideo,
+.opposite
+{
+    width: 80%;
+    max-width: 900px;
+    height: 70%;
+    background-color: #161616;
+    position: relative;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+}
+.opposite h1{
+    font-size: 1.8rem;
+    color: #fff;
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translate(-50%, -50%); /* Adjust the element to be truly centered */
+
+}
+#oppositeimg{
+    width: 100%;
+    height: 100%;
+}
+.profileOpposite {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    background-color: yellow; /* Or you can replace this with an image */
+    position: absolute;
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Adjust the element to be truly centered */
+    opacity: 0.5;
+
+}
+
+
+
+
+
+#localVideo,
+.local{
+    width: 20%;
+    max-width: 400px;
+    min-height: 200px;
+    height: auto;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border-radius: 10px;
+    background-color: #858585;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    border: 2px solid #ffffff;
+    z-index: 2;
+}
+
+#localimg{
+    width: 100%;
+    height: 100%;
+}
+
+.profileLocal {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: yellow; /* Or you can replace this with an image */
+    position: absolute;
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Adjust the element to be truly centered */
+    opacity: 0.5;
+
+}
+
+.videoCallBtn,
+.voiceCallBtn {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 15px 25px;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    min-width: 400px;
+}
+
+.callBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    background-color: #444444;
+    color: #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.callBtn:hover {
+    background-color: #555555;
+    transform: scale(1.1);
+}
+
+.callBtn.selected {
+    background-color: #1d72b8;
+    box-shadow: 0 6px 14px rgba(29, 114, 184, 0.7);
+    color: #ffffff;
+}
+
+.waiting-message,
+.voiceCallwaiting-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffffff;
+    text-align: center;
+    display: none;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+
+}
+
+
+
+.call-status {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+    font-weight: bold;
+    color: red;
+    text-align: center;
+    display: none;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
