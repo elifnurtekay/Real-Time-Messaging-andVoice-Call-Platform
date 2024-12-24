@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Web Clone</title>
+    <link rel="stylesheet" href="homePage.css"> <!-- Link to your CSS file -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+</head>
+
+<body>
+
+
+    <!-- Video Arama Konteyneri -->
+    <div class="video-container" id="videoContainer">
+        <video id="localVideo" autoplay muted></video>
+        <video id="oppositeVideo" autoplay muted></video>
+        <div class="videoCallBtn">
+            <a href="" id="call_closeVideo"class="callBtn"><i class="fa-solid fa-video-slash"></i></a>
+            <a href="" id="call_closeVideoMicrophone"class="callBtn"><i class="fa-solid fa-microphone-slash"></i></a>
+            <a href="" id="call_closeVideoCall"class="callBtn"><i class="fa-solid fa-x"></i></a>
+        </div>
+        <div class="waiting-message" id="waitingMessage">Arama Yapılıyor...</div>
+        <div class="call-status" id="callStatus"></div>
+    </div>
+    
+    
+    <div class="voicecall-container" id="voiceCallContainer" > 
+        <div class="local">
+        <img  id="localimg">
+        <img  class="profileLocal">
+        </div>
+    
+        <div class="opposite">
+        <img id="oppositeimg">
+        <h1 class="sayac">Süre:</h1>
+        <img class="profileOpposite">
+        </div>
+            
+            
+        <div class="voiceCallBtn">
+            <a href="" id="call_closeCallMicrophone"class="callBtn"><i class="fa-solid fa-microphone-slash"></i></a>
+            <a href="" id="call_closeVoiceCall"class="callBtn"><i class="fa-solid fa-x"></i></a>
+        </div>
+        <div class="voiceCallwaiting-message" id="voiceCallWaitingMessage">Arama Yapılıyor...</div>
+        <div class="call-status" id="voiceCallStatus"></div>
+    </div>
+
+
+    <nav class="nav">
+        <div class="nav-btn">
+            <ul>
+                <li>
+                    <a class="responsive"><i class="fa-solid fa-bars"></i></a>
+                </li>
+                <li>
+                    <a id="btn-chats" class="nav-btn"><i class="fa-solid fa-comments"></i></a>
+                </li>
+                <li>
+                    <a id="btn-friends" class="nav-btn"><i class="fa-solid fa-user"></i></a>
+                </li>
+                <li>
+                    <a id="btn-calls" class="nav-btn"><i class="fa-solid fa-phone"></i></a>
+                </li>
+                <li>
+                    <a id="btn-addFriends" class="nav-btn"><i class="fa-solid fa-user-plus"></i></a>
+                </li>
+                <li>
+                    <a id="btn-group" class="nav-btn"><i class="fa-solid fa-users"></i></a>
+                </li>
+                <li>
+                    <a id="btn-setting" class="nav-btn"><i class="fa-solid fa-gear"></i></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <div class="bar-container">
+        <div class="chats-container">
+            <div class="header">
+                <div class="right-btn">
+                    <h1 id="right-btn">Sohbetler</h1>
+                    
+                </div>
+            </div>
+            <div class="search-container">
+                <input type="text" id="search-bar" placeholder="Aratın veya sohbet başlatın.">
+                <i class="fas fa-search"></i>
+            </div>
+
+        
+        
+        </div>
+        <div class="contacts">
+            <ul id="contact-list">
+                <!-- JavaScript burada öğeleri ekleyecek -->
+            </ul>
+        </div>
+        <div class="friends-container">
+            <ul id="friends-list">
+
+            </ul>
+        </div>
+        <div class="calls-container" id="calls-ctr">
+            <ul id="calls-list">
+
+            </ul>
+        </div>
+        <div class="addfriends-container">
+            <h3>Eklenecek Kişiler Bul</h3>
+            <div class="addfriend-body">
+                <input type="search" name="" id="searchFriend" placeholder="Kullanıcı adı ile aratın">
+                <button onclick="searchUsername()">Ara</button>
+                <div class="results">
+
+                </div>
+            </div>        
+        </div>
+        <div class="groups-container">
+            <ul id="groups-list">
+
+            </ul>
+
+        </div>
+
+
+    </div>
+
+    <div class="settings-container">
+        <div class="header">
+            <div class="settings-categories">
+                <ul class="categories">
+                    <li class="category active" id="settings-general">
+                        <i class="fa-solid fa-laptop"></i>Genel
+                    </li>
+                    <li class="category" id="settings-account">
+                        <i class="fa-solid fa-key"></i>Hesap
+                    </li>
+                    <li class="category" id="settings-chats">
+                        <i class="fa-solid fa-comment"></i>Sohbetler
+                    </li>
+                    <li class="category" id="settings-audio">
+                        <i class="fa-solid fa-video"></i>Video ve Ses
+                    </li>
+                    <li class="category" id="settings-notifications">
+                        <i class="fa-solid fa-circle-info"></i>Bildirimler
+                    </li>
+                    <li class="category" id="settings-customize">
+                        <i class="fa-solid fa-brush"></i>Kişiselleştirme
+                    </li>
+                    <li class="category" id="settings-memory">
+                        <i class="fa-solid fa-memory"></i>Depolama Alanı
+                    </li>
+                    <li class="category" id="settings-shortcuts">
+                        <i class="fa-solid fa-keyboard"></i>Kısayollar
+                    </li>
+                    <li class="category" id="settings-help">
+                        <i class="fa-solid fa-handshake-angle"></i>Yardım
+                    </li>
+                    <li class="category" id="settings-profile">
+                        <i class="fa-solid fa-user"></i>Profil
+                    </li>
+                </ul>
+            </div>
+            <div class="settings-content">
+                <h1 id="settings-header">Genel
+
+                </h1>
+                <div class="settings-general  setting" id="setting-general">
+                    <h3>Giriş</h3>
+                    <br>
+
+                    <p>Giriş yapıldığında uygulamayı başlat.</p>
+                    <br>
+
+                    <h3>Dil</h3>
+                    <select id="languages" name="languages">
+                        <option value="Türkçe">Türkçe</option>
+                        <option value="İngilizce">İngilizce</option>
+                        <option value="İspanyolca">İspanyolca</option>
+                        <option value="Rusça">Rusça</option>
+                    </select>
+
+                    <br>
+
+
+
+
+
+
+                </div>
+                <div class="settings-account setting" id="setting-account">
+                    <h3>Gizlilik Ayarları</h3>
+                    <br>
+
+                    <h4>Son Görülme</h4>
+                    <br>
+
+                    <input type="radio" class="option" name="options-ls" value="1">
+                    <label for="option1">Herkes</label>
+
+                    <input type="radio" class="option" name="options-ls" value="2">
+                    <label for="option2">Kişilerim</label>
+
+                    <input type="radio" class="option-ls" name="options-ls" value="3">
+                    <label for="option3">Hiçkimse</label>
+
+                    <br>
+                    <br>
+
+                    <h4>Profil Fotoğrafı</h4>
+                    <br>
+
+
+                    <input type="radio" class="option" name="options-pp" value="1">
+                    <label for="option1">Herkes</label>
+
+                    <input type="radio" class="option" name="options-pp" value="2">
+                    <label for="option2">Kişilerim</label>
+
+                    <input type="radio" class="option" name="options-pp" value="3">
+                    <label for="option3">Hiçkimse</label>
+
+
+                    <br>
+                    <br>
+
+                    <h4>Hakkımda</h4>
+                    <br>
+
+                    <input type="radio" class="option" name="options-am" value="1">
+                    <label for="option1">Herkes</label>
+
+                    <input type="radio" class="option" name="options-am" value="2">
+                    <label for="option2">Kişilerim</label>
+
+                    <input type="radio" class="option" name="options-am" value="3">
+                    <label for="option3">Hiçkimse</label>
+
+                    <br>
+                    <br>
+
+                    <h4>Okundu Bilgisi</h4>
+                    <br>
+                    <input type="checkbox" name="" id="">
+                    <br>
+                    <br>
+
+                    <hr>
+                    <br>
+
+                    <h3>Engellenen Kişiler</h3>
+
+                    <div id="blocked-users"><!--Javascript burada engellenen kişileri sıralayacak.--></div>
+
+                    <hr>
+                    <br>
+
+                    <h2>Güvenlik</h2>
+
+                    <br>
+
+                    <p style="color: #666">Uçtan uca şifrelenmiş sohbet ve aramalar, gönderici ve alıcı dışında
+                        hiçbir şekilde okunamaz. Gizlilik politikası gereği mesajlarınızı uygulama bile okuyamaz.
+                    </p>
+
+
+                </div>
+                <div class="settings-chats  setting" id="setting-chats">
+                    <h3>chats</h3>
+                </div>
+                <div class="settings-audio  setting" id="setting-audio">
+                    <h3>ses</h3>
+                </div>
+                <div class="settings-notifications  setting" id="setting-notifications">
+                    <h3>Bildirimler</h3>
+                </div>
+                <div class="settings-customize  setting" id="setting-customize">
+                    <h3>Tema</h3>
+                    <p>Uygulamanın renk teması</p>
+                    <select id="theme" name="themes">
+                        <option value="1"><i class="fa-solid fa-sun"></i> Açık</option>
+                        <option value="2"><i class="fa-solid fa-moon"></i> Koyu</option>
+                    </select>
+                </div>
+                <div class="settings-memory  setting" id="setting-memory">
+                    <h3>Depolama</h3>
+                </div>
+                <div class="settings-shortcuts  setting" id="setting-shortcuts">
+                    <h3>Kısayollar</h3>
+                </div>
+                <div class="settings-help  setting" id="setting-help">
+                    <h3>Yardım</h3>
+                </div>
+                <div class="settings-profile  setting" id="setting-profile">
+                    <!-- Profil bilgileri dinamik olarak buraya eklenecek. -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <div class="chat-area">
+        <div class="profile-summary" id="profile-sum">
+            <div class="profile-categories">
+                <ul class="categorization">
+                    <li class="profile-category active" id="btn-profile-summary-overall"><i
+                            class="fa-solid fa-info"></i>Genel Bakış</li>
+                    <li class="profile-category" id="btn-profile-summary-media"><i
+                            class="fa-solid fa-clapperboard"></i>Medya</li>
+                    <li class="profile-category" id="btn-profile-summary-files"><i class="fa-solid fa-file"></i>Dosyalar
+                    </li>
+                    <li class="profile-category" id="btn-profile-summary-links"><i
+                            class="fa-solid fa-link"></i>Bağlantılar</li>
+                    <li class="profile-category" id="btn-profile-summary-groups"><i
+                            class="fa-solid fa-user-group"></i>Gruplar</li>
+                </ul>
+            </div>
+            <div class="profile-content">
+                <div class="profile-summary-overall-container">
+                    <!--Burada öğeleri javascript ekleyecek.-->
+                </div>
+                <div class="profile-summary-media-container">
+                    <h2>Medya</h2>
+                    <br>
+                    <ul id="medias-list">
+                        <!--Burada öğeleri javascript ekleyecek.-->
+                    </ul>
+                </div>
+                <div class="profile-summary-files-container ">
+                    <h2>Dosyalar</h2>
+                    <br>
+                    <ul id="files-list">
+                        <!--Burada öğeleri javascript ekleyecek.-->
+                    </ul>
+                </div>
+                <div class="profile-summary-links-container">
+                    <h2>Bağlantılar</h2>
+                    <br>
+                    <ul id="links-list">
+                        <!--Burada öğeleri javascript ekleyecek.-->
+                    </ul>
+                </div>
+                <div class="profile-summary-groups-container">
+                    <h2>Ortak Gruplar</h2>
+                    <br>
+                    <ul id="groups-list-profile">
+                        <div class="search-container">
+                            <input type="text" id="search-bar-groups" placeholder="Ortak gruplar içinde arayın.">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <!--Burada öğeleri javascript ekleyecek.-->
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="chat-header">
+            <div class="profile-summary-click"></div>
+            <div class="contact-user">
+                <img id="contact-profile-image" src="" />
+                <h2 id="contact-name"></h2>
+            </div>
+
+            <div class="call-icons">
+                <a href="#" class="video-call"><i class="fa-solid fa-video"></i></a>
+                <a href="#" class="voice-call"><i class="fa-solid fa-phone"></i></a>
+            </div>
+
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <!-- Mesajlar dinamik olarak buraya eklenecek -->
+        </div>
+        <div class="container-text">
+            <a href="" class="emoji-active"><i class="fa-solid fa-face-smile"></i></a>
+
+
+            <div class="more">
+                <i class="fa-solid fa-paperclip"></i>
+
+                <div class="dropcontent-2">
+                    <ul>
+                        <li class="photograf"><i class="fa-regular fa-image"></i>Fotoğraflar ve Videolar</li>
+                        <li class="camera"><i class="fa-solid fa-camera"></i>Kamera</li>
+                        <li class="document-btn"><i class="fa-solid fa-file"></i>Belge</li>
+                        <li class="person"><i class="fa-solid fa-user"></i>Kişi</li>
+                        <li class="question"><i class="fa-solid fa-square-poll-horizontal"></i>Anket</li>
+                    </ul>
+                
+                </div>
+
+
+            </div>
+            <input type="file" id="fileInputImgVideo" accept="image/*,video/*" style="display: none;" multiple>
+            <input type="file" id="fileInputDocument" style="display: none;" multiple>
+            <div class="design-container " style="display: none;">
+                <div class="img-container">
+                    <ul>
+                        <li class="tool trash-btn"><i class="fa-solid fa-circle-xmark"></i></i></li>
+                    </ul>
+                    <img class="design-img" src="" alt="image">
+                    <video class="design-video" src="" controls></video>
+                </div>
+
+                <div class="submit-container">
+                    <div class="first-Col">
+                        <a class="icon btn emoji-2"><i class="fa-solid fa-face-smile"></i></a>
+
+                        <input type="text" class="chat-message" placeholder="Başlık veya yazı yazın">
+                        <a class="submit btn"><i class="fa-solid fa-paper-plane"></i></a>
+                    </div>
+                    <div class="emoji-container-2" style="display: none;">
+
+                        <a href="" class="emoji"><span>😊</span></a>
+                        <a href="" class="emoji"><span>😂</span></a>
+                        <a href="" class="emoji"><span>😍</span></a>
+                        <a href="" class="emoji"><span>😎</span></a>
+                        <a href="" class="emoji"><span>😇</span></a>
+                        <a href="" class="emoji"><span>😉</span></a>
+                        <a href="" class="emoji"><span>😜</span></a>
+                        <a href="" class="emoji"><span>🤩</span></a>
+                        <a href="" class="emoji"><span>🤔</span></a>
+                        <a href="" class="emoji"><span>😢</span></a>
+                        <a href="" class="emoji"><span>🥳</span></a>
+                        <a href="" class="emoji"><span>🤗</span></a>
+                        <a href="" class="emoji"><span>🤫</span></a>
+                        <a href="" class="emoji"><span>😴</span></a>
+                        <a href="" class="emoji"><span>🙃</span></a>
+                        <a href="" class="emoji"><span>😏</span></a>
+                        <a href="" class="emoji"><span>😬</span></a>
+                        <a href="" class="emoji"><span>🤪</span></a>
+                        <a href="" class="emoji"><span>😱</span></a>
+                        <a href="" class="emoji"><span>😭</span></a>
+                        <a href="" class="emoji"><span>😠</span></a>
+                        <a href="" class="emoji"><span>😡</span></a>
+                        <a href="" class="emoji"><span>🤯</span></a>
+                        <a href="" class="emoji"><span>🤤</span></a>
+                        <a href="" class="emoji"><span>🤮</span></a>
+                        <a href="" class="emoji"><span>🤧</span></a>
+                        <a href="" class="emoji"><span>🤒</span></a>
+                        <a href="" class="emoji"><span>😇</span></a>
+                        <a href="" class="emoji"><span>🤓</span></a>
+                        <a href="" class="emoji"><span>😎</span></a>
+                        <a href="" class="emoji"><span>😳</span></a>
+                        <a href="" class="emoji"><span>🥰</span></a>
+                        <a href="" class="emoji"><span>😋</span></a>
+                        <a href="" class="emoji"><span>🧐</span></a>
+                        <a href="" class="emoji"><span>🥵</span></a>
+                        <a href="" class="emoji"><span>🥶</span></a>
+                        <a href="" class="emoji"><span>🥴</span></a>
+                        <a href="" class="emoji"><span>😌</span></a>
+                        <a href="" class="emoji"><span>😍</span></a>
+                        <a href="" class="emoji"><span>😘</span></a>
+                        <a href="" class="emoji"><span>🤡</span></a>
+                        <a href="" class="emoji"><span>👻</span></a>
+                        <a href="" class="emoji"><span>💀</span></a>
+                        <a href="" class="emoji"><span>👽</span></a>
+                        <a href="" class="emoji"><span>👾</span></a>
+                        <a href="" class="emoji"><span>🤖</span></a>
+                        <a href="" class="emoji"><span>🎃</span></a>
+                        <a href="" class="emoji"><span>🐶</span></a>
+                        <a href="" class="emoji"><span>🐱</span></a>
+                        <a href="" class="emoji"><span>🦊</span></a>
+                        <a href="" class="emoji"><span>🐻</span></a>
+                        <a href="" class="emoji"><span>🐼</span></a>
+                        <a href="" class="emoji"><span>🐨</span></a>
+                        <a href="" class="emoji"><span>🐯</span></a>
+                        <a href="" class="emoji"><span>🦁</span></a>
+                        <a href="" class="emoji"><span>🐮</span></a>
+                        <a href="" class="emoji"><span>🐷</span></a>
+                        <a href="" class="emoji"><span>🐸</span></a>
+                        <a href="" class="emoji"><span>🐵</span></a>
+                        <a href="" class="emoji"><span>🐔</span></a>
+                        <a href="" class="emoji"><span>🐧</span></a>
+                        <a href="" class="emoji"><span>🐦</span></a>
+                        <a href="" class="emoji"><span>🐤</span></a>
+                        <a href="" class="emoji"><span>🦄</span></a>
+                        <a href="" class="emoji"><span>🐙</span></a>
+                        <a href="" class="emoji"><span>🐬</span></a>
+                        <a href="" class="emoji"><span>🐳</span></a>
+                        <a href="" class="emoji"><span>🐋</span></a>
+                        <a href="" class="emoji"><span>🦓</span></a>
+                        <a href="" class="emoji"><span>🐘</span></a>
+                        <a href="" class="emoji"><span>🦒</span></a>
+                        <a href="" class="emoji"><span>🦏</span></a>
+                        <a href="" class="emoji"><span>🦛</span></a>
+                        <a href="" class="emoji"><span>🦍</span></a>
+                        <a href="" class="emoji"><span>🐢</span></a>
+                        <a href="" class="emoji"><span>🐍</span></a>
+                        <a href="" class="emoji"><span>🦕</span></a>
+                        <a href="" class="emoji"><span>🦖</span></a>
+                        <a href="" class="emoji"><span>🐜</span></a>
+                        <a href="" class="emoji"><span>🐝</span></a>
+                        <a href="" class="emoji"><span>🐞</span></a>
+                        <a href="" class="emoji"><span>🕷</span></a>
+                        <a href="" class="emoji"><span>🦂</span></a>
+                        <a href="" class="emoji"><span>🦟</span></a>
+                        <a href="" class="emoji"><span>🦠</span></a>
+                        <a href="" class="emoji"><span>💐</span></a>
+                        <a href="" class="emoji"><span>🌸</span></a>
+                        <a href="" class="emoji"><span>🌹</span></a>
+                        <a href="" class="emoji"><span>🌺</span></a>
+                        <a href="" class="emoji"><span>🌻</span></a>
+                        <a href="" class="emoji"><span>🌼</span></a>
+                        <a href="" class="emoji"><span>🌷</span></a>
+                        <a href="" class="emoji"><span>🌲</span></a>
+                        <a href="" class="emoji"><span>🌳</span></a>
+                        <a href="" class="emoji"><span>🌴</span></a>
+                        <a href="" class="emoji"><span>🌵</span></a>
+
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="camera-container" style="display: none;">
+
+                <div class="header">
+                    <h1>Fotoğraf Çekin</h1>
+                    <a href="" class="exit"><i class="fa-solid fa-circle-xmark"></i></a>
+                </div>
+                <div class="camera">
+                    <video id="cameraStream" autoplay></video>
+                    <canvas id="canvas" style="display: none;"></canvas>
+                    <img id="capturedPhoto" src="" alt="Captured Photo" style="display:none;">
+                    <video controls src="" id="capturedVideo" alt="Captured Video" style="display: none;"></video>
+                </div>
+                <div class="btn">
+
+                    <div class="first">
+                        <a href="" class="foto-btn" id="captureFoto"><i class="fa-solid fa-camera"></i></a>
+                        <a href="" class="video-btn" id="captureVideo"><i class="fa-solid fa-video"></i></a>
+                    </div>
+                    <div class="video-first" style="display: none;">
+                        <div id="timerDisplay" style="display: none; color: white; font-size: 20px; margin-top: 10px;">
+                            00:00</div>
+                        <a href="" class="video-stop"><i class="fa-solid fa-circle-stop"></i></a>
+
+                    </div>
+                    <div class="video-end" style="display: none;">
+                        <a href="" class="comeback-video"><i class="fa-solid fa-rotate-left"></i></a>
+                        <a href="" class="submit-btn" id="video-send"><i class="fa-solid fa-paper-plane"></i></a>
+                    </div>
+
+                    <div class="foto-end" style="display: none;">
+                        <a href="" class="comeback-foto"><i class="fa-solid fa-rotate-left"></i></a>
+                        <a href="" class="submit-btn " id="foto-send"><i class="fa-solid fa-paper-plane"></i></a>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="document-container" style="display: none;">
+                <div class="document">
+                    <ul>
+                        <li class="tool trash-btn"><i class="fa-solid fa-circle-xmark"></i></i></li>
+                    </ul>
+                    <img class="document-img" src="" alt="image">
+                    <div class="text"> 
+                        <p class="document-info-Url"></p>
+                        <P class="document-info-size"></P>
+                    </div>
+
+                   
+                </div>
+                <div class="submit-container">
+                    <div class="first-Col">
+                        <a class="icon btn emoji-2"><i class="fa-solid fa-face-smile"></i></a>
+
+                        <input type="text" class="chat-message" placeholder="Başlık veya yazı yazın">
+                        <a class="submit btn"><i class="fa-solid fa-paper-plane"></i></a>
+                    </div>
+                    <div class="emoji-container-2" style="display: none;">
+
+                        <a href="" class="emoji"><span>😊</span></a>
+                        <a href="" class="emoji"><span>😂</span></a>
+                        <a href="" class="emoji"><span>😍</span></a>
+                        <a href="" class="emoji"><span>😎</span></a>
+                        <a href="" class="emoji"><span>😇</span></a>
+                        <a href="" class="emoji"><span>😉</span></a>
+                        <a href="" class="emoji"><span>😜</span></a>
+                        <a href="" class="emoji"><span>🤩</span></a>
+                        <a href="" class="emoji"><span>🤔</span></a>
+                        <a href="" class="emoji"><span>😢</span></a>
+                        <a href="" class="emoji"><span>🥳</span></a>
+                        <a href="" class="emoji"><span>🤗</span></a>
+                        <a href="" class="emoji"><span>🤫</span></a>
+                        <a href="" class="emoji"><span>😴</span></a>
+                        <a href="" class="emoji"><span>🙃</span></a>
+                        <a href="" class="emoji"><span>😏</span></a>
+                        <a href="" class="emoji"><span>😬</span></a>
+                        <a href="" class="emoji"><span>🤪</span></a>
+                        <a href="" class="emoji"><span>😱</span></a>
+                        <a href="" class="emoji"><span>😭</span></a>
+                        <a href="" class="emoji"><span>😠</span></a>
+                        <a href="" class="emoji"><span>😡</span></a>
+                        <a href="" class="emoji"><span>🤯</span></a>
+                        <a href="" class="emoji"><span>🤤</span></a>
+                        <a href="" class="emoji"><span>🤮</span></a>
+                        <a href="" class="emoji"><span>🤧</span></a>
+                        <a href="" class="emoji"><span>🤒</span></a>
+                        <a href="" class="emoji"><span>😇</span></a>
+                        <a href="" class="emoji"><span>🤓</span></a>
+                        <a href="" class="emoji"><span>😎</span></a>
+                        <a href="" class="emoji"><span>😳</span></a>
+                        <a href="" class="emoji"><span>🥰</span></a>
+                        <a href="" class="emoji"><span>😋</span></a>
+                        <a href="" class="emoji"><span>🧐</span></a>
+                        <a href="" class="emoji"><span>🥵</span></a>
+                        <a href="" class="emoji"><span>🥶</span></a>
+                        <a href="" class="emoji"><span>🥴</span></a>
+                        <a href="" class="emoji"><span>😌</span></a>
+                        <a href="" class="emoji"><span>😍</span></a>
+                        <a href="" class="emoji"><span>😘</span></a>
+                        <a href="" class="emoji"><span>🤡</span></a>
+                        <a href="" class="emoji"><span>👻</span></a>
+                        <a href="" class="emoji"><span>💀</span></a>
+                        <a href="" class="emoji"><span>👽</span></a>
+                        <a href="" class="emoji"><span>👾</span></a>
+                        <a href="" class="emoji"><span>🤖</span></a>
+                        <a href="" class="emoji"><span>🎃</span></a>
+                        <a href="" class="emoji"><span>🐶</span></a>
+                        <a href="" class="emoji"><span>🐱</span></a>
+                        <a href="" class="emoji"><span>🦊</span></a>
+                        <a href="" class="emoji"><span>🐻</span></a>
+                        <a href="" class="emoji"><span>🐼</span></a>
+                        <a href="" class="emoji"><span>🐨</span></a>
+                        <a href="" class="emoji"><span>🐯</span></a>
+                        <a href="" class="emoji"><span>🦁</span></a>
+                        <a href="" class="emoji"><span>🐮</span></a>
+                        <a href="" class="emoji"><span>🐷</span></a>
+                        <a href="" class="emoji"><span>🐸</span></a>
+                        <a href="" class="emoji"><span>🐵</span></a>
+                        <a href="" class="emoji"><span>🐔</span></a>
+                        <a href="" class="emoji"><span>🐧</span></a>
+                        <a href="" class="emoji"><span>🐦</span></a>
+                        <a href="" class="emoji"><span>🐤</span></a>
+                        <a href="" class="emoji"><span>🦄</span></a>
+                        <a href="" class="emoji"><span>🐙</span></a>
+                        <a href="" class="emoji"><span>🐬</span></a>
+                        <a href="" class="emoji"><span>🐳</span></a>
+                        <a href="" class="emoji"><span>🐋</span></a>
+                        <a href="" class="emoji"><span>🦓</span></a>
+                        <a href="" class="emoji"><span>🐘</span></a>
+                        <a href="" class="emoji"><span>🦒</span></a>
+                        <a href="" class="emoji"><span>🦏</span></a>
+                        <a href="" class="emoji"><span>🦛</span></a>
+                        <a href="" class="emoji"><span>🦍</span></a>
+                        <a href="" class="emoji"><span>🐢</span></a>
+                        <a href="" class="emoji"><span>🐍</span></a>
+                        <a href="" class="emoji"><span>🦕</span></a>
+                        <a href="" class="emoji"><span>🦖</span></a>
+                        <a href="" class="emoji"><span>🐜</span></a>
+                        <a href="" class="emoji"><span>🐝</span></a>
+                        <a href="" class="emoji"><span>🐞</span></a>
+                        <a href="" class="emoji"><span>🕷</span></a>
+                        <a href="" class="emoji"><span>🦂</span></a>
+                        <a href="" class="emoji"><span>🦟</span></a>
+                        <a href="" class="emoji"><span>🦠</span></a>
+                        <a href="" class="emoji"><span>💐</span></a>
+                        <a href="" class="emoji"><span>🌸</span></a>
+                        <a href="" class="emoji"><span>🌹</span></a>
+                        <a href="" class="emoji"><span>🌺</span></a>
+                        <a href="" class="emoji"><span>🌻</span></a>
+                        <a href="" class="emoji"><span>🌼</span></a>
+                        <a href="" class="emoji"><span>🌷</span></a>
+                        <a href="" class="emoji"><span>🌲</span></a>
+                        <a href="" class="emoji"><span>🌳</span></a>
+                        <a href="" class="emoji"><span>🌴</span></a>
+                        <a href="" class="emoji"><span>🌵</span></a>
+
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="shared-contact" style="display: none;">
+                <div class="header">
+                    <h1>Kişi Seçin</h1>
+                    <a href="" class="exit"><i class="fa-solid fa-circle-xmark"></i></a>
+                </div>
+                <div class="search-container">
+                    <input type="text" class="search-contact" placeholder="Ara">
+                </div>
+                
+
+                <a href="" class="shared-btn" style="display: none;">Kişi Paylaş</a>
+
+                <div class="shared-contacts">
+                    <ul id="shared-contact-list">
+                        <!-- JavaScript burada öğeleri ekleyecek -->
+                    </ul>
+
+                </div>
+
+
+                
+            </div>
+
+            <div class="questions-container" style="display: none;">
+                <div class="header">
+                    <div class="first-Col">
+                        <h1>Anket Oluşturun</h1>
+                        <a href="" class="exit"><i class="fa-solid fa-circle-xmark"></i></a>
+                    </div>      
+                    <small>Soru</small>
+                    <div class="inputContent"> 
+                        <input type="text" placeholder="Anket Sorusu Yazın">
+                        <a href="javascript:void(0);" class="emoji" onclick="toggleEmojiBox(this)">
+                            <i class="fa-solid fa-face-smile"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="options-container">
+                    <p>Seçenekler</p>
+                    <div class="options"id="options">
+                        <div class="inputContent-Options"> 
+                            <input type="text" placeholder="+Seçenekler ekleyin" class="la">
+                            <a href="javascript:void(0);" class="emoji" onclick="toggleEmojiBox(this)">
+                                <i class="fa-solid fa-face-smile"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div id="emoji-box" class="emoji-box" style="display: none;">
+
+
+                    <a href="" class="emoji"><span>😊</span></a>
+                    <a href="" class="emoji"><span>😂</span></a>
+                    <a href="" class="emoji"><span>😍</span></a>
+                    <a href="" class="emoji"><span>😎</span></a>
+                    <a href="" class="emoji"><span>😇</span></a>
+                    <a href="" class="emoji"><span>😉</span></a>
+                    <a href="" class="emoji"><span>😜</span></a>
+                    <a href="" class="emoji"><span>🤩</span></a>
+                    <a href="" class="emoji"><span>🤔</span></a>
+                    <a href="" class="emoji"><span>😢</span></a>
+                    <a href="" class="emoji"><span>🥳</span></a>
+                    <a href="" class="emoji"><span>🤗</span></a>
+                    <a href="" class="emoji"><span>🤫</span></a>
+                    <a href="" class="emoji"><span>😴</span></a>
+                    <a href="" class="emoji"><span>🙃</span></a>
+                    <a href="" class="emoji"><span>😏</span></a>
+                    <a href="" class="emoji"><span>😬</span></a>
+                    <a href="" class="emoji"><span>🤪</span></a>
+                    <a href="" class="emoji"><span>😱</span></a>
+                    <a href="" class="emoji"><span>😭</span></a>
+                    <a href="" class="emoji"><span>😠</span></a>
+                    <a href="" class="emoji"><span>😡</span></a>
+                    <a href="" class="emoji"><span>🤯</span></a>
+                    <a href="" class="emoji"><span>🤤</span></a>
+                    <a href="" class="emoji"><span>🤮</span></a>
+                    <a href="" class="emoji"><span>🤧</span></a>
+                    <a href="" class="emoji"><span>🤒</span></a>
+                    <a href="" class="emoji"><span>😇</span></a>
+                    <a href="" class="emoji"><span>🤓</span></a>
+                    <a href="" class="emoji"><span>😎</span></a>
+                    <a href="" class="emoji"><span>😳</span></a>
+                    <a href="" class="emoji"><span>🥰</span></a>
+                    <a href="" class="emoji"><span>😋</span></a>
+                    <a href="" class="emoji"><span>🧐</span></a>
+                    <a href="" class="emoji"><span>🥵</span></a>
+                    <a href="" class="emoji"><span>🥶</span></a>
+                    <a href="" class="emoji"><span>🥴</span></a>
+                    <a href="" class="emoji"><span>😌</span></a>
+                    <a href="" class="emoji"><span>😍</span></a>
+                    <a href="" class="emoji"><span>😘</span></a>
+                    <a href="" class="emoji"><span>🤡</span></a>
+                    <a href="" class="emoji"><span>👻</span></a>
+                    <a href="" class="emoji"><span>💀</span></a>
+                    <a href="" class="emoji"><span>👽</span></a>
+                    <a href="" class="emoji"><span>👾</span></a>
+                    <a href="" class="emoji"><span>🤖</span></a>
+                    <a href="" class="emoji"><span>🎃</span></a>
+                    <a href="" class="emoji"><span>🐶</span></a>
+                    <a href="" class="emoji"><span>🐱</span></a>
+                    <a href="" class="emoji"><span>🦊</span></a>
+                    <a href="" class="emoji"><span>🐻</span></a>
+                    <a href="" class="emoji"><span>🐼</span></a>
+                    <a href="" class="emoji"><span>🐨</span></a>
+                    <a href="" class="emoji"><span>🐯</span></a>
+                    <a href="" class="emoji"><span>🦁</span></a>
+                    <a href="" class="emoji"><span>🐮</span></a>
+                    <a href="" class="emoji"><span>🐷</span></a>
+                    <a href="" class="emoji"><span>🐸</span></a>
+                    <a href="" class="emoji"><span>🐵</span></a>
+                    <a href="" class="emoji"><span>🐔</span></a>
+                    <a href="" class="emoji"><span>🐧</span></a>
+                    <a href="" class="emoji"><span>🐦</span></a>
+                    <a href="" class="emoji"><span>🐤</span></a>
+                    <a href="" class="emoji"><span>🦄</span></a>
+                    <a href="" class="emoji"><span>🐙</span></a>
+                    <a href="" class="emoji"><span>🐬</span></a>
+                    <a href="" class="emoji"><span>🐳</span></a>
+                    <a href="" class="emoji"><span>🐋</span></a>
+                    <a href="" class="emoji"><span>🦓</span></a>
+                    <a href="" class="emoji"><span>🐘</span></a>
+                    <a href="" class="emoji"><span>🦒</span></a>
+                    <a href="" class="emoji"><span>🦏</span></a>
+                    <a href="" class="emoji"><span>🦛</span></a>
+                    <a href="" class="emoji"><span>🦍</span></a>
+                    <a href="" class="emoji"><span>🐢</span></a>
+                    <a href="" class="emoji"><span>🐍</span></a>
+                    <a href="" class="emoji"><span>🦕</span></a>
+                    <a href="" class="emoji"><span>🦖</span></a>
+                    <a href="" class="emoji"><span>🐜</span></a>
+                    <a href="" class="emoji"><span>🐝</span></a>
+                    <a href="" class="emoji"><span>🐞</span></a>
+                    <a href="" class="emoji"><span>🕷</span></a>
+                    <a href="" class="emoji"><span>🦂</span></a>
+                    <a href="" class="emoji"><span>🦟</span></a>
+                    <a href="" class="emoji"><span>🦠</span></a>
+                    <a href="" class="emoji"><span>💐</span></a>
+                    <a href="" class="emoji"><span>🌸</span></a>
+                    <a href="" class="emoji"><span>🌹</span></a>
+                    <a href="" class="emoji"><span>🌺</span></a>
+                    <a href="" class="emoji"><span>🌻</span></a>
+                    <a href="" class="emoji"><span>🌼</span></a>
+                    <a href="" class="emoji"><span>🌷</span></a>
+                    <a href="" class="emoji"><span>🌲</span></a>
+                    <a href="" class="emoji"><span>🌳</span></a>
+                    <a href="" class="emoji"><span>🌴</span></a>
+                    <a href="" class="emoji"><span>🌵</span></a>
+
+
+
+
+                </div>
+                <div class="question-submit">
+                   <span><input type="checkbox"><span>Birden çok yanıta izin verin.</span></span>
+                    <a href="" class="submit-btn"><i class="fa-solid fa-paper-plane"></i></a>
+                </div>
+            </div>
+
+
+
+            <input class="text-box" type="text" id="text-box">
+
+            <div class="voice">
+                <i class="fa-solid fa-microphone"></i>
+
+                <div class="dropcontent-3">
+                    <div class="voice-content">
+                        <a href="" class="gabrage btn"><i class="fa-solid fa-trash-can"></i></a>
+                        <div class="voice-start">
+                            <p class="signal"></p> <!-- Kırmızı yanıp sönen sinyal -->
+                            <h1><span id="recording-time">0:00</span></h1>
+                            <canvas id="waveform"  width="400" height="100"></canvas> <!-- Ses dalgası için canvas -->
+                            <a href="" class="stop-recording btn"><i class="fa-solid fa-pause"></i></i></a>
+                        </div>
+                        <div class="voice-stop">
+                            
+                            <audio class="voice-mp4" controls></audio>
+
+                            <a href="" class="voice-submit btn"><i class="fa-regular fa-paper-plane"></i></a>
+
+                        </div>
+                        
+
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <button class="btn-submit" id="btn-submit">Gönder</button>
+
+
+        </div>
+        <div class="emoji-container" id="emoji-container">
+
+            <a href="" class="emoji"><span>😊</span></a>
+            <a href="" class="emoji"><span>😂</span></a>
+            <a href="" class="emoji"><span>😍</span></a>
+            <a href="" class="emoji"><span>😎</span></a>
+            <a href="" class="emoji"><span>😇</span></a>
+            <a href="" class="emoji"><span>😉</span></a>
+            <a href="" class="emoji"><span>😜</span></a>
+            <a href="" class="emoji"><span>🤩</span></a>
+            <a href="" class="emoji"><span>🤔</span></a>
+            <a href="" class="emoji"><span>😢</span></a>
+            <a href="" class="emoji"><span>🥳</span></a>
+            <a href="" class="emoji"><span>🤗</span></a>
+            <a href="" class="emoji"><span>🤫</span></a>
+            <a href="" class="emoji"><span>😴</span></a>
+            <a href="" class="emoji"><span>🙃</span></a>
+            <a href="" class="emoji"><span>😏</span></a>
+            <a href="" class="emoji"><span>😬</span></a>
+            <a href="" class="emoji"><span>🤪</span></a>
+            <a href="" class="emoji"><span>😱</span></a>
+            <a href="" class="emoji"><span>😭</span></a>
+            <a href="" class="emoji"><span>😠</span></a>
+            <a href="" class="emoji"><span>😡</span></a>
+            <a href="" class="emoji"><span>🤯</span></a>
+            <a href="" class="emoji"><span>🤤</span></a>
+            <a href="" class="emoji"><span>🤮</span></a>
+            <a href="" class="emoji"><span>🤧</span></a>
+            <a href="" class="emoji"><span>🤒</span></a>
+            <a href="" class="emoji"><span>😇</span></a>
+            <a href="" class="emoji"><span>🤓</span></a>
+            <a href="" class="emoji"><span>😎</span></a>
+            <a href="" class="emoji"><span>😳</span></a>
+            <a href="" class="emoji"><span>🥰</span></a>
+            <a href="" class="emoji"><span>😋</span></a>
+            <a href="" class="emoji"><span>🧐</span></a>
+            <a href="" class="emoji"><span>🥵</span></a>
+            <a href="" class="emoji"><span>🥶</span></a>
+            <a href="" class="emoji"><span>🥴</span></a>
+            <a href="" class="emoji"><span>😌</span></a>
+            <a href="" class="emoji"><span>😍</span></a>
+            <a href="" class="emoji"><span>😘</span></a>
+            <a href="" class="emoji"><span>🤡</span></a>
+            <a href="" class="emoji"><span>👻</span></a>
+            <a href="" class="emoji"><span>💀</span></a>
+            <a href="" class="emoji"><span>👽</span></a>
+            <a href="" class="emoji"><span>👾</span></a>
+            <a href="" class="emoji"><span>🤖</span></a>
+            <a href="" class="emoji"><span>🎃</span></a>
+            <a href="" class="emoji"><span>🐶</span></a>
+            <a href="" class="emoji"><span>🐱</span></a>
+            <a href="" class="emoji"><span>🦊</span></a>
+            <a href="" class="emoji"><span>🐻</span></a>
+            <a href="" class="emoji"><span>🐼</span></a>
+            <a href="" class="emoji"><span>🐨</span></a>
+            <a href="" class="emoji"><span>🐯</span></a>
+            <a href="" class="emoji"><span>🦁</span></a>
+            <a href="" class="emoji"><span>🐮</span></a>
+            <a href="" class="emoji"><span>🐷</span></a>
+            <a href="" class="emoji"><span>🐸</span></a>
+            <a href="" class="emoji"><span>🐵</span></a>
+            <a href="" class="emoji"><span>🐔</span></a>
+            <a href="" class="emoji"><span>🐧</span></a>
+            <a href="" class="emoji"><span>🐦</span></a>
+            <a href="" class="emoji"><span>🐤</span></a>
+            <a href="" class="emoji"><span>🦄</span></a>
+            <a href="" class="emoji"><span>🐙</span></a>
+            <a href="" class="emoji"><span>🐬</span></a>
+            <a href="" class="emoji"><span>🐳</span></a>
+            <a href="" class="emoji"><span>🐋</span></a>
+            <a href="" class="emoji"><span>🦓</span></a>
+            <a href="" class="emoji"><span>🐘</span></a>
+            <a href="" class="emoji"><span>🦒</span></a>
+            <a href="" class="emoji"><span>🦏</span></a>
+            <a href="" class="emoji"><span>🦛</span></a>
+            <a href="" class="emoji"><span>🦍</span></a>
+            <a href="" class="emoji"><span>🐢</span></a>
+            <a href="" class="emoji"><span>🐍</span></a>
+            <a href="" class="emoji"><span>🦕</span></a>
+            <a href="" class="emoji"><span>🦖</span></a>
+            <a href="" class="emoji"><span>🐜</span></a>
+            <a href="" class="emoji"><span>🐝</span></a>
+            <a href="" class="emoji"><span>🐞</span></a>
+            <a href="" class="emoji"><span>🕷</span></a>
+            <a href="" class="emoji"><span>🦂</span></a>
+            <a href="" class="emoji"><span>🦟</span></a>
+            <a href="" class="emoji"><span>🦠</span></a>
+            <a href="" class="emoji"><span>💐</span></a>
+            <a href="" class="emoji"><span>🌸</span></a>
+            <a href="" class="emoji"><span>🌹</span></a>
+            <a href="" class="emoji"><span>🌺</span></a>
+            <a href="" class="emoji"><span>🌻</span></a>
+            <a href="" class="emoji"><span>🌼</span></a>
+            <a href="" class="emoji"><span>🌷</span></a>
+            <a href="" class="emoji"><span>🌲</span></a>
+            <a href="" class="emoji"><span>🌳</span></a>
+            <a href="" class="emoji"><span>🌴</span></a>
+            <a href="" class="emoji"><span>🌵</span></a>
+
+
+        </div>
+    </div>  
+
+    <script src="contact.js" type="module"></script>
+    <script src="emoji.js"></script>
+    <script src="voice.js"></script>
+    <script src="homepage.js"></script>
+    <script src="imgDesign.js"></script>    
+    <script src="camera.js"></script>
+    <script src="document.js"></script>
+    <script src="shared_contact.js"></script>
+    <script src="questions.js"></script>
+    <script src="video_call.js"></script>
+    <script src="buttons.js" type="module"></script>
+    <script src="groups.js"></script>
+    <script src="profile-summary.js"></script>
+    <script src="profile.js"></script>
+    <script src="overall.js"></script>
+    <script src="blockedUsers.js"></script>
+    <script src="customize.js"></script>
+    <script src="links.js"></script>
+    <script src="media.js"></script> 
+
+</body> 
+
+</html>
+
+<!--
+>>Kullanıcı kişi gönderdiğinde  mesajlarda ona tıklandığında ona mesaj at veya kişilere ekle olucak
+>>dosya veya fotoğraf  video attığında kaydet butonu olucak
+>>fotolara  tıklandığında tam ekran olucak
+>>contactların altında songörülmesi olucak
+>> şifremi unuttum ekranı yapılcak ve epostaya bağlancak google appsle  scriptle büyük ihtimale
+>>
+-->
