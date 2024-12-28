@@ -1,3 +1,5 @@
+import { socket } from "./socketListener.js";
+
 document.querySelector(".responsive").addEventListener("click", function(event) {
     event.preventDefault(); // Linkin varsayılan davranışını durdur
     event.stopPropagation(); // Olayın yayılmasını durdur
@@ -7,8 +9,10 @@ document.querySelector(".responsive").addEventListener("click", function(event) 
     
     if (displayStyle === "block") {
         barcontainer.style.display = "none"; // Ekrandan gizle
+        adjustWidth();
     } else {
         barcontainer.style.display = "block"; // Görünür yap
+        adjustWidth();
     }
 });
 
@@ -17,6 +21,7 @@ function adjustWidth() {
     const element2 = document.querySelector('.emoji-container'); // Genişliğini ayarlamak istediğiniz elemanın sınıfı
     const element3 = document.querySelector('.chat-header'); // Genişliğini ayarlamak istediğiniz elemanın sınıfı
     const element4 = document.querySelector('.chat-messages'); // Genişliğini ayarlamak istediğiniz elemanın sınıfı
+    const element5 = document.querySelector(".call-information");
     const navbar = document.querySelector("nav"); // Navbar genişliği
     const barcontainer = document.querySelector('.bar-container'); // Bar container genişliği
     const newWidth = window.innerWidth - navbar.offsetWidth - barcontainer.offsetWidth; // Uygun genişliği hesapla
@@ -28,10 +33,9 @@ function adjustWidth() {
     element.style.width = finalWidth + "px";
     element2.style.width = finalWidth + "px";
     element3.style.width = finalWidth + "px";
-    
-    element4.style.width=finalWidth + "px";
-    
+    element4.style.width = finalWidth + "px";
     element4.style.paddingLeft = 5 + "px";
+    element5.style.width = finalWidth + "px";
 }
 
 // Sayfa yüklendiğinde ve pencere boyutu değiştiğinde fonksiyonu çağır
@@ -54,22 +58,12 @@ window.addEventListener('load', adjustBarContainerPadding);
 window.addEventListener('resize', adjustBarContainerPadding);
 
 document.addEventListener('DOMContentLoaded', () => {
-
-    document.querySelector('.logout-button').addEventListener('click', function () {
-
-        fetch('api/users/logout', {
-            method: 'POST',
-            credentials: 'include' // Eğer JWT çerezde saklanıyorsa bunu ekleyin
-        })
-        .then(response => {
-            if (response.ok) {
-                alert("Çıkış başarılı")
-                window.location.href = "/login";
-            } else {
-                console.error('Çıkış yapılamadı');
-            }
-        })
-        .catch(error => console.error('Error:', error));
+    
+    document.addEventListener('click', function(event) {
+        
+        if (event.target && event.target.matches('.logout-button')) {
+            socket.emit('logout', { socketId: socket.id });
+        }
     });
 
 });

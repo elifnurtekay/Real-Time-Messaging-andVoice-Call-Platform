@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WhatsApp Web Clone</title>
+    <title>ChatWork | Ana Sayfa</title>
+    <link rel="icon" type="image/x-icon" href="./images/konuşmatik.ico">
     <link rel="stylesheet" href="homePage.css"> <!-- Link to your CSS file -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
         integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
@@ -31,14 +32,14 @@
     
     <div class="voicecall-container" id="voiceCallContainer" > 
         <div class="local">
-        <img  id="localimg">
-        <img  class="profileLocal">
+            <img id="localimg">
+            <img class="profileLocal">
         </div>
     
         <div class="opposite">
-        <img id="oppositeimg">
-        <h1 class="sayac">Süre:</h1>
-        <img class="profileOpposite">
+            <img id="oppositeimg">
+            <h1 class="sayac">Süre: <span id="timeCounter">00:00</span></h1>
+            <img class="profileOpposite">
         </div>
             
             
@@ -73,6 +74,10 @@
                     <a id="btn-group" class="nav-btn"><i class="fa-solid fa-users"></i></a>
                 </li>
                 <li>
+                    <a id="btn-addgroup" class="nav-btn"><i class="fa-solid fa-users"></i><i
+                            class="fa-solid fa-circle-plus"></i></a>
+                </li>
+                <li>
                     <a id="btn-setting" class="nav-btn"><i class="fa-solid fa-gear"></i></a>
                 </li>
             </ul>
@@ -94,8 +99,8 @@
             </div>
 
         
-        
         </div>
+
         <div class="contacts">
             <ul id="contact-list">
                 <!-- JavaScript burada öğeleri ekleyecek -->
@@ -112,12 +117,22 @@
             </ul>
         </div>
         <div class="addfriends-container">
-            <h3>Eklenecek Kişiler Bul</h3>
+            <h3>Arkadaş Ekle</h3>
             <div class="addfriend-body">
+
                 <input type="search" name="" id="searchFriend" placeholder="Kullanıcı adı ile aratın">
-                <button onclick="searchUsername()">Ara</button>
+                <button id="search-btn">Ara</button>
                 <div class="results">
 
+                </div>
+            </div>
+            <h3>Arkadaş İstekleri</h3>
+            <div class="addfriend-request">
+
+                <div class="request">
+                    <ul id="friend-request">
+
+                    </ul>
                 </div>
             </div>        
         </div>
@@ -128,6 +143,30 @@
 
         </div>
 
+        <div class="add-groups-container">
+            <h3>Grup Oluştur</h3>
+            <img class="groups-img" src="./images/no-person.jpg" alt="">
+            <button class="changeImg-button">Resmi değiştir</button>
+            <input type="text" placeholder="Grup İsmi">
+            <input type="text" placeholder="Grup Açıklaması">
+
+            <!-- Kullanıcı Arama -->
+            <h2>Kişiler</h2>
+            <div class="add-groups-contact-list">
+                <input type="search" placeholder="Adıyla aratın">
+                <button class="search-button">Ara</button>
+            </div>
+            <div class="add-person">
+                <ul id="add-groups-list">
+                    <li></li>
+                </ul>
+
+            </div>
+
+            <!-- Gönder Butonu -->
+            <button class="submit-button">Grubu Oluştur</button>
+
+        </div>
 
     </div>
 
@@ -308,6 +347,71 @@
 
 
     <div class="chat-area">
+        <div class="groups-summary" id="groups-sum">
+            <div class="profile-categories">
+                <ul class="categorization">
+                    <li class="profile-category active" id="btn-groups-summary-overall"><i
+                            class="fa-solid fa-info"></i>Genel Bakış</li>
+                    <li class="profile-category" id="btn-groups-summary-users"><i class="fa-solid fa-users"></i>Üyeler
+                    </li>
+                    <li class="profile-category" id="btn-groups-summary-addUsers"><i
+                            class="fa-solid fa-user-plus"></i>Üye Ekle</li>
+                    <li class="profile-category" id="btn-groups-summary-media"><i
+                            class="fa-solid fa-clapperboard"></i>Medya</li>
+                    <li class="profile-category" id="btn-groups--summary-files"><i class="fa-solid fa-file"></i>Dosyalar
+                    </li>
+                    <li class="profile-category" id="btn-groups-summary-links"><i
+                            class="fa-solid fa-link"></i>Bağlantılar</li>
+
+                </ul>
+            </div>
+            <div class="profile-content">
+                <div class="groups-summary-overall-container"></div>
+                    
+                <div class="groups-summary-users-container">
+                    <h1>Üyeler(22)</h1>
+                    <input type="text" placeholder="Üye Ara">
+                    <ul class="group-users">
+
+                    </ul>
+                </div>
+                <div class="groups-summary-addUsers-container">
+                    <h1>Üye Ekle</h1>
+                    <input type="text" placeholder="Kişilerde Ara">
+                    <ul class="group-addUsers">
+
+                    </ul>
+                    <div class="add-group-cont">
+                        <button id="add-users-groups">Üye Ekle</button>
+                    </div>
+
+                </div>
+
+
+                <div class="groups-summary-media-container">
+                    <h2>Medya</h2>
+                    <br>
+                    <ul class="medias-list">
+                        <!--Burada öğeleri javascript ekleyecek.-->
+                    </ul>
+                </div>
+                <div class="groups-summary-files-container ">
+                    <h2>Dosyalar</h2>
+                    <br>
+                    <ul id="files-list">
+                        <!--Burada öğeleri javascript ekleyecek.-->
+                    </ul>
+                </div>
+                <div class="groups-summary-links-container">
+                    <h2>Bağlantılar</h2>
+                    <br>
+                    <ul class="links-list">
+                        <!--Burada öğeleri javascript ekleyecek.-->
+                    </ul>
+                </div>
+            </div>
+
+        </div>
         <div class="profile-summary" id="profile-sum">
             <div class="profile-categories">
                 <ul class="categorization">
@@ -367,7 +471,10 @@
             <div class="profile-summary-click"></div>
             <div class="contact-user">
                 <img id="contact-profile-image" src="" />
-                <h2 id="contact-name"></h2>
+                <div class="profile-information">
+                    <h2 id="contact-name"></h2>
+                    <small id="last-seen"></small>
+                </div>
             </div>
 
             <div class="call-icons">
@@ -979,23 +1086,39 @@
 
 
         </div>
+
+        <div class="call-information">
+
+            <div class="call-body">
+                <p class="call-duration">Süre: <span>03:25</span></p>
+                <p class="call-date">Tarih: <span>21 Aralık 2024</span></p>
+                <div class="call-status-box">
+                    <span class="call-status-label">Durum:</span>
+                    <span class="call-status-type missed">Gelen Arama</span> <!-- Durum: Gelen, Giden, Cevapsız -->
+                </div>
+            </div>
+
+        </div>
     </div>  
 
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+    <script src="socketListener.js" type="module"></script>
     <script src="contact.js" type="module"></script>
     <script src="emoji.js"></script>
     <script src="voice.js"></script>
-    <script src="homepage.js"></script>
+    <script src="homepage.js" type="module"></script>
     <script src="imgDesign.js"></script>    
     <script src="camera.js"></script>
     <script src="document.js"></script>
     <script src="shared_contact.js"></script>
     <script src="questions.js"></script>
     <script src="video_call.js"></script>
+    <script src="voice_call.js"></script>
     <script src="buttons.js" type="module"></script>
     <script src="groups.js"></script>
-    <script src="profile-summary.js"></script>
+    <script src="profile-summary.js" type="module"></script>
     <script src="profile.js"></script>
-    <script src="overall.js"></script>
+    <script src="overall.js" type="module"></script>
     <script src="blockedUsers.js"></script>
     <script src="customize.js"></script>
     <script src="links.js"></script>
@@ -1006,10 +1129,7 @@
 </html>
 
 <!--
->>Kullanıcı kişi gönderdiğinde  mesajlarda ona tıklandığında ona mesaj at veya kişilere ekle olucak
->>dosya veya fotoğraf  video attığında kaydet butonu olucak
->>fotolara  tıklandığında tam ekran olucak
->>contactların altında songörülmesi olucak
+>>dosya veya fotoğraf veya dosya gönderdiğinde  video attığında kaydet butonu olucak
+>kişi paylaşırken arkadaş ekle butonu olucak altında
 >> şifremi unuttum ekranı yapılcak ve epostaya bağlancak google appsle  scriptle büyük ihtimale
->>
 -->

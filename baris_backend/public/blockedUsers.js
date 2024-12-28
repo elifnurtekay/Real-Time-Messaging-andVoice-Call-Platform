@@ -1,23 +1,37 @@
-document.addEventListener("DOMContentLoaded", function() {
-    const data = [
-        {name: "Umut Çağatay", surname: "Tapur", username: "umutcty", email: "tapur601@gmail.com", image:"https://via.placeholder.com/50"},
-        {name: "Ali", surname: "Tapur", username: "umutcty", email: "tapur601@gmail.com", image:"https://via.placeholder.com/50"},
-        {name: "Veli", surname: "Tapur", username: "umutcty", email: "tapur601@gmail.com", image:"https://via.placeholder.com/50"}
-    ]
+async function getBlockedUsers() {
+    const response = await fetch('api/users/blocked', {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    if (!response.ok) {
+        console.error("Engellenen kullanıcılar alınamadı.");
+        return null;
+    }
     
-    const blockedUsers = document.getElementById("blocked-users");
+    const data = await response.json();
+    return data.blockedUsers;
+}
+
+document.addEventListener("DOMContentLoaded", async function() {
     
-    data.forEach(person => {
-        const personInfo = `<img src="${person.image}" class="blocked-image">
+    const blockedUserList = document.getElementById("blocked-users");
+    const blockedUsers = await getBlockedUsers();
+
+    blockedUsers.forEach(user => {
+        // IMAGE
+        const personInfo = `<img src="./images/no-person.jpg" class="blocked-image">
         <div class="person-info">
-        <strong class = "blocked-name">${person.name} ${person.surname}</strong>
-         <p class = "blocked-username">Username: ${person.username}</p>
-         <p class = "blocked-email">Email: ${person.email}</p>
+        <strong class = "blocked-name">${user.name_}</strong>
+         <p class = "blocked-username">Username: ${user.username}</p>
+         <p class = "blocked-email">Email: ${user.email}</p>
          <input type="button" value="Engeli Kaldır" class="remove-block-button">
          </div>
          `
          ;
-        blockedUsers.innerHTML += personInfo;
-    })
+        blockedUserList.innerHTML += personInfo;
+    });
     
 });

@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 const Chat = require('../models/chatModel');
-const Message = require('../models/messageModel');
 const Friend = require('../models/friendModel');
 
 const getUserChats = async (req, res) => {
@@ -24,20 +23,6 @@ const getUserChats = async (req, res) => {
   }
 };
 
-const getMessagesByChatId = async (req, res) =>{
-  const { chatId } = req.params;
-  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-  res.setHeader('Pragma', 'no-cache');
-  res.setHeader('Expires', '0');
-  try {
-    const messages = await Message.loadMessages(chatId);
-    res.status(200).json({ messages });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Veri tabanı hatası' });
-  }
-}
-
 const getUserFriends = async (req, res) =>{
   const token = req.cookies.auth_token;
   if (!token) {
@@ -57,4 +42,7 @@ const getUserFriends = async (req, res) =>{
   }
 }
   
-module.exports = { getUserChats, getMessagesByChatId, getUserFriends };
+module.exports = { 
+  getUserChats, 
+  getUserFriends 
+};

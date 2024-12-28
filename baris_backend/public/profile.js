@@ -1,7 +1,3 @@
-const data = [
-    { profilepic:"./images/seeds.png", name: "Umut Çağatay Tapur", about: "black", phonenum: "+90 530 234 43 25"}
-]
-
 async function getProfileDetails() {
     const response = await fetch('api/users/profile', {
         method: 'GET',
@@ -23,7 +19,7 @@ const profile = document.getElementById("setting-profile");
 
 const profileSetting = document.getElementById("settings-profile");
 profileSetting.addEventListener("click", async () => {
-
+    profile.innerHTML = ''
     const profileDetails = await getProfileDetails();
     
     profileDetails.forEach(profileDetail => {

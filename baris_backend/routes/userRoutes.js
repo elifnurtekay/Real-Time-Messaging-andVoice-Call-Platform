@@ -1,6 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const { registerUser , loadProfileDetails} = require('../controllers/userController'); // Fonksiyonunuzu doğru import edin
+const { 
+    registerUser, 
+    loadProfileDetails, 
+    getBlockedUsers, 
+    findMatchedUsers,
+    getReceiverProfile,
+    getGroupMembers
+} = require('../controllers/userController'); // Fonksiyonunuzu doğru import edin
 
 // Kayıt rotası
 router.post('/register', async (req, res) => {
@@ -26,5 +33,9 @@ router.post('/logout', (req, res) => {
 });
 
 router.get('/profile', loadProfileDetails);
+router.get('/blocked', getBlockedUsers);
+router.post('/find', findMatchedUsers);
+router.post('/get-receiver-profile', getReceiverProfile);
+router.post('/get-group-members', getGroupMembers);
 
 module.exports = router;

@@ -10,6 +10,13 @@ const profileFilesBtn = document.getElementById('btn-profile-summary-files');
 const profileLinksBtn = document.getElementById('btn-profile-summary-links');
 const profileGroupsBtn = document.getElementById('btn-profile-summary-groups');
 
+const GroupsOverallBtn = document.getElementById('btn-groups-summary-overall');
+const GroupsMediaBtn = document.getElementById('btn-groups-summary-media');
+const GroupsFilesBtn = document.getElementById('btn-groups--summary-files');
+const GroupsLinksBtn = document.getElementById('btn-groups-summary-links');
+const GroupsUsersBtn = document.getElementById('btn-groups-summary-users');
+const GroupsAddUsersBtn = document.getElementById('btn-groups-summary-addUsers');
+
 //Profil kategori butonlarının açtığı konteynırlar
 const profileOverallContainer = document.querySelector('.profile-summary-overall-container');
 const profileMediaContainer = document.querySelector('.profile-summary-media-container');
@@ -17,6 +24,12 @@ const profileFilesContainer = document.querySelector('.profile-summary-files-con
 const profileLinksContainer = document.querySelector('.profile-summary-links-container');
 const profileGroupsContainer = document.querySelector('.profile-summary-groups-container');
 
+const GroupsOverallContainer = document.querySelector('.groups-summary-overall-container');
+const GroupsMediaContainer = document.querySelector('.groups-summary-media-container');
+const GroupsFilesContainer = document.querySelector('.groups-summary-files-container');
+const GroupsLinksContainer = document.querySelector('.groups-summary-links-container');
+const GroupsUsersContainer = document.querySelector('.groups-summary-users-container');
+const GroupsAddUsersContainer = document.querySelector('.groups-summary-addUsers-container');
 
 //Ayarlar kategori buton değişken atamaları
 const settingsButton = document.getElementById('btn-setting')
@@ -37,22 +50,24 @@ const chatsBtn = document.getElementById("btn-chats");
 const friendsButton = document.getElementById('btn-friends');
 const addFriendsButton = document.getElementById('btn-addFriends');
 const groupsButton = document.getElementById('btn-group');
+const addGroupsButton = document.getElementById("btn-addgroup");
 
 //Header kısmının değişken atamaları
 const headerText = document.getElementById("right-btn")
 const searchBar = document.getElementById("search-bar");
 
 //Nav butonlarının açtığı konteynırlar
-const contactList = document.getElementById('contact-list');
+const contactsContainer = document.querySelector('.contacts');
 const callsContainer = document.getElementById("calls-ctr");
 const friendsContainer = document.querySelector('.friends-container');
 const addFriendsContainer = document.querySelector('.addfriends-container');
 const groupsContainer = document.querySelector('.groups-container');
+const addGroupsContainer = document.querySelector(".add-groups-container");
 
-const containers = [contactList, friendsContainer, callsContainer, groupsContainer, addFriendsContainer];
+const containers = [contactsContainer, friendsContainer, callsContainer, groupsContainer, addFriendsContainer, addGroupsContainer];
 
 const profileCategoryContainers = [profileOverallContainer, profileMediaContainer, profileFilesContainer, profileLinksContainer, profileGroupsContainer];
-
+const GroupsCategoryContainers = [GroupsOverallContainer, GroupsLinksContainer, GroupsFilesContainer, GroupsMediaContainer, GroupsUsersContainer, GroupsAddUsersContainer];
 const settings = document.querySelectorAll('.setting')
 
 settingCategories.forEach(category => {
@@ -114,8 +129,11 @@ const buttonContainerMap = [
   { button: callsBtn, container: callsContainer, header: "Aramalarım", placeholder: "Aramalarım içinde arama yapın." },
   { button: friendsButton, container: friendsContainer, header: "Arkadaşlar", placeholder: "Arkadaşlarım içinde arama yapın." },
   { button: groupsButton, container: groupsContainer, header: "Gruplar", placeholder: "Gruplar içinde arama yapın." },
-  { button: addFriendsButton, container: addFriendsContainer, header: "Arkadaş Ekle", placeholder: "Arkadaş Ekle içinde arama yapın." }
+  { button: addFriendsButton, container: addFriendsContainer, header: "Arkadaş Ekle", placeholder: "Arkadaş Ekle içinde arama yapın." },
+  { button: addGroupsButton, container: addGroupsContainer, header: "Grup Oluştur", placeholder: "Arkadaş Ekle içinde arama yapın." }
 ];
+
+let activeContainer = contactsContainer.className;
 
 import { fetchChats, loadFriends, loadCalls } from "./contact.js"
 
@@ -123,72 +141,163 @@ buttonContainerMap.forEach(({ button, container, header, placeholder }) => {
   button.addEventListener('click', () => {
     containers.forEach(container => {
       container.style.display = 'none';
+      
     });
-
-    if(container!=contactList){
-      document.querySelectorAll(".toggle-btn").forEach(button => {
-        button.style.display = "none";
-      });
     
-    }else{
-      document.querySelectorAll(".toggle-btn").forEach(button => {
-        button.style.display = "block";
-      });
-    
-    }
     container.style.display = "block";
     headerText.textContent = header;
     searchBar.placeholder = placeholder;
 
-    if(button === chatsBtn || button == groupsButton){
-      fetchChats();
-    }else if (button === friendsButton){
-      loadFriends();
-    }else if (button === callsBtn){
-      loadCalls();
+    if (button === friendsButton || button === addGroupsButton || button === addFriendsButton) {
+      // Eğer addGroupsButton veya addFriendsButton tıklanmışsa chats-container'ı gizle
+      if (button === addGroupsButton || button === addFriendsButton) {
+        document.querySelector(".chats-container").style.display = "none";
+      }
+  
+      // friendsButton her durumda aktif olmalı, sadece loadFriends fonksiyonu çağrılır
+      if (button === addGroupsButton) {
+        loadFriends("new-group");
+      } else if (button === friendsButton) {
+        document.querySelector(".chats-container").style.display = "block";
+        loadFriends("friends");
+      }
+    } else {
+      // chats-container'ı diğer durumlarda göster
+      document.querySelector(".chats-container").style.display = "block";
+    
+      // Diğer butonlara göre işlemler
+      if (button === chatsBtn || button === groupsButton) {
+        fetchChats();
+      } else if (button === callsBtn) {
+        loadCalls();
+      }
     }
+    activeContainer = container.className;
+
   });
 });
 
 // Kullanıcı adı arama sekmesi için kodlar
-const dataSearch = [
-  {username: "umutcty", name: "Umut Çağatay", surname: "Tapur", image: "./images/seeds.png"},
-  {username: "hsaribuga", name: "Hüseyin", surname: "Sarıbuğa", image: "./images/effrey.webp"},
-  {username: "barisgungor", name: "Barış", surname: "Güngör", image: "./images/jacob.jpg"},
-  {username: "elifntekay", name: "Elif Nur", surname: "Tekay", image: "./images/view.avif"}
-]
 
 const results = document.querySelector('.results');
+const searchValue = document.getElementById("searchFriend")
 
-function searchUsername() {
+async function searchUsername() {
   results.innerHTML = '';
-  const searchValue = document.getElementById("searchFriend").value.trim();
-  let found = false;
+  const userSearchValue = searchValue.value.trim();
 
-  dataSearch.forEach(person => {
-    if (person.username == `${searchValue}`) {
-      const content = 
-      `<div class="result-container">
-          <img src="${person.image}" alt="${person.name}" class="person-image" onclick="handleImageClick(this)">
-          <div class="person-text">
-              <div class="person-name">${person.name} ${person.surname}</div>
-              <div class="person-username">${person.username}</div>
-          </div>
-        </div>`;
+  // Girdi boşsa işlem durdur
+  if (!userSearchValue) {
+    alert('Lütfen bir kullanıcı adı girin.');
+    return; // İşlemi sonlandır
+  }
 
-        results.innerHTML += content;
-        found = true;
-      } 
-  });
+  try {
+    const response = await fetch('/api/users/find', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ searchQuery: userSearchValue }),
+      credentials: 'include'
+    });
+  
+    const data = await response.json();
 
-  if(!found){
+    if(response.ok){
+      renderMatchedUsers(data);
+    }else{
+      console.error(data.message);
+      alert('Kullanıcı verisi alınırken bir hata oluştu!');
+    }
+
+  } catch (error) {
+    console.error('Sunucu bağlantı hatası:', error);
+    alert('Sunucuyla bağlantı kurulamadı.');
+  }
+
+}
+
+function renderMatchedUsers(matchedUserList){
+  
+  if(matchedUserList.exists){
+    matchedUserList.users.forEach(user => {
+      // IMAGE
+      const content = `<div class="result-container">
+            <img src="./images/gorkem.jpeg" alt="${user.full_name}" class="person-image" onclick="handleImageClick(this)">
+            <div class="person-text">
+                <div class="person-name">${user.full_name}</div>
+                <div class="person-username">${user.username}</div>
+            </div>
+          </div>`;
+  
+      results.innerHTML += content;
+    });
+  
+  }else{
     const content = `<p> Herhangi bir sonuç bulunamadı. </p>`
     results.innerHTML += content;
   }
- 
+
 }
 
-//Profil özeti listesi için butonlar
+// Arkadaş ekle içinde user arayan fonksiyon
+searchValue.addEventListener('keydown', function (event){
+  if (event.key === 'Enter') { // Enter tuşu algılanır
+    event.preventDefault(); // Varsayılan davranışı durdur (form gönderimi gibi)
+    
+    const userSearchValue = searchValue.value.trim();
+
+    if (!userSearchValue) {
+      alert('Lütfen bir kullanıcı adı girin.');
+      return; // İşlemi sonlandır
+    }
+
+    // Fonksiyonu çağır
+    searchUsername();
+  }
+});
+
+// ADD FRIEND LIST, RESULT CLASS LI DİV
+// USERNAME ÜZERİNDEN FRIEND ID TESPİT ET DB İŞLE
+
+const searchButton = document.getElementById('search-btn');
+searchButton.addEventListener('click', searchUsername);
+
+// Liste içinde arama yapan arama çubuğu fonksiyonu
+searchBar.addEventListener('input', ()=>{
+  let items;
+  if(activeContainer === "contacts"){
+    items = Array.from(document.querySelectorAll('.contact-item'));
+  }else if(activeContainer === "friends-container"){
+    items = Array.from(document.querySelectorAll('.friend-item'));
+  }else if(activeContainer === "calls-container"){
+    items = Array.from(document.querySelectorAll('.call-item'));
+  }else if(activeContainer === "groups-container"){
+    items = Array.from(document.querySelectorAll('.group-item'));
+  }else{
+    return;
+  };
+
+  const query = searchBar.value.toLowerCase();
+  items.forEach(item => {
+    let name;
+    if(activeContainer === "contacts" || activeContainer === "groups-container"){
+      name = item.getAttribute('data-chat-name').toLowerCase(); // İsmi al
+    }else if(activeContainer === "friends-container"){
+      name = item.getAttribute('data-friend-name').toLowerCase();
+    }else if(activeContainer === "calls-container"){
+      name = item.getAttribute('data-call-name').toLowerCase();
+    }else{
+      return;
+    };
+
+    const isVisible = name.includes(query); // Arama sorgusuyla karşılaştır
+    item.style.display = isVisible ? '' : 'none'; // Eşleşenleri göster, diğerlerini gizle
+  });
+});
+
+// Profil özeti listesi için butonlar
 profileCategories.forEach(category => {
 
   category.addEventListener('click', () => {
@@ -209,8 +318,23 @@ const buttonPanelMap = [
   { button: profileGroupsBtn, panel: profileGroupsContainer }
 ];
 
+const buttonPanelMap2 = [
+  { button: GroupsOverallBtn, panel: GroupsOverallContainer },
+  { button: GroupsMediaBtn, panel: GroupsMediaContainer },
+  { button: GroupsFilesBtn, panel: GroupsFilesContainer },
+  { button: GroupsLinksBtn, panel: GroupsLinksContainer },
+  { button: GroupsAddUsersBtn, panel: GroupsAddUsersContainer },
+  { button: GroupsUsersBtn, panel: GroupsUsersContainer }
+];
+
 function hideAllProfilePanels() {
   profileCategoryContainers.forEach(container => {
+    container.style.display = "none";
+  });
+}
+
+function hideAllProfilePanels2() {
+  GroupsCategoryContainers.forEach(container => {
     container.style.display = "none";
   });
 }
@@ -219,5 +343,16 @@ buttonPanelMap.forEach(({ button, panel }) => {
   button.addEventListener('click', () => {
     hideAllProfilePanels();
     panel.style.display = "block";
+  });
+});
+
+buttonPanelMap2.forEach(({ button, panel }) => {
+  button.addEventListener('click', () => {
+    hideAllProfilePanels2();
+    if(button === GroupsOverallBtn){
+      panel.style.display = "flex";
+    }else{
+      panel.style.display = "block";
+    }
   });
 });
