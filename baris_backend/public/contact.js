@@ -285,10 +285,30 @@ async function renderMessages(messages, chat_name) {
     contactProfileImage.style.display = 'flex';
 
     messages.sort((a,b) => new Date(a.timestamp_) - new Date(b.timestamp_));
+    let lastDate = null;
+
     // Mevcut mesajları yükle
     messages.forEach(message => {
-
         const date = new Date(message.timestamp_); // SQL timestamp'ını bir Date objesine dönüştür
+        const messageDate = date.toLocaleDateString('tr-TR', { year: 'numeric', month: 'long', day: 'numeric' });
+
+        if (messageDate !== lastDate) {
+            lastDate = messageDate;
+
+            // Tarih etiketi oluştur
+            const dateDivider = document.createElement('div');
+            dateDivider.classList.add('date-divider');
+            dateDivider.textContent = messageDate;
+
+            // Tarih ayracına stil ekle
+            dateDivider.style.textAlign = 'center';
+            dateDivider.style.margin = '10px 0';
+            dateDivider.style.fontWeight = 'bold';
+            dateDivider.style.color = '#555';
+
+            chatMessages.appendChild(dateDivider);
+        }
+        
         const hours = date.getHours().toString().padStart(2, '0');  // Saat (iki basamağa tamamla)
         const minutes = date.getMinutes().toString().padStart(2, '0');  // Dakika (iki basamağa tamamla)
         message.timestamp_ = `${hours}.${minutes}`;  // Saat.Dakika formatında
