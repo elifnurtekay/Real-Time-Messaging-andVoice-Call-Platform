@@ -1,9 +1,11 @@
+import { socket } from "./socketListener.js";
+
 const settingCategories = document.querySelectorAll('.category');
 const profileCategories = document.querySelectorAll('.profile-category');
 
 const header = document.getElementById('settings-header');
 
-//Profil özeti kategori buton değişken atamaları
+// Profil özeti kategori buton değişken atamaları
 const profileOverallBtn = document.getElementById('btn-profile-summary-overall');
 const profileMediaBtn = document.getElementById('btn-profile-summary-media');
 const profileFilesBtn = document.getElementById('btn-profile-summary-files');
@@ -17,7 +19,7 @@ const GroupsLinksBtn = document.getElementById('btn-groups-summary-links');
 const GroupsUsersBtn = document.getElementById('btn-groups-summary-users');
 const GroupsAddUsersBtn = document.getElementById('btn-groups-summary-addUsers');
 
-//Profil kategori butonlarının açtığı konteynırlar
+// Profil kategori butonlarının açtığı konteynırlar
 const profileOverallContainer = document.querySelector('.profile-summary-overall-container');
 const profileMediaContainer = document.querySelector('.profile-summary-media-container');
 const profileFilesContainer = document.querySelector('.profile-summary-files-container');
@@ -31,7 +33,7 @@ const GroupsLinksContainer = document.querySelector('.groups-summary-links-conta
 const GroupsUsersContainer = document.querySelector('.groups-summary-users-container');
 const GroupsAddUsersContainer = document.querySelector('.groups-summary-addUsers-container');
 
-//Ayarlar kategori buton değişken atamaları
+// Ayarlar kategori buton değişken atamaları
 const settingsButton = document.getElementById('btn-setting')
 const settingsGeneral = document.getElementById('settings-general')
 const settingsAccount = document.getElementById('settings-account')
@@ -44,7 +46,7 @@ const settingsShortcuts = document.getElementById('settings-shortcuts')
 const settingsHelp = document.getElementById('settings-help')
 const settingsProfile = document.getElementById('settings-profile')
 
-//Nav buton değişken atamaları
+// Nav buton değişken atamaları
 const callsBtn = document.getElementById("btn-calls");
 const chatsBtn = document.getElementById("btn-chats");
 const friendsButton = document.getElementById('btn-friends');
@@ -52,11 +54,11 @@ const addFriendsButton = document.getElementById('btn-addFriends');
 const groupsButton = document.getElementById('btn-group');
 const addGroupsButton = document.getElementById("btn-addgroup");
 
-//Header kısmının değişken atamaları
+// Header kısmının değişken atamaları
 const headerText = document.getElementById("right-btn")
 const searchBar = document.getElementById("search-bar");
 
-//Nav butonlarının açtığı konteynırlar
+// Nav butonlarının açtığı konteynırlar
 const contactsContainer = document.querySelector('.contacts');
 const callsContainer = document.getElementById("calls-ctr");
 const friendsContainer = document.querySelector('.friends-container');
@@ -72,14 +74,14 @@ const settings = document.querySelectorAll('.setting')
 
 settingCategories.forEach(category => {
 
-  category.addEventListener('click', () => {
+    category.addEventListener('click', () => {
      
-    // Tüm butonlardan "active" sınıfını kaldır
-    settingCategories.forEach(cat => cat.classList.remove('active'));
+      // Tüm butonlardan "active" sınıfını kaldır
+      settingCategories.forEach(cat => cat.classList.remove('active'));
       
-    // Tıklanan butona "active" sınıfını ekle
-    category.classList.add('active');
-  });
+      // Tıklanan butona "active" sınıfını ekle
+      category.classList.add('active');
+    });
 });
 
 const settingsMap = [
@@ -119,13 +121,13 @@ document.addEventListener('click', (event) => {
   const settingsContainer = document.getElementsByClassName('settings-container')[0];
   // Eğer panel açık ve tıklanan yer panel değilse, paneli kapat
   if (settingsContainer.classList.contains('show') && !settingsContainer.contains(event.target)) {
-    settingsContainer.classList.remove('show');
+      settingsContainer.classList.remove('show');
   }
 });
 
 // Nav butonları
 const buttonContainerMap = [
-  { button: chatsBtn, container: contactList, header: "Sohbetler", placeholder: "Sohbetler içinde arama yapın." },
+  { button: chatsBtn, container: contactsContainer, header: "Sohbetler", placeholder: "Sohbetler içinde arama yapın." },
   { button: callsBtn, container: callsContainer, header: "Aramalarım", placeholder: "Aramalarım içinde arama yapın." },
   { button: friendsButton, container: friendsContainer, header: "Arkadaşlar", placeholder: "Arkadaşlarım içinde arama yapın." },
   { button: groupsButton, container: groupsContainer, header: "Gruplar", placeholder: "Gruplar içinde arama yapın." },
@@ -160,6 +162,8 @@ buttonContainerMap.forEach(({ button, container, header, placeholder }) => {
       } else if (button === friendsButton) {
         document.querySelector(".chats-container").style.display = "block";
         loadFriends("friends");
+      } else if (button === addFriendsButton) {
+        loadFriendRequests();
       }
     } else {
       // chats-container'ı diğer durumlarda göster
@@ -176,6 +180,71 @@ buttonContainerMap.forEach(({ button, container, header, placeholder }) => {
 
   });
 });
+
+const friendRequestList = document.getElementById('friend-request');
+
+async function loadFriendRequests(){
+  friendRequestList.innerHTML = '';
+  try {
+    const response = await fetch('/api/friends/requests', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include'
+    });
+
+    const data = await response.json();
+
+    if(response.ok){
+      renderFriendRequests(data.requests);
+    }else{
+      console.error(data.message);
+      alert('Arkadaşlık istekleri alınırken bir hata oluştu!');
+    }
+
+  } catch (error) {
+    console.error('Sunucu bağlantı hatası:', error);
+    alert('Sunucuyla bağlantı kurulamadı.');
+  }
+};
+
+function renderFriendRequests(requests) {
+  requests.forEach(request => {
+    const date = new Date(request.started_at).toLocaleString('tr-TR', { 
+      timeZone: 'Europe/Istanbul',  
+    });
+    const li = document.createElement('li');
+    li.classList.add('friend-request-item');
+
+    li.innerHTML = `
+          <img src="images/no-person.jpg" alt="${request.username}" class="friend-image" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px;">
+          <div class="friend-details">
+              <strong>${request.username}</strong><br>
+              <span class="request-date">Request Date: ${date}</span><br>
+              <button class="approve-btn" style="margin-right: 5px;">Onayla</button>
+              <button class="reject-btn">Reddet</button>
+          </div>
+      `;
+
+    // Append the list item to the friend request list
+    friendRequestList.appendChild(li);
+
+    // Handle Approve button click
+    const approveButton = li.querySelector('.approve-btn');
+    approveButton.addEventListener('click', () => {
+        socket.emit('friend_request_accepted', {reqUsername: request.username});
+        li.remove(); // Remove the friend request after approval
+    });
+
+    // Handle Reject button click
+    const rejectButton = li.querySelector('.reject-btn');
+    rejectButton.addEventListener('click', () => {
+        socket.emit('friend_request_rejected', {reqUsername: request.username});
+        li.remove(); // Remove the friend request after rejection
+    });
+  });
+};
 
 // Kullanıcı adı arama sekmesi için kodlar
 
@@ -233,12 +302,12 @@ function renderMatchedUsers(matchedUserList){
   
       results.innerHTML += content;
     });
-  
+    sendFriendRequest();
   }else{
     const content = `<p> Herhangi bir sonuç bulunamadı. </p>`
     results.innerHTML += content;
   }
-
+  
 }
 
 // Arkadaş ekle içinde user arayan fonksiyon
@@ -258,8 +327,21 @@ searchValue.addEventListener('keydown', function (event){
   }
 });
 
-// ADD FRIEND LIST, RESULT CLASS LI DİV
-// USERNAME ÜZERİNDEN FRIEND ID TESPİT ET DB İŞLE
+async function sendFriendRequest(){
+  const resultElements = document.querySelectorAll('.result-container');
+  resultElements.forEach(element => {
+    element.addEventListener('click', async function() {
+      const usernameElement = element.querySelector('.person-username');
+      const username = usernameElement ? usernameElement.textContent : null;
+      if (username) {
+        this.remove();
+        socket.emit('friend_request', {username: username});
+      } else {
+        alert('Kullanıcı adı bulunamadı.');
+      }
+    });
+  });
+}
 
 const searchButton = document.getElementById('search-btn');
 searchButton.addEventListener('click', searchUsername);

@@ -1,4 +1,4 @@
-import {socket} from "./socketListener.js";
+import { socket } from "./socketListener.js";
 
 const barContainer = document.querySelector('.bar-container');
 const chatArea = document.querySelector(".chat-area");
@@ -629,7 +629,7 @@ callsList.addEventListener('click', (event) => {
     // LAST SEEN İ SİLDİN
 
     // Durum sınıflarını temizle
-    callStatusType.classList.remove("missed", "incoming", "outgoing");
+    callStatusType.classList.remove("missed", "incoming", "outgoing", "failed");
     
     const callStatus = li.querySelector('div > p').textContent.trim();
     const duration = li.getAttribute('data-duration');
@@ -667,55 +667,6 @@ callsList.addEventListener('click', (event) => {
     li.style.backgroundColor = '#e0e0e0';
 
 });
-
-
-
-
-
-// ARKADAŞ EKLE BEKLEYEN İSTEKLER LİSTESİ
-const friendRequest = [
-    { username: "umutcty", name: "Umut Çağatay", surname: "Tapur", image: "./images/seeds.png", requestDate: "12.05.2024" },
-    { username: "hsaribuga", name: "Hüseyin", surname: "Sarıbuğa", image: "./images/effrey.webp", requestDate: "12.05.2024" },
-    { username: "barisgungor", name: "Barış", surname: "Güngör", image: "./images/jacob.jpg", requestDate: "12.05.2024" },
-    { username: "elifntekay", name: "Elif Nur", surname: "Tekay", image: "./images/view.avif", requestDate: "12.05.2024" }
-]
-
-const friendRequestList = document.getElementById('friend-request');
-
-friendRequest.forEach(request => {
-    const li = document.createElement('li');
-    li.classList.add('friend-request-item');
-
-    li.innerHTML = `
-          <img src="${request.image}" alt="${request.name} ${request.surname}" class="friend-image" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px;">
-          <div class="friend-details">
-              <strong>${request.name} ${request.surname}</strong><br>
-              <span class="request-date">Request Date: ${request.requestDate}</span><br>
-              <button class="approve-btn" style="margin-right: 5px;">Onayla</button>
-              <button class="reject-btn">Reddet</button>
-          </div>
-      `;
-
-    // Append the list item to the friend request list
-    friendRequestList.appendChild(li);
-
-    // Handle Approve button click
-    const approveButton = li.querySelector('.approve-btn');
-    approveButton.addEventListener('click', () => {
-        alert(`Arkadaşlık isteği onaylandı: ${request.name} ${request.surname}`);
-        li.remove(); // Remove the friend request after approval
-    });
-
-    // Handle Reject button click
-    const rejectButton = li.querySelector('.reject-btn');
-    rejectButton.addEventListener('click', () => {
-        alert(`Arkadaşlık isteği reddedildi: ${request.name} ${request.surname}`);
-        li.remove(); // Remove the friend request after rejection
-    });
-}); 
-
-
-
 
 const textBox = document.getElementById('text-box');
 const btnSubmit = document.getElementById('btn-submit');
@@ -817,23 +768,25 @@ window.addEventListener('load', () => {
     chatMessages.scrollTop = chatMessages.scrollHeight; // Mesajlar aşağı kaydırılsın
 });
 
+// ARKADAŞLIK İSTEĞİ SERVER KAPANIP AÇILINCA YANLIŞ TARAFA DÜŞÜYOR - REQUEST ATANI DB TUT
+// ARKADAŞ EKLEMEK İÇİN USER ARA - ARKADAŞLAR VE BENİ BLOKLAYANLARI GÖREMEM
+// GRUP EKLE KOMPLE AYARLANACAK 
+// ORTAK GRUPLAR - GRUP ÜYELERİ İÇİNDE SEARCH
+// Mesajların chat-area da günlere ayrılması
+// GÖRÜLDÜ İLETİLDİ AYARLA
+// FRIEND E TIKLAMA AYARLA
+// ÇEVRİM İÇİ AYARLA ÜST PANEL
+// Eklenen kişi önce friendList e sonra contactList e
+// Setting de aradaki şeyler silinecek sadece profil ve hesap kalsın
+
+// WebRTC - UMUT - DEVAM EDİYOR
+// BLOKLAMA İŞLEMİ - ELİF NUR - Bloklayan kullanıcıya mesaj yazamıyoruz, gönderildi de kalacak ve pp no image
+
+// YEREL DATE MUHABBETİNE BAK (Date diye aratınca 7/32/70. sonuçlar)
+// message_content TÜRÜNÜ DÜZENLE
 // SETTINGS - Profil fotoğrafı ekleme, değiştirme - HÜSEYİN
 // Document gönderme ve yerelde indirilmesi + içine text yazma - HÜSEYİN
-// Grupta birini admin yapma?
-
-// SQL e data ekle - BARIŞ
-// Eklenen kişi önce friendList e sonra contactList e - BARIŞ
-// Eklenen kişilerin id leri chat_id ile beraber members tablosuna eklenecek (kabul edildi ise) - BARIŞ
-// Yeni chat ekleme uuid chat_id - BARIŞ
-// Mesajların chat-area da günlere ayrılması? - BARIŞ
-// Setting de aradaki şeyler silinecek sadece profil ve hesap kalsın - BARIŞ
-// Bloklayan kullanıcıya mesaj yazamıyoruz, gönderildi de kalacak ve pp no image - BARIŞ
-// message_content TÜRÜNÜ DÜZENLE
-// YEREL DATE MUHABBETİNE BAK (Date diye aratınca 7/32/69. sonuçlar)
-
-// WebRTC - UMUT
-
-// chat ile chat_members fonksiyonu benzer sorun çözecek - ELİF NUR
+// Grupta birini admin yapma? - HÜSEYİN
 
 // KONUŞULACAK
 // - Fotoğraf ve medya DB de depolanırsa performansı nasıl etkiler?

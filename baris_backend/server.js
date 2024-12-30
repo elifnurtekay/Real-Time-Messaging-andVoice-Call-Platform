@@ -6,6 +6,7 @@ const authRoutes = require('./routes/authRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 const callRoutes = require('./routes/callRoutes');
 const messageRoutes = require('./routes/messageRoutes');
+const friendRoutes = require('./routes/friendRoutes');
 const dotenv = require('dotenv');
 const path = require('path');
 const cors = require('cors');
@@ -37,6 +38,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/call', callRoutes);
 app.use('/api/messages', messageRoutes);
+app.use('/api/friends', friendRoutes);
 
 // Ana sayfa rotası (HTML dosyasını sun)
 app.get('/login', (req, res) => {
