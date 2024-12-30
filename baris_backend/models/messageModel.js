@@ -152,6 +152,24 @@ const Messages = {
                 connection.release();
             }
         }
+    },
+    setMessageStatus: async(messageId, is_read)=>{
+        let connection = await getConnection();
+        console.log(messageId, is_read);
+        try {
+            await connection.execute(`
+                UPDATE messages 
+                SET is_read = ? 
+                WHERE message_id = ?;
+                `, [is_read, messageId]);
+        } catch (error) {
+            console.error('[setMessageStatus] Hata:', error.message);
+            throw error;
+        } finally {
+            if(connection){
+                connection.release();
+            }
+        }
     }
 }
 

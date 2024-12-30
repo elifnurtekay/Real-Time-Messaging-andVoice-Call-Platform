@@ -308,12 +308,15 @@ async function renderMessages(messages, chat_name) {
 
             chatMessages.appendChild(dateDivider);
         }
-        
+
         const hours = date.getHours().toString().padStart(2, '0');  // Saat (iki basamağa tamamla)
         const minutes = date.getMinutes().toString().padStart(2, '0');  // Dakika (iki basamağa tamamla)
         message.timestamp_ = `${hours}.${minutes}`;  // Saat.Dakika formatında
 
+        const msg_Id = uuid.v4();
         const messageDiv = document.createElement('div');
+        messageDiv.setAttribute('data-id', msg_Id);
+
         if(userId === message.sender_id){
             messageDiv.classList.add('message', 'sent')
         }else{
@@ -707,7 +710,10 @@ btnSubmit.addEventListener('click', async () => {
         return;
     }
 
+    const msg_Id = uuid.v4();
     const messageDiv = document.createElement('div');
+    messageDiv.setAttribute('data-id', msg_Id);
+
     messageDiv.classList.add('message', 'sent');
     messageDiv.innerHTML = `${messageText} 
         <div>
@@ -763,12 +769,17 @@ btnSubmit.addEventListener('click', async () => {
     const allMessageData = allData.allMessageData;
 
     const sendMessageData = {
-        senderId: allMessageData.sender_id,
-        receiverId: allMessageData.receiver_id,
         content: allMessageData.message_content,
-        date: date
+        date: date,
     }
-    socket.emit('send_message', sendMessageData);
+
+    socket.emit('send_message', 
+        sendMessageData,
+        allMessageData.sender_id,
+        allMessageData.receiver_id, 
+        msg_Id, 
+        allMessageData.message_id
+    );
 
     // CONTACT LIST GÜNCELLE SIRALA
 
@@ -792,8 +803,6 @@ window.addEventListener('load', () => {
 // ARKADAŞ EKLEMEK İÇİN USER ARA - ARKADAŞLAR VE BENİ BLOKLAYANLARI GÖREMEM
 // GRUP EKLE KOMPLE AYARLANACAK 
 // ORTAK GRUPLAR - GRUP ÜYELERİ İÇİNDE SEARCH
-// Mesajların chat-area da günlere ayrılması
-// GÖRÜLDÜ İLETİLDİ AYARLA
 // FRIEND E TIKLAMA AYARLA
 // ÇEVRİM İÇİ AYARLA ÜST PANEL
 // Eklenen kişi önce friendList e sonra contactList e
@@ -806,6 +815,9 @@ window.addEventListener('load', () => {
 // message_content TÜRÜNÜ DÜZENLE
 // SETTINGS - Profil fotoğrafı ekleme, değiştirme - HÜSEYİN
 // Document gönderme ve yerelde indirilmesi + içine text yazma - HÜSEYİN
+
+// BU İŞLER İPTAL
+// İLETİLDİ DEN GÖRÜLDÜ YE GEÇİŞ - KULLANICI OFFLINE KEN GÖNDERİLİYOSA SIKINTI
 // Grupta birini admin yapma? - HÜSEYİN
 
 // KONUŞULACAK

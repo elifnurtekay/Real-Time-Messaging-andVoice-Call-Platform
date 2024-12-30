@@ -8,15 +8,21 @@ const { getSocketId } = require('./onlineUsers');
  */
 function onMessageReceived(socket) {
     socket.on('message_received', async (data) => {
-        const { messageId, receiverId } = data;
+        const { success, action, msg_Id, senderId, message_id } = data;
+        const socketId = getSocketId(senderId);
 
         try {
-            // Mesaj durumunu "Göründü" olarak güncelle
-            await Message.setMessageStatus(messageId, 'Göründü');
-            console.log(`Mesaj ${messageId}, alıcı ${receiverId} tarafından göründü.`);
-
-            // Alıcıya "Göründü" durumunu gönder
-            socket.to(receiverId).emit('message_seen', { messageId });
+            if(success){
+                if(action === 'seen'){
+                    await Message.setMessageStatus(message_id, 'Görüldü');
+                    socket.to(socketId).emit('message_seen', msg_Id);
+                }else{
+                    await Message.setMessageStatus(message_id, 'İletildi');
+                    socket.to(socketId).emit('message_forwarded', msg_Id);
+                }
+            }else{
+                console.log('Mesaj bulunamadı.');
+            }
         } catch (error) {
             console.error('onMessageReceived Hatası:', error.message);
         }
@@ -28,16 +34,14 @@ function onMessageReceived(socket) {
  * @param {Socket} socket - Bağlanan socket
  */
 function onSendMessage(socket) {
-    socket.on('send_message', async (data) => {
-        const { senderId, receiverId, content, date } = data;
+    socket.on('send_message', async (data, sender_id, receiver_id, msg_Id, message_id) => {
+        const { content, date } = data;
 
         try {
-            const socketId = getSocketId(receiverId);
-            const senderUsername = await User.getUsernameById(senderId);
-            // Alıcıya mesajı gönder
-            socket.to(socketId).emit('message_received', senderUsername, content, date);
-
-            console.log(`Yeni mesaj gönderildi: ${content}`);
+            const socketId = getSocketId(receiver_id);
+            const senderUsername = await User.getUsernameById(sender_id);
+            socket.to(socketId).emit('message_received', senderUsername, content, date, sender_id, msg_Id, message_id); 
+            
         } catch (error) {
             console.error('onSendMessage Hatası:', error.message);
         }
