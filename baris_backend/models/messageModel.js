@@ -48,6 +48,23 @@ const Messages = {
             }
         }
     },
+    getStatus: async(receiverUsername)=>{
+        let connection = await getConnection();
+        try {
+            const [rows] = await connection.execute(
+                `SELECT status_ FROM users 
+                WHERE username = ?
+                `,[receiverUsername]);
+            return rows[0].status_;
+        } catch (error) {
+            console.error('Veri tabanı sorgu hatası:', error);
+            throw error;
+        } finally {
+            if(connection){
+                connection.release();
+            }
+        }
+    },
     loadGroupMessages: async(chatName, createdAt)=>{
         let connection = await getConnection();
         try {

@@ -235,29 +235,33 @@ async function loadMessages(getMessageDataFrom, chatName){
         // API'den dönen mesajları JSON olarak al
         const data = await response.json();
         // Son görülmeyi işle
-        if (data.lastLogin) {
-            const lastLoginDate = new Date(data.lastLogin);
-            const currentDate = new Date();
-            const yesterday = new Date(currentDate);
-            yesterday.setDate(currentDate.getDate() - 1);
-
-            // Bugün mü, dün mü, yoksa daha eski bir tarih mi kontrolü
-            let formattedDate;
-            if (lastLoginDate.toDateString() === currentDate.toDateString()) {
-                // Bugünse saat ve dakikayı göster
-                formattedDate = `bugün ${lastLoginDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-            } else if (lastLoginDate.toDateString() === yesterday.toDateString()) {
-                // Dünse 'Dün' yaz
-                formattedDate = `dün ${lastLoginDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-            } else {
-                // Daha eski tarihlerde 'gg-aa' formatı
-                formattedDate = lastLoginDate.toLocaleDateString('tr-TR') + 
-                ' ' + 
-                lastLoginDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            }
-            contactLastSeen.textContent = `son görülme ${formattedDate}`;
+        if (data.status === "çevrim içi") {
+            contactLastSeen.textContent = data.status;
         } else {
-            contactLastSeen.textContent = '';
+            if (data.lastLogin) {
+                const lastLoginDate = new Date(data.lastLogin);
+                const currentDate = new Date();
+                const yesterday = new Date(currentDate);
+                yesterday.setDate(currentDate.getDate() - 1);
+    
+                // Bugün mü, dün mü, yoksa daha eski bir tarih mi kontrolü
+                let formattedDate;
+                if (lastLoginDate.toDateString() === currentDate.toDateString()) {
+                    // Bugünse saat ve dakikayı göster
+                    formattedDate = `bugün ${lastLoginDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+                } else if (lastLoginDate.toDateString() === yesterday.toDateString()) {
+                    // Dünse 'Dün' yaz
+                    formattedDate = `dün ${lastLoginDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+                } else {
+                    // Daha eski tarihlerde 'gg-aa' formatı
+                    formattedDate = lastLoginDate.toLocaleDateString('tr-TR') + 
+                    ' ' + 
+                    lastLoginDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                }
+                contactLastSeen.textContent = `son görülme ${formattedDate}`;
+            } else {
+                contactLastSeen.textContent = '';
+            }
         }
         // Mesajları render et
         renderMessages(data.messages, chatName);
@@ -830,14 +834,13 @@ window.addEventListener('load', () => {
 // GRUPTAN AYRILMA?
 // ORTAK GRUPLAR - GRUP ÜYELERİ İÇİNDE SEARCH
 // FRIEND E TIKLAMA AYARLA
-// ÇEVRİM İÇİ - YAZIYOR AYARLA ÜST PANEL - LAST LOGİN DB DE
+// YAZIYOR AYARLA ÜST PANEL
 // Setting de aradaki şeyler silinecek sadece profil ve hesap kalsın
 // BLOCKED USERS IMPLEMENTATION
 
 // WebRTC - UMUT - DEVAM EDİYOR
 
 // BU İŞLER İPTAL
-// İLETİLDİ DEN GÖRÜLDÜ YE GEÇİŞ - KULLANICI OFFLINE KEN GÖNDERİLİYOSA SIKINTI
 // Grupta birini admin yapma? - HÜSEYİN
 // Eklenen kişi önce friendList e sonra contactList e anlık
 // YEREL DATE MUHABBETİNE BAK (Date diye aratınca 7/32/70. sonuçlar) - fazla ayrıntı

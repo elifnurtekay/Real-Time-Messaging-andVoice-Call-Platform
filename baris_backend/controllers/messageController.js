@@ -94,7 +94,8 @@ const getMessagesFromChatData = async (req, res) =>{
             const messages = await Message.loadMessages(senderId, variableData.receiverUsername);
             // Üst kısımda göstermek için last_login bilgisini döndür
             const lastLogin = await Message.getLastLogin(variableData.receiverUsername);
-            res.status(200).json({ messages, lastLogin });
+            const status = await Message.getStatus(variableData.receiverUsername);
+            res.status(200).json({ messages, lastLogin, status });
         }
     } catch (err) {
       console.error(err);

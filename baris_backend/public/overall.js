@@ -66,6 +66,7 @@ export function renderGroupDetail(chatName, createdAt){
 };
 
 export function renderGroupMembers(members){
+    userListContainer.innerHTML = '';
     members.forEach(member => {
         const userItem = document.createElement("li");
         userItem.className = "user-item";
