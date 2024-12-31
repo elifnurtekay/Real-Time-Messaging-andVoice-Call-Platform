@@ -67,6 +67,39 @@ socket.on('message_seen', async (msg_Id) =>{
     };
 });
 
+socket.on('new_group_message', async (senderUsername, groupName, message, date, senderId, msg_Id, message_id) => {
+
+    const listItems = document.querySelectorAll("li");
+    const matchedItem = Array.from(listItems).find(
+        li => li.getAttribute("data-chat-name") === groupName
+    );
+
+    if(matchedItem && matchedItem.classList.contains("selected")){
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message', 'received');
+        messageDiv.innerHTML = `
+        <div class="sender-username" style="color: #C0392B; font-weight: bold; font-size: 0.9rem; margin-bottom: 5px;">${senderUsername}</div>
+        ${message} 
+        <div>
+            <div class="message-info">
+                <div class="history"><small>${date}</small></div>
+            </div>
+        </div>`;
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        socket.emit('group_message_received', { success: true, action: 'seen' , group_name: groupName, msg_Id: msg_Id, senderId: senderId, message_id: message_id});
+    }else if(matchedItem){
+        // Örneğin, seçilen öğeyi vurgulamak için başka bir stil uygulayın
+        matchedItem.style.backgroundColor = "#d1e7dd"; // Açık yeşil ton
+        socket.emit('group_message_received', { success: true, action: 'forwarded', group_name: groupName, msg_Id: msg_Id, senderId: senderId, message_id: message_id});
+    }else{
+        console.error("Eşleşen bir öğe bulunamadı!");
+        socket.emit('group_message_received', { success: false }); // Hata durumu bildir
+        return;
+    }
+});
+
 const friendRequestList = document.getElementById('friend-request');
 
 socket.on('new_friend_request', (data) => {

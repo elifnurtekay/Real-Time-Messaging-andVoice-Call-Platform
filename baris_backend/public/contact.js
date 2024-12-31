@@ -345,12 +345,23 @@ async function renderMessages(messages, chat_name) {
                 </div>
             </div>`;
         }else{
-            messageDiv.innerHTML = `${message.message_content} 
-            <div>
-                <div class="message-info">
-                    <div class="history"><small>${message.timestamp_}</small></div>
-                </div>
-            </div>`;
+            if(message.sender_username){
+                messageDiv.innerHTML = `
+                <div class="sender-username" style="color: #C0392B; font-weight: bold; font-size: 0.9rem; margin-bottom: 5px;">${message.sender_username}</div>
+                ${message.message_content} 
+                <div>
+                    <div class="message-info">
+                        <div class="history"><small>${message.timestamp_}</small></div>
+                    </div>
+                </div>`;
+            }else{
+                messageDiv.innerHTML = `${message.message_content} 
+                <div>
+                    <div class="message-info">
+                        <div class="history"><small>${message.timestamp_}</small></div>
+                    </div>
+                </div>`;
+            }
         }
         
         chatMessages.appendChild(messageDiv);
@@ -773,13 +784,25 @@ btnSubmit.addEventListener('click', async () => {
         date: date,
     }
 
-    socket.emit('send_message', 
-        sendMessageData,
-        allMessageData.sender_id,
-        allMessageData.receiver_id, 
-        msg_Id, 
-        allMessageData.message_id
-    );
+    if(selectedElement.classList.contains('contact-item')) {
+        socket.emit('send_message', 
+            sendMessageData,
+            allMessageData.sender_id,
+            allMessageData.receiver_id, 
+            msg_Id, 
+            allMessageData.message_id
+        );
+    } else if (selectedElement.classList.contains('group-item')) {
+        const groupName = selectedElement.getAttribute('data-chat-name');
+        socket.emit('send_group_message', 
+            sendMessageData,
+            allMessageData.sender_id, 
+            groupName,
+            msg_Id,
+            allMessageData.message_id 
+        );
+    }
+    
 
     // CONTACT LIST GÜNCELLE SIRALA
 
@@ -804,25 +827,24 @@ window.addEventListener('load', () => {
 // GRUP EKLE KOMPLE AYARLANACAK 
 // ORTAK GRUPLAR - GRUP ÜYELERİ İÇİNDE SEARCH
 // FRIEND E TIKLAMA AYARLA
-// ÇEVRİM İÇİ AYARLA ÜST PANEL
-// Eklenen kişi önce friendList e sonra contactList e
+// ÇEVRİM İÇİ - YAZIYOR AYARLA ÜST PANEL - LAST LOGİN DB DE
 // Setting de aradaki şeyler silinecek sadece profil ve hesap kalsın
+// BLOCKED USERS IMPLEMENTATION
 
 // WebRTC - UMUT - DEVAM EDİYOR
-// BLOKLAMA İŞLEMİ - ELİF NUR - Bloklayan kullanıcıya mesaj yazamıyoruz, gönderildi de kalacak ve pp no image
-
-// YEREL DATE MUHABBETİNE BAK (Date diye aratınca 7/32/70. sonuçlar)
-// message_content TÜRÜNÜ DÜZENLE
-// SETTINGS - Profil fotoğrafı ekleme, değiştirme - HÜSEYİN
-// Document gönderme ve yerelde indirilmesi + içine text yazma - HÜSEYİN
 
 // BU İŞLER İPTAL
 // İLETİLDİ DEN GÖRÜLDÜ YE GEÇİŞ - KULLANICI OFFLINE KEN GÖNDERİLİYOSA SIKINTI
 // Grupta birini admin yapma? - HÜSEYİN
-
-// KONUŞULACAK
+// Eklenen kişi önce friendList e sonra contactList e anlık
+// YEREL DATE MUHABBETİNE BAK (Date diye aratınca 7/32/70. sonuçlar) - fazla ayrıntı
+// message_content TÜRÜNÜ DÜZENLE
+// SETTINGS - Profil fotoğrafı ekleme, değiştirme - HÜSEYİN
+// Document gönderme ve yerelde indirilmesi + içine text yazma - HÜSEYİN
 // - Fotoğraf ve medya DB de depolanırsa performansı nasıl etkiler?
 // - Bulutta tutulursa güvenlik açığı olur mu? - Hüseyin olur dedi.
+// SEARCHING - ALT ÇİZGİ GİBİ BAZI KARAKTERLERDE SIKINTI VAR - MYSQL2 PAKETİ DESTEKLEMİYOR
+// SONRADAN GÖRÜLEN MESAJIN DURUMUNU ÇEVİREMİYORUM
 
 // camera.js - fotoğraf çek gönder
 // document.js - belge gönder
@@ -833,8 +855,3 @@ window.addEventListener('load', () => {
 // questions.js - anket oluşturma
 // shared_contact.js - kişi paylaşma
 // imgDesign.js - fotoğraf/video seçme ve gönderme
-
-// SEARCHING - ALT ÇİZGİ GİBİ BAZI KARAKTERLERDE SIKINTI VAR
-// MYSQL2 PAKETİ DESTEKLEMİYOR
-
-// GRUP ARAMASI İÇİN CHAT ID ÜZERİNDEN CHAT NAME ALIP GÖSTER

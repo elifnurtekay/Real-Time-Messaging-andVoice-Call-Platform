@@ -53,9 +53,11 @@ const Messages = {
         try {
             const createdAtDate = new Date(createdAt);
             const [rows] = await connection.execute(
-                `SELECT * 
-                FROM messages 
-                WHERE chat_id = (SELECT chat_id FROM chats WHERE chat_name = ? AND created_at = ?);
+                `SELECT m.*, 
+                u.username AS sender_username
+                FROM messages m
+                JOIN users u ON m.sender_id = u.user_id
+                WHERE m.chat_id = (SELECT chat_id FROM chats WHERE chat_name = ? AND created_at = ?);
                 `,[chatName, createdAtDate]);
             return rows;
         } catch (error) {
@@ -155,7 +157,6 @@ const Messages = {
     },
     setMessageStatus: async(messageId, is_read)=>{
         let connection = await getConnection();
-        console.log(messageId, is_read);
         try {
             await connection.execute(`
                 UPDATE messages 

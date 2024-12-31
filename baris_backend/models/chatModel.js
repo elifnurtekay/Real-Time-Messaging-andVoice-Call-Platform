@@ -57,6 +57,28 @@ const Chat = {
                 connection.release();
             }
         }
+    },
+    fetchGroupNames: async(userId)=>{
+        let connection = await getConnection();
+        // profile_photo_url BİLGİSİ ALINACAK
+        try {
+            const [rows] = await connection.execute(
+                `SELECT c.chat_name
+                FROM chats c
+                JOIN chat_members cm ON c.chat_id = cm.chat_id
+                WHERE cm.user_id = ?
+                AND c.is_group = 1;`,
+                [userId]
+            );
+            return rows;
+        } catch (error) {
+            console.error('Veri tabanı sorgu hatası:', error);
+            throw error;
+        } finally {
+            if(connection){
+                connection.release();
+            }
+        }
     }
 };
 

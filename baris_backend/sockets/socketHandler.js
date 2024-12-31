@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config();
 const { addOnlineUser, removeOnlineUser } = require('./onlineUsers');
+const Chat = require('../models/chatModel')
 
 /**
  * WebSocket sunucusunu başlatır ve gerekli event handler'ları yükler.
@@ -35,7 +36,7 @@ function initializeSocket(io) {
  * Yeni bir bağlantı kurulduğunda kullanıcıyı doğrular ve ilgili socket event'lerini bağlar.
  * @param {Socket} socket - Bağlanan socket
  */
-function onConnection(socket) {
+async function onConnection(socket) {
     const cookies = socket.handshake.headers.cookie;
     const token = cookies ? cookies.split(';').find(cookie => cookie.trim().startsWith('auth_token=')).split('=')[1] : null;
     let userId = null;
@@ -51,10 +52,19 @@ function onConnection(socket) {
     if (userId) {
         console.log(`Kullanıcı bağlandı: ${userId} (Socket ID: ${socket.id})`);
         addOnlineUser(userId, socket.id);
+        const groupNames = await Chat.fetchGroupNames(userId);
         // Kullanıcıyı kendi odasına dahil et
         socket.join(userId);
+        groupNames.forEach(groupName =>{
+            const roomName = createRoomSlug(groupName.chat_name);
+            socket.join(`${roomName}`);
+        });
         console.log(`Kullanıcı ${userId}, oda ${userId}'e bağlandı.`);
-
+        console.log([...socket.adapter.rooms.keys()]);
+        console.log([...socket.adapter.rooms.get('a-u-yazilim-3-sinif')]);
+        console.log([...socket.adapter.rooms.entries()]
+        .filter(([key, value]) => !value.has(key)) // Soket ID'leri hariç tut
+        .map(([key]) => key))
     } else {
         console.log(`Kimlik doğrulanmadan bağlanma isteği: ${socket.id}`);
         socket.disconnect();
@@ -93,6 +103,22 @@ function onLogout(socket) {
         .catch(error => console.error('Error:', error)); 
         
     });
+}
+
+function createRoomSlug(groupName) {
+    return groupName
+    .toLowerCase()
+    .replace(/ç/g, 'c')         // 'ç' -> 'c'
+    .replace(/ğ/g, 'g')         // 'ğ' -> 'g'
+    .replace(/ı/g, 'i')         // 'ı' -> 'i'
+    .replace(/ö/g, 'o')         // 'ö' -> 'o'
+    .replace(/ş/g, 's')         // 'ş' -> 's'
+    .replace(/ü/g, 'u')         // 'ü' -> 'u'
+    .replace(/[.]/g, '-')       // '.' -> '-'
+    .replace(/[^\w\s-]/g, '')   // Diğer özel karakterleri kaldırır
+    .replace(/\s+/g, '-')       // Boşlukları `-` ile değiştirir
+    .replace(/--+/g, '-')       // Ardışık tireleri tek tireye dönüştürür
+    .trim(); // Baş ve sondaki boşlukları kaldırır
 }
 
 module.exports = { 
