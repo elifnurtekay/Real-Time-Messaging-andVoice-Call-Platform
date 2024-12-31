@@ -58,7 +58,7 @@ exports.rejectFriendRequest = async (req, res) => {
 exports.getFriends = async (req, res) => {
     try {
         const userId = req.params.userId;
-        const friends = await Friend.getFriends(userId);
+        const friends = await Friend.getFriends(userId);  //users modelini de import etmek gerekli mi??
         res.status(200).json({ success: true, friends });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });

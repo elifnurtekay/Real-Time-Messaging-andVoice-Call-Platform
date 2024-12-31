@@ -1,6 +1,8 @@
 const { messageSocketHandlers } = require('./messageSocket');
 const { chatSocketHandlers } = require('./chatSocket');
 const { friendSocketHandlers } = require('./friendSocket');
+const { blockedUserSocketHandlers } = require('./blockedUserSocket');
+
 //const { callSocketHandlers } = require('./callSocket'); // Eğer çağrı event'leri gerekiyorsa
 const config = require('../config/index');
 
@@ -23,6 +25,9 @@ function initializeSocket(io) {
         
         // friend event'lerini bağla
         friendSocketHandlers(socket);
+
+        //blocked event'lerini bağla
+        blockedUserSocketHandlers(socket);
 
         // Eğer çağrı işlemleri kullanılıyorsa bu event'leri bağla
         //callSocketHandlers(socket);
