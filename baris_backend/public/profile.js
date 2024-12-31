@@ -24,7 +24,7 @@ profileSetting.addEventListener("click", async () => {
     
     profileDetails.forEach(profileDetail => {
 
-        const profileInfo = `<img id="account-pp" src="./images/seeds.png" class="account-pp thumbnail" onclick="handleImageClick(this)">
+        const profileInfo = `<img id="account-pp" src="./images/no-person.jpg" class="account-pp thumbnail" onclick="handleImageClick(this)">
         <div class="account-name">
         <h3> ${profileDetail.name} </h3>
         </div>

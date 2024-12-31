@@ -438,3 +438,24 @@ buttonPanelMap2.forEach(({ button, panel }) => {
     }
   });
 });
+
+const createGroupButton = document.querySelector('.submit-button');
+
+createGroupButton.addEventListener('click', async function (event) {
+  event.preventDefault();
+  // Tüm seçili checkbox'ları bul
+  const selectedFriends = [];
+  document.querySelectorAll('.friend-checkbox:checked').forEach(checkbox => {
+      const username = checkbox.closest('.friend-item').dataset.username;
+      selectedFriends.push(username);
+  });
+  const groupName = document.getElementById('group-name').value.trim();
+  if(!groupName){
+    alert('Grup ismi alanı boş bırakılamaz.')
+  }
+
+  socket.emit('create_chat', {
+    friendList: selectedFriends,
+    group_name: groupName
+  });
+});

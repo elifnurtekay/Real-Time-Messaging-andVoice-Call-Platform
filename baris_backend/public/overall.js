@@ -6,7 +6,7 @@ export function renderReceiverProfile(datas){
     datas.forEach(data => {
         profileOverallContainer.innerHTML = `
         <div class="profile-header-info">
-            <img src="images/deneme.jpg" alt="${data.name_}" onclick="handleImageClick(this)">
+            <img src="images/no-person.jpg" alt="${data.name_}" onclick="handleImageClick(this)">
             <div class="name-surname">
                 <span class="name">${data.name_}</span>
                 <span class="surname">${data.surname}</span>
@@ -45,7 +45,7 @@ export function renderGroupDetail(chatName, createdAt){
     });
     groupOverallContainer.innerHTML = `
     <div class="profile-header-info">
-        <img src="./images/mark.webp" alt="${chatName}">
+        <img src="./images/no-person.jpg" alt="${chatName}">
         <div class="name-surname">
             <span class="name">${chatName}</span>
         </div>
@@ -74,7 +74,7 @@ export function renderGroupMembers(members){
         userInfo.className = "user-info";
     
         const userImage = document.createElement("img");
-        userImage.src = "images/gorkem.jpeg";
+        userImage.src = "images/no-person.jpg";
         userImage.alt = member.fullName;
     
         const userName = document.createElement("span");

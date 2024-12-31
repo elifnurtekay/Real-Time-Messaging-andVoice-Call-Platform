@@ -116,7 +116,7 @@ function renderChats(chats) {
 
         // IMAGE EKLENECEK
         li.innerHTML = `
-            <img src="images/deneme.jpg" alt="${chat.chat_name}" class="contact-image" style="width: 50px; height: 50px; border-radius: 50%; margin-bottom: 10px; margin-right: 10px; float: left;">
+            <img src="images/no-person.jpg" alt="${chat.chat_name}" class="contact-image" style="width: 50px; height: 50px; border-radius: 50%; margin-bottom: 10px; margin-right: 10px; float: left;">
             <div class="${divClass}" style="overflow: hidden;">
                 <strong>${chat.chat_name}</strong>
                 <p><i class="fa-regular fa-message"></i> ${chat.last_message}</p>
@@ -281,7 +281,7 @@ async function renderMessages(messages, chat_name) {
     chatMessages.innerHTML = ''; // Önceki mesajları temizle
 
     // PROFİL RESMİ DÜZENLENECEK
-    contactProfileImage.src = 'images/deneme.jpg'
+    contactProfileImage.src = 'images/no-person.jpg'
     contactProfileImage.style.display = 'flex';
 
     messages.sort((a,b) => new Date(a.timestamp_) - new Date(b.timestamp_));
@@ -415,11 +415,11 @@ function renderFriends(friends){
         const li = document.createElement('li');
         let fullName = friend.name_ + ' ' + friend.surname;
         li.classList.add('friend-item');
-        li.setAttribute('data-friend-name', fullName);
+        li.setAttribute('data-username', friend.username);
 
         // IMAGE EKLENECEK
         li.innerHTML = `
-            <img src="images/deneme.jpg" alt="${fullName}" class="friend-image" style="width: 50px; height: 50px; border-radius: 50%; margin-bottom: 10px; margin-right: 10px; float: left;">
+            <img src="images/no-person.jpg" alt="${fullName}" class="friend-image" style="width: 50px; height: 50px; border-radius: 50%; margin-bottom: 10px; margin-right: 10px; float: left;">
             <div class="friend-text" style="overflow: hidden;">
 
                 <strong class="friend-name">${fullName}</strong>
@@ -432,9 +432,12 @@ function renderFriends(friends){
 }
 
 function renderAddGroups(friends, listType){
+    let checkBoxType = null
     if(listType === 'new-group'){
         addgroups_ul.innerHTML = '';
+        checkBoxType = "friend-checkbox"
     }else{
+        checkBoxType = "friend-user-checkbox"
         addgroups_users_ul.innerHTML = '';
     }
     friends.sort((a, b) => new Date(a.started_at) - new Date(b.started_at));
@@ -442,13 +445,13 @@ function renderAddGroups(friends, listType){
         const li = document.createElement('li');
         let fullName = friend.name_ + ' ' + friend.surname;
         li.classList.add('friend-item');
-        li.setAttribute('data-friend-name', fullName);
+        li.setAttribute('data-username', friend.username);
         li.innerHTML = `
-            <img src="images/deneme.jpg" alt="${fullName}" class="friend-image" style="width: 50px; height: 50px; border-radius: 50%; margin-bottom: 10px; margin-right: 10px; float: left;">
+            <img src="images/no-person.jpg" alt="${fullName}" class="friend-image" style="width: 50px; height: 50px; border-radius: 50%; margin-bottom: 10px; margin-right: 10px; float: left;">
             <div class="friend-text" style="overflow: hidden;">
                 <strong class="friend-name">${fullName}</strong>
             </div>
-            <input type="checkbox" class="friend-checkbox" style="margin-left: 10px;"/>
+            <input type="checkbox" class="${checkBoxType}" style="margin-left: 10px;"/>
         `;
         
         // Hover effect - change background color on hover
@@ -619,7 +622,7 @@ async function renderCalls(calls){
         li.setAttribute('data-duration', call.duration);
 
         // IMAGE EKLENECEK
-        li.innerHTML = `<img src="images/deneme.jpg" alt="${call.other_user_name}" class="call-image" style="width: 50px; height: 50px; border-radius: 50%; margin-bottom: 10px; margin-right: 10px; float: left;">
+        li.innerHTML = `<img src="images/no-person.jpg" alt="${call.other_user_name}" class="call-image" style="width: 50px; height: 50px; border-radius: 50%; margin-bottom: 10px; margin-right: 10px; float: left;">
             <div class="call-text" style="overflow: hidden;">
 
                 <strong class="call-name">${call.other_user_name}</strong>
@@ -659,7 +662,7 @@ callsList.addEventListener('click', (event) => {
 
     // Verileri ata
     contactNameHeader.textContent = callName;
-    contactProfileImage.src = "./images/effrey.webp";
+    contactProfileImage.src = "./images/no-person.jpg";
     // LAST SEEN İ SİLDİN
 
     // Durum sınıflarını temizle
@@ -824,7 +827,7 @@ window.addEventListener('load', () => {
 
 // ARKADAŞLIK İSTEĞİ SERVER KAPANIP AÇILINCA YANLIŞ TARAFA DÜŞÜYOR - REQUEST ATANI DB TUT
 // ARKADAŞ EKLEMEK İÇİN USER ARA - ARKADAŞLAR VE BENİ BLOKLAYANLARI GÖREMEM
-// GRUP EKLE KOMPLE AYARLANACAK 
+// GRUPTAN AYRILMA?
 // ORTAK GRUPLAR - GRUP ÜYELERİ İÇİNDE SEARCH
 // FRIEND E TIKLAMA AYARLA
 // ÇEVRİM İÇİ - YAZIYOR AYARLA ÜST PANEL - LAST LOGİN DB DE

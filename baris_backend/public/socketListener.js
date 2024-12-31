@@ -137,6 +137,18 @@ socket.on('new_friend_request', (data) => {
     });
 });
 
+socket.on('group_created',() => {
+    alert('Grup oluşturuldu.')
+})
+
+socket.on('join_new_group_room', (roomSlug) => {
+    socket.emit('joinRoom', roomSlug);
+})
+
+socket.on('joined_a_group', () => {
+    alert('Yeni bir gruba eklendiniz.');
+})
+
 socket.on('logged_out', (data) => {
     alert(data.message);
     window.location.href = "/login";

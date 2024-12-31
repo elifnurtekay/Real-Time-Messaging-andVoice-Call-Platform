@@ -1,5 +1,6 @@
 const { messageSocketHandlers } = require('./messageSocket');
 const { friendSocketHandlers } = require('./friendSocket');
+const { chatSocketHandlers } = require('./chatSocket');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config();
@@ -19,6 +20,8 @@ function initializeSocket(io) {
 
         // Mesajlaşma event'lerini bağla
         messageSocketHandlers(socket);
+
+        chatSocketHandlers(socket);
 
         // friend event'lerini bağla
         friendSocketHandlers(socket);
