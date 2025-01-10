@@ -7,6 +7,7 @@
     <title>ChatWork | Ana Sayfa</title>
     <link rel="icon" type="image/x-icon" href="./images/konuşmatik.ico">
     <link rel="stylesheet" href="homePage.css"> <!-- Link to your CSS file -->
+    <link rel="stylesheet" href="voiceCall.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
         integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -30,25 +31,28 @@
     </div>
     
     
-    <div class="voicecall-container" id="voiceCallContainer" > 
-        <div class="local">
-            <img id="localimg">
-            <img class="profileLocal">
+    <div class="call-container">
+        <div class="call-display">
+            <!--Burada öğeler javascript tarafından doldurulur-->
         </div>
-    
-        <div class="opposite">
-            <img id="oppositeimg">
-            <h1 class="sayac">Süre: <span id="timeCounter">00:00</span></h1>
-            <img class="profileOpposite">
+        <div class="call-options">
+            <button class="mute-active" id="mute-button"><i
+                    class="fa-solid fa-microphone"></i></button>
+            <button  id="endCall-button"><i class="fa-solid fa-phone"></i></button>
         </div>
-            
-            
-        <div class="voiceCallBtn">
-            <a href="" id="call_closeCallMicrophone"class="callBtn"><i class="fa-solid fa-microphone-slash"></i></a>
-            <a href="" id="call_closeVoiceCall"class="callBtn"><i class="fa-solid fa-x"></i></a>
+
+    </div>
+
+    <div class="offer-container">
+        <div class="display-offer">
+            <img src="./images/no-person.jpg" alt="" class="offer-image">
+            <h2 id="caller"></h2>
+            <h3>Gelen Sesli Arama...</h3>
         </div>
-        <div class="voiceCallwaiting-message" id="voiceCallWaitingMessage">Arama Yapılıyor...</div>
-        <div class="call-status" id="voiceCallStatus"></div>
+        <div class="offer-buttons"> <button class="accept-call">Kabul Et</button>
+            <button class="decline-call">Reddet</button>
+        </div>
+
     </div>
 
 
@@ -479,7 +483,7 @@
 
             <div class="call-icons">
                 <a href="#" class="video-call"><i class="fa-solid fa-video"></i></a>
-                <a href="#" class="voice-call"><i class="fa-solid fa-phone"></i></a>
+                <a id="voice-call-button" class="voice-call"><i class="fa-solid fa-phone"></i></a>
             </div>
 
         </div>

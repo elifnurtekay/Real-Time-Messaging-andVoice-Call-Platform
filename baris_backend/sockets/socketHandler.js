@@ -7,6 +7,7 @@ dotenv.config();
 const { addOnlineUser, removeOnlineUser, getUserId } = require('./onlineUsers');
 const Chat = require('../models/chatModel');
 const User = require('../models/userModel');
+const { getFriendIdFromUsername } = require('../models/friendModel');
 
 /**
  * WebSocket sunucusunu başlatır ve gerekli event handler'ları yükler.
@@ -24,6 +25,9 @@ function initializeSocket(io) {
 
         chatSocketHandlers(socket);
 
+        // WebRTC sinyalleşme işlemleri
+        webRTCSignalHandlers(socket);
+
         // friend event'lerini bağla
         friendSocketHandlers(socket);
 
@@ -34,6 +38,44 @@ function initializeSocket(io) {
             onDisconnect(socket);
         });
     });
+}
+
+/**
+ * WebRTC sinyalleşme olaylarını yönetir.
+ * @param {Socket} socket - Bağlanan socket
+ */
+function webRTCSignalHandlers(socket) {
+    // Offer gönderme
+    socket.on("offer", async(data) => {
+        const receiverId = await getFriendIdFromUsername(data.target)
+        socket.to(receiverId).emit("offer", {
+        sdp: data.sdp,
+        sender: socket.id,
+        sender_username: data.target
+        });
+    });
+   
+    // Answer gönderme
+    socket.on("answer", (data) => {
+        socket.to(data.target).emit("answer", {
+            sdp: data.sdp,
+            sender: socket.id,
+        });
+   
+        socket.emit("answer", {
+            sdp: data.sdp,
+            sender: socket.id,
+        });
+       
+    });
+   
+    socket.on("endCall", async(data) => {
+       // Diğer kullanıcıya görüşmenin sona erdiğini bildir
+       console.log('çalışıyorum2');
+       const receiverId = await getFriendIdFromUsername(data.target)
+       socket.to(receiverId).emit("endCall");
+    });
+   
 }
 
 /**
@@ -66,10 +108,11 @@ async function onConnection(socket) {
         });
         console.log(`Kullanıcı ${userId}, oda ${userId}'e bağlandı.`);
         console.log([...socket.adapter.rooms.keys()]);
-        console.log([...socket.adapter.rooms.get('a-u-yazilim-3-sinif')]);
+        console.log([...socket.adapter.rooms.get(`${socket.id}`)]);
         console.log([...socket.adapter.rooms.entries()]
         .filter(([key, value]) => !value.has(key)) // Soket ID'leri hariç tut
-        .map(([key]) => key))
+        .map(([key]) => key));
+
     } else {
         console.log(`Kimlik doğrulanmadan bağlanma isteği: ${socket.id}`);
         socket.disconnect();
