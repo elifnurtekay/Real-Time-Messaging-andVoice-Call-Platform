@@ -1,0 +1,189 @@
+.call-container {
+    width: 800px;
+    height: 500px;
+    left: calc((100% - 800px) / 2);
+    top: calc((100vh - 500px) / 2);
+    background-color: burlywood;
+    position: absolute;
+    z-index: 100;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px rgba(52, 73, 94, 0.9);
+    display: none;
+}
+
+.call-display {
+    width: 100%;
+    height: 420px;
+    background-color: rgb(52, 73, 94);
+    border-radius: inherit;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.call-options {
+    width: 100%;
+    height: 80px;
+    display: flex;
+    background-color: #2C3E50;
+    border-radius: inherit;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    justify-content: center;
+    align-items: center;
+}
+
+.call-options button {
+    width: 60px;
+    height: 60px;
+    padding: 5px;
+    border-radius: 50%;
+    color: #fff;
+    border: none;
+    box-shadow: 2px 2px rgba(0, 0, 0, 0.6);
+    transition: .3s;
+}
+
+#mute-button {
+    background-color: rgb(52, 73, 94);
+    margin-right: 10px;
+}
+
+#endCall-button {
+    background-color: darkred;
+    margin-left: 10px;
+}
+
+#endCall-button:hover {
+    background-color: rgb(182, 12, 12);
+    cursor: pointer;
+    transform: rotate(135deg);
+}
+
+
+#endCall-button:active {
+    background-color: rgb(86, 2, 2);
+}
+
+#mute-button:hover {
+    background-color: #374c61;
+    cursor: pointer;
+}
+
+#mute-button.mute-active {
+    background-color: #fff;
+    color: black;
+    
+}
+
+.profile-offer {
+    display: flex;
+    flex-direction: column; /* Dikey sıralama */
+    align-items: center; /* Yatayda ortalama */
+    justify-content: center; /* Dikeyde ortalama */
+    height: 300px; /* Divin yüksekliği */
+}
+
+.profile-img-offer {
+    width: 150px; /* Resmin genişliği */
+    height: 150px; /* Resmin yüksekliği */
+    border-radius: 50%; /* Yuvarlak yapmak için */
+    margin-bottom: 30px; /* Resim ile metin arasına boşluk ekler */
+    margin-top: 100px;
+}
+
+.profile-info-offer {
+    text-align: center; /* İsim ve soyismi ortalar */
+}
+
+.name-offer {
+    font-size: 25px; /* Yazı boyutu */
+    font-weight: 700;
+    margin: 0; /* Varsayılan margin değerini sıfırlama */
+    color: #fff;
+}
+
+.stopwatch {
+    text-align: center;
+    font-size: 30px;
+    font-family: Arial, sans-serif;
+    margin-top: 40px;
+}
+
+#timer {
+    font-size: 30px;
+    font-weight: 200;
+    color: #fff; /* Yeşil renk */
+}
+
+.offer-container{
+    width: 500px;
+    height: 300px;
+    left: calc((100% - 500px) / 2);
+    top: calc((100vh - 300px) / 2);
+    background-color: #2C3E50;
+    position: absolute;
+    z-index: 120;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px rgba(52, 73, 94, 0.9);
+    padding: 20px;
+    color: #fff;
+    display: none;
+}
+
+.display-offer{
+margin-top: 5px;
+}
+
+
+.offer-container h2,
+.offer-container h3{
+    text-align: center;
+    margin-bottom:  10px;
+}
+
+.offer-container h3{
+    color: lightgray;
+    font-weight: 300;
+}
+
+.offer-buttons{
+    display: flex;
+    margin-top: 40px;
+    justify-content: space-evenly;
+}
+
+.offer-buttons button {
+    border-radius: 20px;
+    height: 35px;
+    width: 90px;
+    color: #fff;
+    border: none;
+}
+
+.accept-call{
+    background-color: green;
+}
+
+.decline-call{
+    background-color: darkred;
+}
+
+.accept-call:hover{
+    background-color: darkgreen;
+    cursor: pointer;
+}
+
+.decline-call:hover{
+    background-color: rgb(85, 3, 3);
+    cursor: pointer;
+}
+
+.offer-image{
+    width: 90px;
+    height: auto;
+    border-radius: 50%;
+    margin-left: 180px;
+    margin-bottom: 15px;
+}

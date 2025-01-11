@@ -3,6 +3,7 @@ import { socket } from "./socketListener.js";
 const barContainer = document.querySelector('.bar-container');
 const chatArea = document.querySelector(".chat-area");
 const callInformation = document.querySelector(".call-information");
+const containerText = document.querySelector(".container-text");
 
 // İçerik değiştikçe yüksekliği güncelle
 function updateBarContainerHeight() {
@@ -116,7 +117,7 @@ function renderChats(chats) {
 
         // IMAGE EKLENECEK
         li.innerHTML = `
-            <img src="images/deneme.jpg" alt="${chat.chat_name}" class="contact-image" style="width: 50px; height: 50px; border-radius: 50%; margin-bottom: 10px; margin-right: 10px; float: left;">
+            <img src="images/no-person.jpg" alt="${chat.chat_name}" class="contact-image" style="width: 50px; height: 50px; border-radius: 50%; margin-bottom: 10px; margin-right: 10px; float: left;">
             <div class="${divClass}" style="overflow: hidden;">
                 <strong>${chat.chat_name}</strong>
                 <p><i class="fa-regular fa-message"></i> ${chat.last_message}</p>
@@ -167,6 +168,7 @@ contactList.addEventListener('click', event => {
         chatArea.style.opacity = 1; // Opacity'yi 1 yap
         chatMessages.style.display = "block";
         chatMessages.scrollTop = chatMessages.scrollHeight; // Mesajlar aşağı kaydırılsın
+        containerText.style.display = "block";
     }
 
     // loadMessages fonksiyonunu çağır ve chatId'yi gönder
@@ -205,6 +207,7 @@ groupsList.addEventListener('click', event => {
         chatArea.style.opacity = 1; // Opacity'yi 1 yap
         chatMessages.style.display = "block";
         chatMessages.scrollTop = chatMessages.scrollHeight; // Mesajlar aşağı kaydırılsın
+        containerText.style.display = "block";
     }
     
     // loadMessages fonksiyonunu çağır ve chatId'yi gönder
@@ -235,30 +238,35 @@ async function loadMessages(getMessageDataFrom, chatName){
         // API'den dönen mesajları JSON olarak al
         const data = await response.json();
         // Son görülmeyi işle
-        if (data.lastLogin) {
-            const lastLoginDate = new Date(data.lastLogin);
-            const currentDate = new Date();
-            const yesterday = new Date(currentDate);
-            yesterday.setDate(currentDate.getDate() - 1);
-
-            // Bugün mü, dün mü, yoksa daha eski bir tarih mi kontrolü
-            let formattedDate;
-            if (lastLoginDate.toDateString() === currentDate.toDateString()) {
-                // Bugünse saat ve dakikayı göster
-                formattedDate = `bugün ${lastLoginDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-            } else if (lastLoginDate.toDateString() === yesterday.toDateString()) {
-                // Dünse 'Dün' yaz
-                formattedDate = `dün ${lastLoginDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+        if(data.status === "çevrim içi"){
+            contactLastSeen.textContent = data.status;
+        }else{
+            if (data.lastLogin) {
+                const lastLoginDate = new Date(data.lastLogin);
+                const currentDate = new Date();
+                const yesterday = new Date(currentDate);
+                yesterday.setDate(currentDate.getDate() - 1);
+    
+                // Bugün mü, dün mü, yoksa daha eski bir tarih mi kontrolü
+                let formattedDate;
+                if (lastLoginDate.toDateString() === currentDate.toDateString()) {
+                    // Bugünse saat ve dakikayı göster
+                    formattedDate = `bugün ${lastLoginDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+                } else if (lastLoginDate.toDateString() === yesterday.toDateString()) {
+                    // Dünse 'Dün' yaz
+                    formattedDate = `dün ${lastLoginDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+                } else {
+                    // Daha eski tarihlerde 'gg-aa' formatı
+                    formattedDate = lastLoginDate.toLocaleDateString('tr-TR') + 
+                    ' ' + 
+                    lastLoginDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                }
+                contactLastSeen.textContent = `son görülme ${formattedDate}`;
             } else {
-                // Daha eski tarihlerde 'gg-aa' formatı
-                formattedDate = lastLoginDate.toLocaleDateString('tr-TR') + 
-                ' ' + 
-                lastLoginDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                contactLastSeen.textContent = '';
             }
-            contactLastSeen.textContent = `son görülme ${formattedDate}`;
-        } else {
-            contactLastSeen.textContent = '';
         }
+
         // Mesajları render et
         renderMessages(data.messages, chatName);
     } catch (error) {
@@ -281,7 +289,7 @@ async function renderMessages(messages, chat_name) {
     chatMessages.innerHTML = ''; // Önceki mesajları temizle
 
     // PROFİL RESMİ DÜZENLENECEK
-    contactProfileImage.src = 'images/deneme.jpg'
+    contactProfileImage.src = 'images/no-person.jpg'
     contactProfileImage.style.display = 'flex';
 
     messages.sort((a,b) => new Date(a.timestamp_) - new Date(b.timestamp_));
@@ -415,11 +423,11 @@ function renderFriends(friends){
         const li = document.createElement('li');
         let fullName = friend.name_ + ' ' + friend.surname;
         li.classList.add('friend-item');
-        li.setAttribute('data-friend-name', fullName);
+        li.setAttribute('data-username', friend.username);
 
         // IMAGE EKLENECEK
         li.innerHTML = `
-            <img src="images/deneme.jpg" alt="${fullName}" class="friend-image" style="width: 50px; height: 50px; border-radius: 50%; margin-bottom: 10px; margin-right: 10px; float: left;">
+            <img src="images/no-person.jpg" alt="${fullName}" class="friend-image" style="width: 50px; height: 50px; border-radius: 50%; margin-bottom: 10px; margin-right: 10px; float: left;">
             <div class="friend-text" style="overflow: hidden;">
 
                 <strong class="friend-name">${fullName}</strong>
@@ -432,9 +440,12 @@ function renderFriends(friends){
 }
 
 function renderAddGroups(friends, listType){
+    let checkBoxType = null
     if(listType === 'new-group'){
         addgroups_ul.innerHTML = '';
+        checkBoxType = "friend-checkbox"
     }else{
+        checkBoxType = "friend-user-checkbox"
         addgroups_users_ul.innerHTML = '';
     }
     friends.sort((a, b) => new Date(a.started_at) - new Date(b.started_at));
@@ -442,13 +453,13 @@ function renderAddGroups(friends, listType){
         const li = document.createElement('li');
         let fullName = friend.name_ + ' ' + friend.surname;
         li.classList.add('friend-item');
-        li.setAttribute('data-friend-name', fullName);
+        li.setAttribute('data-username', friend.username);
         li.innerHTML = `
-            <img src="images/deneme.jpg" alt="${fullName}" class="friend-image" style="width: 50px; height: 50px; border-radius: 50%; margin-bottom: 10px; margin-right: 10px; float: left;">
+            <img src="images/no-person.jpg" alt="${fullName}" class="friend-image" style="width: 50px; height: 50px; border-radius: 50%; margin-bottom: 10px; margin-right: 10px; float: left;">
             <div class="friend-text" style="overflow: hidden;">
                 <strong class="friend-name">${fullName}</strong>
             </div>
-            <input type="checkbox" class="friend-checkbox" style="margin-left: 10px;"/>
+            <input type="checkbox" class="${checkBoxType}" style="margin-left: 10px;"/>
         `;
         
         // Hover effect - change background color on hover
@@ -582,7 +593,7 @@ export async function loadCalls(){
 
 async function renderCalls(calls){
     callsList.innerHTML = '';
-    calls.sort((a, b) => new Date(a.started_at) - new Date(b.started_at));
+    calls.sort((a, b) => new Date(b.started_at) - new Date(a.started_at));
     const currentUser = await getUserIdFromToken(); 
     calls.forEach(call =>{
         const isCaller = call.caller_id === currentUser;
@@ -619,7 +630,7 @@ async function renderCalls(calls){
         li.setAttribute('data-duration', call.duration);
 
         // IMAGE EKLENECEK
-        li.innerHTML = `<img src="images/deneme.jpg" alt="${call.other_user_name}" class="call-image" style="width: 50px; height: 50px; border-radius: 50%; margin-bottom: 10px; margin-right: 10px; float: left;">
+        li.innerHTML = `<img src="images/no-person.jpg" alt="${call.other_user_name}" class="call-image" style="width: 50px; height: 50px; border-radius: 50%; margin-bottom: 10px; margin-right: 10px; float: left;">
             <div class="call-text" style="overflow: hidden;">
 
                 <strong class="call-name">${call.other_user_name}</strong>
@@ -654,12 +665,11 @@ callsList.addEventListener('click', (event) => {
     const callStatusType = document.querySelector(".call-status-type");
     const callDate = document.querySelector(".call-date span");
     
-    const containerText = document.querySelector(".container-text");
     const callName = li.getAttribute('data-call-name');
 
     // Verileri ata
     contactNameHeader.textContent = callName;
-    contactProfileImage.src = "./images/effrey.webp";
+    contactProfileImage.src = "./images/no-person.jpg";
     // LAST SEEN İ SİLDİN
 
     // Durum sınıflarını temizle
@@ -824,17 +834,16 @@ window.addEventListener('load', () => {
 
 // ARKADAŞLIK İSTEĞİ SERVER KAPANIP AÇILINCA YANLIŞ TARAFA DÜŞÜYOR - REQUEST ATANI DB TUT
 // ARKADAŞ EKLEMEK İÇİN USER ARA - ARKADAŞLAR VE BENİ BLOKLAYANLARI GÖREMEM
-// GRUP EKLE KOMPLE AYARLANACAK 
+// GRUPTAN AYRILMA?
 // ORTAK GRUPLAR - GRUP ÜYELERİ İÇİNDE SEARCH
 // FRIEND E TIKLAMA AYARLA
-// ÇEVRİM İÇİ - YAZIYOR AYARLA ÜST PANEL - LAST LOGİN DB DE
+// YAZIYOR AYARLA ÜST PANEL
 // Setting de aradaki şeyler silinecek sadece profil ve hesap kalsın
 // BLOCKED USERS IMPLEMENTATION
 
 // WebRTC - UMUT - DEVAM EDİYOR
 
 // BU İŞLER İPTAL
-// İLETİLDİ DEN GÖRÜLDÜ YE GEÇİŞ - KULLANICI OFFLINE KEN GÖNDERİLİYOSA SIKINTI
 // Grupta birini admin yapma? - HÜSEYİN
 // Eklenen kişi önce friendList e sonra contactList e anlık
 // YEREL DATE MUHABBETİNE BAK (Date diye aratınca 7/32/70. sonuçlar) - fazla ayrıntı

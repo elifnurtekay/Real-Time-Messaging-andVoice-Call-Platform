@@ -79,6 +79,24 @@ const Chat = {
                 connection.release();
             }
         }
+    },
+    createChat: async(chatId, groupName)=>{
+        let connection = await getConnection();
+        // profile_photo_url BİLGİSİ ALINACAK
+        try {
+            await connection.execute(
+                `INSERT INTO chats 
+                VALUES(?, ?, 1, DEFAULT, NULL);`,
+                [chatId, groupName]
+            );
+        } catch (error) {
+            console.error('Veri tabanı sorgu hatası:', error);
+            throw error;
+        } finally {
+            if(connection){
+                connection.release();
+            }
+        }
     }
 };
 

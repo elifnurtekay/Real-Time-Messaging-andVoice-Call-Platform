@@ -293,7 +293,7 @@ function renderMatchedUsers(matchedUserList){
     matchedUserList.users.forEach(user => {
       // IMAGE
       const content = `<div class="result-container">
-            <img src="./images/gorkem.jpeg" alt="${user.full_name}" class="person-image" onclick="handleImageClick(this)">
+            <img src="./images/no-person.jpg" alt="${user.full_name}" class="person-image" onclick="handleImageClick(this)">
             <div class="person-text">
                 <div class="person-name">${user.full_name}</div>
                 <div class="person-username">${user.username}</div>
@@ -436,5 +436,26 @@ buttonPanelMap2.forEach(({ button, panel }) => {
     }else{
       panel.style.display = "block";
     }
+  });
+});
+
+const createGroupButton = document.querySelector('.submit-button');
+
+createGroupButton.addEventListener('click', async function (event) {
+  event.preventDefault();
+  // Tüm seçili checkbox'ları bul
+  const selectedFriends = [];
+  document.querySelectorAll('.friend-checkbox:checked').forEach(checkbox => {
+      const username = checkbox.closest('.friend-item').dataset.username;
+      selectedFriends.push(username);
+  });
+  const groupName = document.getElementById('group-name').value.trim();
+  if(!groupName){
+    alert('Grup ismi alanı boş bırakılamaz.')
+  }
+
+  socket.emit('create_chat', {
+    friendList: selectedFriends,
+    group_name: groupName
   });
 });

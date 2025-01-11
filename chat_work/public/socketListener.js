@@ -3,6 +3,21 @@ const socket = io("http://localhost:3000",{
     reconnection: false
 });
 
+const offerContainer = document.querySelector(".offer-container")
+const callContainer = document.querySelector('.call-container');
+const muteButton = document.getElementById('mute-button');
+const endCallButton = document.getElementById('endCall-button');
+const acceptCallButton = document.querySelector('.accept-call');
+const rejectCallButton = document.querySelector('.decline-call');
+const callButton = document.getElementById('voice-call-button');
+
+const backgroundAudio = new Audio('./voice/Incoming-call.mp3');
+backgroundAudio.loop = true;
+backgroundAudio.currentTime = 0;
+
+
+let control = false;
+
 // Socket olaylarını burada tanımlayın
 const chatMessages = document.getElementById('chat-messages');
 
@@ -137,6 +152,18 @@ socket.on('new_friend_request', (data) => {
     });
 });
 
+socket.on('group_created',() => {
+    alert('Grup oluşturuldu.')
+})
+
+socket.on('join_new_group_room', (roomSlug) => {
+    socket.emit('joinRoom', roomSlug);
+})
+
+socket.on('joined_a_group', () => {
+    alert('Yeni bir gruba eklendiniz.');
+})
+
 socket.on('logged_out', (data) => {
     alert(data.message);
     window.location.href = "/login";
@@ -145,5 +172,160 @@ socket.on('logged_out', (data) => {
 socket.on("disconnect", () => {
     console.log("Bağlantınız koptu.");
 });
+
+let mediaStream;
+let peerConnectionA = new RTCPeerConnection();
+
+callButton.addEventListener('click', async () =>  {
+
+    const selectedContact = document.querySelector(".selected");
+    if(!selectedContact){
+        alert("Arama başlatmak için bir sohbet seçin.")
+    }
+    const selectedUsername = selectedContact.getAttribute("data-receiver-username");
+    navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+        stream.getTracks().forEach((track) => peerConnectionA.addTrack(track, stream));
+        mediaStream = stream;
+        let audioElement = document.querySelector('audio');
+        audioElement.srcObject = mediaStream;
+        peerConnectionA.createOffer()
+        .then((offer) => {
+            return peerConnectionA.setLocalDescription(offer)
+                .then(() => {
+                    socket.emit("offer", { sdp: offer, target: selectedUsername });
+                });
+        })
+        .catch((error) => {
+            console.error("Offer oluşturma veya local description ayarlama hatası:", error);
+        });
+      });
+
+})
+
+let peerConnectionB = new RTCPeerConnection();
+
+socket.on("offer", (data) => {
+    backgroundAudio.play();
+  
+    offerContainer.style.display = 'block';
+    document.getElementById("caller").innerText = data.sender_username;
+    
+    acceptCallButton.addEventListener('click', async () => {
+        // Mikrofon akışını al ve bağlantıya ekle
+        navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+            stream.getTracks().forEach((track) => peerConnectionB.addTrack(track, stream));
+
+            // Gelen offer SDP'yi ayarla (setRemoteDescription)
+            peerConnectionB.setRemoteDescription(new RTCSessionDescription(data.sdp))
+            .then(() => {
+                // Offer'a yanıt oluştur (createAnswer)
+                return peerConnectionB.createAnswer();
+            })
+            .then((answer) => {
+                // Yanıtı yerel tanımlama olarak ayarla (setLocalDescription)
+                return peerConnectionB.setLocalDescription(answer);
+            })
+            .then(() => {
+                // Yanıtı signaling server'a gönder
+                socket.emit("answer", { sdp: peerConnectionB.localDescription, target: data.sender });
+            })
+            .catch((error) => {
+                console.error("Hata oluştu: ", error);
+            });
+        });
+    });
+
+    rejectCallButton.addEventListener('click', () => {
+        document.querySelector('.offer-container').style.display = 'none';
+        backgroundAudio.pause();
+        backgroundAudio.currentTime = 0;
+    
+    });
+});
+
+socket.on("answer", (data) => {
+    const selectedContact = document.querySelector(".selected");
+    const selectedUsername = selectedContact.getAttribute("data-receiver-username");
+    document.querySelector(".name-offer").innerText = selectedUsername
+    peerConnectionA.setRemoteDescription(new RTCSessionDescription(data.sdp))
+    .then(() => {
+        console.log("Bağlantı tamamlandı!");
+        // Burada bağlantı kurulmuş olur, artık ses ve video akışları ile işlem yapılabilir
+    })
+    .catch((error) => {
+        console.error("Yanıt işlenirken hata oluştu: ", error);
+    });
+
+    offerContainer.style.display = 'none';
+    
+    backgroundAudio.pause();
+    backgroundAudio.currentTime = 0;
+
+    peerConnectionA.ontrack = (event) => {
+        const audio = document.createElement("audio");
+        audio.srcObject = event.streams[0]; // Gelen ses akışını al
+        audio.autoplay = true; // Otomatik oynatılmasını sağla
+        document.body.appendChild(audio); // Sayfada ekle
+    };
+    
+    callContainer.style.display = 'block';
+    control = true;
+
+    let minutes = 0;
+    let seconds = 0;
+
+    muteButton.addEventListener('click', () => {
+        muteButton.classList.toggle('mute-active');
+        
+    })
+
+    endCallButton.addEventListener('click', () => {
+        callContainer.style.display = "none";
+        
+        socket.emit("endCall", { target: selectedUsername }); 
+       
+        minutes = 0;
+        seconds = 0;
+        control = false;
+    })
+
+    function updateTimer() {
+        if (control) {
+            seconds++;
+        }
+
+
+        if (seconds === 60) {
+            seconds = 0;
+            minutes++;
+        }
+
+        // Sayacın görüntüsünü güncelle
+        document.getElementById('timer').innerText =
+            `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    }
+
+    // 1000ms (1 saniye) aralıkla sayacı güncelle
+    let interval;
+    interval = setInterval(updateTimer, 1000);
+
+});
+
+socket.on('endCall', () =>{
+    peerConnectionA.close();
+    peerConnectionB.close();
+  
+    callContainer.style.display = 'none';
+    peerConnectionA = new RTCPeerConnection();
+    peerConnectionB = new RTCPeerConnection();
+
+    navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+        stream.getTracks().forEach((track) => peerConnectionA.addTrack(track, stream));
+    })
+    navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+        stream.getTracks().forEach((track) => peerConnectionB.addTrack(track, stream));
+    })
+
+})
 
 export { socket };

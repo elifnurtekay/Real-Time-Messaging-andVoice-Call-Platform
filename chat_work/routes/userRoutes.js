@@ -8,6 +8,7 @@ const {
     getReceiverProfile,
     getGroupMembers
 } = require('../controllers/userController'); // Fonksiyonunuzu doğru import edin
+const User = require('../models/userModel');
 
 // Kayıt rotası
 router.post('/register', async (req, res) => {
@@ -26,8 +27,9 @@ router.post('/register', async (req, res) => {
 });
 
 // Logout route
-router.post('/logout', (req, res) => {
-    // Token cookie'sini temizle
+router.post('/logout', async (req, res) => {
+    const { userId } = req.body;
+    await User.setOnlineStatus(userId);
     res.clearCookie('auth_token');
     res.send('Logged out and token cleared.');
 });

@@ -1,10 +1,13 @@
 const { messageSocketHandlers } = require('./messageSocket');
 const { friendSocketHandlers } = require('./friendSocket');
+const { chatSocketHandlers } = require('./chatSocket');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config();
-const { addOnlineUser, removeOnlineUser } = require('./onlineUsers');
-const Chat = require('../models/chatModel')
+const { addOnlineUser, removeOnlineUser, getUserId } = require('./onlineUsers');
+const Chat = require('../models/chatModel');
+const User = require('../models/userModel');
+const { getFriendIdFromUsername } = require('../models/friendModel');
 
 /**
  * WebSocket sunucusunu başlatır ve gerekli event handler'ları yükler.
@@ -20,6 +23,11 @@ function initializeSocket(io) {
         // Mesajlaşma event'lerini bağla
         messageSocketHandlers(socket);
 
+        chatSocketHandlers(socket);
+
+        // WebRTC sinyalleşme işlemleri
+        webRTCSignalHandlers(socket);
+
         // friend event'lerini bağla
         friendSocketHandlers(socket);
 
@@ -30,6 +38,44 @@ function initializeSocket(io) {
             onDisconnect(socket);
         });
     });
+}
+
+/**
+ * WebRTC sinyalleşme olaylarını yönetir.
+ * @param {Socket} socket - Bağlanan socket
+ */
+function webRTCSignalHandlers(socket) {
+    // Offer gönderme
+    socket.on("offer", async(data) => {
+        const receiverId = await getFriendIdFromUsername(data.target)
+        socket.to(receiverId).emit("offer", {
+        sdp: data.sdp,
+        sender: socket.id,
+        sender_username: data.target
+        });
+    });
+   
+    // Answer gönderme
+    socket.on("answer", (data) => {
+        socket.to(data.target).emit("answer", {
+            sdp: data.sdp,
+            sender: socket.id,
+        });
+   
+        socket.emit("answer", {
+            sdp: data.sdp,
+            sender: socket.id,
+        });
+       
+    });
+   
+    socket.on("endCall", async(data) => {
+       // Diğer kullanıcıya görüşmenin sona erdiğini bildir
+       console.log('çalışıyorum2');
+       const receiverId = await getFriendIdFromUsername(data.target)
+       socket.to(receiverId).emit("endCall");
+    });
+   
 }
 
 /**
@@ -52,6 +98,7 @@ async function onConnection(socket) {
     if (userId) {
         console.log(`Kullanıcı bağlandı: ${userId} (Socket ID: ${socket.id})`);
         addOnlineUser(userId, socket.id);
+        await User.addLastLogin(userId);
         const groupNames = await Chat.fetchGroupNames(userId);
         // Kullanıcıyı kendi odasına dahil et
         socket.join(userId);
@@ -61,10 +108,11 @@ async function onConnection(socket) {
         });
         console.log(`Kullanıcı ${userId}, oda ${userId}'e bağlandı.`);
         console.log([...socket.adapter.rooms.keys()]);
-        console.log([...socket.adapter.rooms.get('a-u-yazilim-3-sinif')]);
+        console.log([...socket.adapter.rooms.get(`${socket.id}`)]);
         console.log([...socket.adapter.rooms.entries()]
         .filter(([key, value]) => !value.has(key)) // Soket ID'leri hariç tut
-        .map(([key]) => key))
+        .map(([key]) => key));
+
     } else {
         console.log(`Kimlik doğrulanmadan bağlanma isteği: ${socket.id}`);
         socket.disconnect();
@@ -75,7 +123,9 @@ async function onConnection(socket) {
  * Kullanıcı bağlantıyı kopardığında gerekli işlemleri yapar.
  * @param {Socket} socket - Bağlantısı kopan socket
  */
-function onDisconnect(socket) {
+async function onDisconnect(socket) {
+    const userId = getUserId(socket.id);
+    await User.setOnlineStatus(userId);
     removeOnlineUser(socket.id);
     console.log(`Bağlantı kesildi: Socket ID ${socket.id}`);
     // Kullanıcı bağlantısı koptuğunda yapılacak işlemleri buraya ekleyin
@@ -87,14 +137,31 @@ function onDisconnect(socket) {
  * @param {Socket} socket - Çıkış yapan socket
  */
 function onLogout(socket) {
-    socket.on('logout', async (userId) => {
+    socket.on('logout', async (user_id) => {
+        const cookies = socket.handshake.headers.cookie;
+        const token = cookies ? cookies.split(';').find(cookie => cookie.trim().startsWith('auth_token=')).split('=')[1] : null;
+        let userId = null;
+        if (token) {
+            try {
+                // JWT doğrulama ve çözümleme
+                const decoded = jwt.decode(token);
+                userId = decoded.userId; // Token'den userId'yi al
+            } catch (err) {
+                console.error('Geçersiz token:', err.message);
+            }
+        }
+        console.log(userId);
         await fetch('http://localhost:3000/api/users/logout', {
             method: 'POST',
-            credentials: 'include' // Eğer JWT çerezde saklanıyorsa bunu ekleyin
+            credentials: 'include', // Eğer JWT çerezde saklanıyorsa bunu ekleyin
+            headers: {
+                'Content-Type':'application/json'
+            }, 
+            body: JSON.stringify({ userId }) 
         })
         .then(response => {
             if (response.ok) {
-                console.log('User logged out:', userId);
+                console.log('User logged out:', user_id);
                 socket.emit('logged_out', { message: 'Çıkış başarılı.' });
             } else {
                 console.error('Çıkış yapılamadı');

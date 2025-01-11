@@ -18,7 +18,7 @@ async function getConnection() {
         const connection = await pool.getConnection(); // Bağlantıyı aç
         return connection; // Bağlantıyı döndür
     } catch (error) {
-        console.error('Veritabanı bağlantı hatası:', error); // Hata mesajı
+        console.error('Veri tabanı bağlantı hatası:', error); // Hata mesajı
         throw error; // Hata varsa fırlat
     }
 }

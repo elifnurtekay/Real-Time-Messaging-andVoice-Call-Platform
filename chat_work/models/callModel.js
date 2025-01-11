@@ -34,7 +34,7 @@ const Call = {
 
             return rows;
         } catch (error) {
-            console.error('Veritabanı sorgu hatası:', error);
+            console.error('Veri tabanı sorgu hatası:', error);
             throw error;
         } finally {
             if (connection) {

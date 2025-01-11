@@ -60,4 +60,8 @@ const getUserId = async(req,res)=>{
   }
 }
 
-module.exports = { login, protectedRoute, getUserId};
+module.exports = { 
+  login, 
+  protectedRoute, 
+  getUserId
+};

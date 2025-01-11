@@ -36,7 +36,7 @@ function adjustWidth() {
     element4.style.width = finalWidth + "px";
     element4.style.paddingLeft = 5 + "px";
     element5.style.width = finalWidth + "px";
-}
+}   
 
 // Sayfa yüklendiğinde ve pencere boyutu değiştiğinde fonksiyonu çağır
 window.addEventListener('DOMContentLoaded', adjustWidth);

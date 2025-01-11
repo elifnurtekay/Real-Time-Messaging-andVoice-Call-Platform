@@ -116,6 +116,41 @@ const User = {
         connection.release();
       }
     }
+  },
+  addLastLogin: async(userId) => {
+    let connection = await getConnection();
+    try {
+      await connection.execute(
+        `UPDATE users
+        SET last_login = CURRENT_TIMESTAMP,
+        status_ = "çevrim içi"
+        WHERE user_id = ?`, [userId]);
+    } catch (error) {
+      console.error('SQL Hatası:', error);
+      throw error;
+    } finally {
+      if (connection){
+        connection.release();
+      }
+    }
+  },
+  setOnlineStatus: async(userId) => {
+    let connection = await getConnection();
+    console.log(userId);
+    try {
+      await connection.execute(
+        `UPDATE users
+        SET last_login = CURRENT_TIMESTAMP,
+        status_ = "çevrim dışı"
+        WHERE user_id = ?`, [userId]);
+    } catch (error) {
+      console.error('SQL Hatası:', error);
+      throw error;
+    } finally {
+      if (connection){
+        connection.release();
+      }
+    }
   }
 };
 
